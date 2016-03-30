@@ -1,0 +1,16 @@
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\bin\Debug\Domain.dll
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\bin\Debug\Domain.pdb
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\bin\Debug\DataAnnotations.dll
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\bin\Debug\Microsoft.AspNet.Identity.Core.dll
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\bin\Debug\NLog.dll
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\bin\Debug\Resources.dll
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\bin\Debug\EntityFramework.dll
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\bin\Debug\DataAnnotations.pdb
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\bin\Debug\Resources.pdb
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\bin\Debug\Microsoft.AspNet.Identity.Core.xml
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\bin\Debug\NLog.xml
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\bin\Debug\EntityFramework.xml
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\bin\Debug\et\Resources.resources.dll
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\obj\Debug\Domain.csprojResolveAssemblyReference.cache
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\obj\Debug\Domain.dll
+C:\Users\viilv\Documents\Visual Studio 2015\Projects\aspnet\Domain\obj\Debug\Domain.pdb
