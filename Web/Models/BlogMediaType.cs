@@ -5,9 +5,9 @@ using System.Web;
 
 namespace Web.Models
 {
-    public class BlogMedia
+    public class BlogMediaType
     {
-        public int BlogMediaId { get; set; }
         public int BlogMediaTypeId { get; set; }
+        public string Value { get; set; }
     }
 }
