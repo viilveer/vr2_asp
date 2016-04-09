@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<ArrayOfArrayOfArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ArrayOfArrayOfString>
+    <ArrayOfString>
+      <string>c:\!dev\git\asp.net-baseapps\contactapp\domain\person.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>c:\!dev\git\asp.net-baseapps\contactapp\web\global.asax.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>C:\!dev\git\ASP.NET-BaseApps\ContactApp\Web\Scripts\App\jquery.validate.globalize.datetime.js</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>C:\!dev\git\ASP.NET-BaseApps\ContactApp\Domain\ContactType.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>C:\!dev\git\ASP.NET-BaseApps\ContactApp\Domain\MultiLangString.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>C:\!dev\git\ASP.NET-BaseApps\ContactApp\Domain\Translation.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>C:\!dev\git\ASP.NET-BaseApps\ContactApp\Web\Web.config</string>
+      <string>C:\!dev\git\ASP.NET-BaseApps\ContactApp\Web\Web.Debug.config</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>C:\!dev\git\ASP.NET-BaseApps\ContactApp\Web\App_Start\BundleConfig.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>C:\!dev\git\ASP.NET-BaseApps\.gitignore</string>
+    </ArrayOfString>
+  </ArrayOfArrayOfString>
+</ArrayOfArrayOfArrayOfString>
