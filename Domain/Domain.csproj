@@ -67,7 +67,6 @@
     <Compile Include="Translation.cs" />
     <Compile Include="UserConnection.cs" />
     <Compile Include="UserMessage.cs" />
-    <Compile Include="UserVehicle.cs" />
     <Compile Include="Vehicle.cs" />
   </ItemGroup>
   <ItemGroup>

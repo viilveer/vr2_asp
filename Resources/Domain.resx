@@ -150,4 +150,7 @@
   <data name="LastnameLengthError" xml:space="preserve">
     <value>Last name too long.</value>
   </data>
+  <data name="Vehicle" xml:space="preserve">
+    <value>Vehicle</value>
+  </data>
 </root>

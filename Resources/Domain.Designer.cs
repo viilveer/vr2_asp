@@ -158,5 +158,14 @@ namespace Resources {
                 return ResourceManager.GetString("LastnameLengthError", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle.
+        /// </summary>
+        public static string Vehicle {
+            get {
+                return ResourceManager.GetString("Vehicle", resourceCulture);
+            }
+        }
     }
 }
