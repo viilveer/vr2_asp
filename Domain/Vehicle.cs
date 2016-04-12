@@ -4,46 +4,46 @@ using Domain.Identity;
 
 namespace Domain
 {
-    class Vehicle
+    public class Vehicle
     {
-        public int VehcileId { get; set; }
+        public int VehicleId { get; set; }
 
-        public User UserId { get; set; }
+        [Required]
+        public int UserId { get; set; }
+        public virtual UserInt User { get; set; }
+
 
         [Required]
         [MaxLength(64)]
-        public string VehicleMake { get; set; }
+        public string Make { get; set; }
 
         [Required]
         [MaxLength(64)]
-        public string VehicleModel { get; set; }
+        public string Model { get; set; }
 
-        [MaxLength(4)]
-        [MinLength(4)]
         [Required]
-        public int VehicleYear { get; set; }
+        public int Year { get; set; }
 
-        [MaxLength(4)]
         [Required]
-        public int VehicleKw { get; set; }
+        public int Kw { get; set; }
 
         [MaxLength(64)]
         [Required]
-        public string VehicleEngine { get; set; }
+        public string Engine { get; set; }
 
         [MaxLength(255)]
         [Required]
-        public string VehicleCreatedBy { get; set; }
+        public string CreatedBy { get; set; }
 
         [DataType(DataType.DateTime)]
         [Required]
-        public DateTime VehicleCreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         [MaxLength(255)]
-        public String VehicleUpdatedBy { get; set; }
+        public String UpdatedBy { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime VehicleUpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
 
     }

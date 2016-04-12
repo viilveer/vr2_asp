@@ -4,21 +4,17 @@ using Domain.Identity;
 
 namespace Domain
 {
-    public class UserMessage
+    public class UserBlogConnection
     {
-
-        public int UserMessageId { get; set; }
+        public int UserBlogConnectionId { get; set; }
 
         [Required]
         public int UserId { get; set; }
         public virtual UserInt User { get; set; }
 
         [Required]
-        public int ReceiverId { get; set; }
-        public virtual UserInt Receiver { get; set; }
-
-        [Required]
-        public virtual MultiLangString Message { get; set; }
+        public int BlogId { get; set; }
+        public virtual Blog Blog { get; set; }
 
         [Required]
         [MaxLength(255)]
@@ -28,10 +24,5 @@ namespace Domain
         [DataType(DataType.DateTime)]
         public DateTime CreatedAt { get; set; }
 
-        [MaxLength(255)]
-        public String UpdatedBy { get; set; }
-
-        [DataType(DataType.DateTime)]
-        public DateTime UpdatedAt { get; set; }
     }
 }

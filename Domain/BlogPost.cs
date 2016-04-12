@@ -1,36 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Domain
 {
-    class BlogPost
+    public class BlogPost
     {
         public int BlogPostId { get; set; }
 
         [Required]
-        public virtual Blog BlogId { get; set; }
+        public int BlogId { get; set; }
+        public virtual Blog Blog { get; set; }
 
-        public virtual MultiLangString BlogPostTitle { get; set; }
+        public virtual MultiLangString Title { get; set; }
 
         [Required]
-        public virtual MultiLangString BlogPostMessage { get; set; }
+        public virtual MultiLangString Message { get; set; }
 
         [Required]
         [MaxLength(255)]
-        public string BlogPostCreatedBy { get; set; }
+        public string CreatedBy { get; set; }
 
         [Required]
         [DataType(DataType.DateTime)]
-        public DateTime BlogPostCreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         [MaxLength(255)]
-        public String BlogPostUpdatedBy { get; set; }
+        public String UpdatedBy { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime BlogPostUpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

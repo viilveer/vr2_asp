@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
+using DAL;
+using DAL.Interfaces;
 using Domain.Identity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -15,19 +19,23 @@ namespace Web.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
+        private readonly DataBaseContext _db = new DataBaseContext();
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly string _instanceId = Guid.NewGuid().ToString();
         private readonly ApplicationSignInManager _signInManager;
         private readonly ApplicationUserManager _userManager;
         private readonly IAuthenticationManager _authenticationManager;
 
+        private readonly IUOW _uow;
+
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager,
-            IAuthenticationManager authenticationManager)
+            IAuthenticationManager authenticationManager, IUOW uow)
         {
             _logger.Debug("InstanceId: " + _instanceId);
             _userManager = userManager;
             _signInManager = signInManager;
             _authenticationManager = authenticationManager;
+            _uow = uow;
         }
 
         //
@@ -133,12 +141,25 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            using (TransactionScope transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var user = new UserInt {UserName = model.Email, Email = model.Email};
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                try
                 {
+                    if (ModelState.IsValid == false)
+                    {
+                        throw new InvalidDataException("Model state not valid");
+                    }
+                
+               
+                    var user = new UserInt { UserName = model.Email, Email = model.Email };
+                    var userSave = await _userManager.CreateAsync(user, model.Password);
+                    var roleSave = await _userManager.AddToRoleAsync(user.Id, "User");
+                    if (userSave.Succeeded == false || roleSave.Succeeded == false)
+                    {
+                        AddErrors(userSave);
+                        throw new InvalidDataException("Save failed");
+                    }
+                    
                     await _signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
@@ -146,14 +167,20 @@ namespace Web.Controllers
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    transaction.Complete();
+                  
 
-                    return RedirectToAction("Index", "Home");
                 }
-                AddErrors(result);
+                catch (Exception ex)
+                {
+                    transaction.Dispose();
+                    Console.WriteLine(ex.InnerException);
+                    return View(model);
+                }
             }
+            return RedirectToAction("Index", "Home");
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            
         }
 
         //

@@ -56,6 +56,13 @@ namespace DAL
         public IDbSet<ContactType> ContactTypes { get; set; }
 
         public IDbSet<Article> Articles { get; set; }
+        public IDbSet<Vehicle> Vehicles { get; set; }
+        public IDbSet<Blog> Blogs{ get; set; }
+        public IDbSet<BlogPost> BlogPosts{ get; set; }
+        public IDbSet<PostComment> PostComments{ get; set; }
+        public IDbSet<PostTag> PostTags{ get; set; }
+        public IDbSet<UserBlogConnection> UserBlogConnections{ get; set; }
+        public IDbSet<UserMessage> UserMessages{ get; set; }
         public IDbSet<MultiLangString> MultiLangStrings { get; set; }
         public IDbSet<Translation> Translations { get; set; }
 
