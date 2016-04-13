@@ -49,18 +49,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Article.cs" />
     <Compile Include="Blog.cs" />
     <Compile Include="BlogPost.cs" />
-    <Compile Include="Contact.cs" />
-    <Compile Include="ContactType.cs" />
     <Compile Include="Identity\Role.cs" />
     <Compile Include="Identity\User.cs" />
     <Compile Include="Identity\UserClaim.cs" />
     <Compile Include="Identity\UserLogin.cs" />
     <Compile Include="Identity\UserRole.cs" />
     <Compile Include="MultiLangString.cs" />
-    <Compile Include="Person.cs" />
     <Compile Include="PostComment.cs" />
     <Compile Include="PostTag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

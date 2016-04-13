@@ -48,7 +48,6 @@ namespace Domain.Identity
 
 
         //Additional (custom) properties
-        public virtual List<Person> Persons { get; set; }
 
     }
 

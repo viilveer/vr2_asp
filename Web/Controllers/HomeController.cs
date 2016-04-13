@@ -19,11 +19,7 @@ namespace Web.Controllers
 
         public ActionResult Index()
         {
-            var vm = new HomeIndexViewModel()
-            {
-                Article = _uow.Articles.FindArticleByName("HomeIndex")
-            };
-            return View(vm);
+            return View();
         }
     }
 }

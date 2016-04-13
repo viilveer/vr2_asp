@@ -44,7 +44,6 @@ namespace DAL
         }
 
         //standard repos
-        public IEFRepository<ContactType> ContactTypes => GetStandardRepo<ContactType>();
         public IEFRepository<MultiLangString> MultiLangStrings => GetStandardRepo<MultiLangString>();
         public IEFRepository<Translation> Translations => GetStandardRepo<Translation>();
 
@@ -56,10 +55,6 @@ namespace DAL
         //public IRoleRepository Roles => GetRepo<IRoleRepository>();
         //public IUserClaimRepository UserClaims => GetRepo<IUserClaimRepository>();
         //public IUserLoginRepository UserLogins => GetRepo<IUserLoginRepository>();
-        public IPersonRepository Persons => GetRepo<IPersonRepository>();
-        public IContactRepository Contacts => GetRepo<IContactRepository>();
-        public IArticleRepository Articles => GetRepo<IArticleRepository>();
-
         public IUserIntRepository UsersInt => GetRepo<IUserIntRepository>();
         public IUserRoleIntRepository UserRolesInt => GetRepo<IUserRoleIntRepository>();
         public IRoleIntRepository RolesInt => GetRepo<IRoleIntRepository>();

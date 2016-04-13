@@ -37,3 +37,5 @@ $(function () {
     $('[data-type="date"]').attr('placeholder', moment.localeData(currentCultureCode)._longDateFormat.L);
     $('[data-type="time"]').attr('placeholder', moment.localeData(currentCultureCode)._longDateFormat.LT);
 });
+
+

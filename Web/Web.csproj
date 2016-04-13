@@ -205,8 +205,6 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
-    <Compile Include="Areas\Admin\Controllers\ArticlesController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ContactTypesController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\MultiLangStringsController.cs" />
     <Compile Include="Areas\Admin\Controllers\RolesController.cs" />
@@ -216,8 +214,6 @@
     <Compile Include="Areas\Admin\Controllers\UserLoginsController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserRolesController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
-    <Compile Include="Areas\Admin\ViewModels\ArticleViewModels.cs" />
-    <Compile Include="Areas\Admin\ViewModels\ContactTypeViewModels.cs" />
     <Compile Include="Areas\Admin\ViewModels\SystemLogViewModels.cs" />
     <Compile Include="Areas\Admin\ViewModels\TranslationsViewModels.cs" />
     <Compile Include="Areas\Admin\ViewModels\UserRoleViewModels.cs" />
@@ -249,14 +245,16 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Areas\MemberArea\MemberAreaAreaRegistration.cs" />
+    <Compile Include="Areas\MemberArea\Controllers\AccountController.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\vehicle\CreateModel.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\vehicle\UpdateModel.cs" />
     <Compile Include="Controllers\ApiAccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LanguageController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\PersonsController.cs" />
+    <Compile Include="Areas\MemberArea\Controllers\ManageController.cs" />
+    <Compile Include="Areas\MemberArea\Controllers\VehiclesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -275,7 +273,6 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\ContactViewModels.cs" />
     <Compile Include="ViewModels\HomeViewModels.cs" />
     <Compile Include="ViewModels\ManageViewModels.cs" />
   </ItemGroup>
@@ -1259,14 +1256,10 @@
     <Content Include="Scripts\App\jquery.validate.fixdata.js" />
     <Content Include="Scripts\App\jquery.validate.globalize.datetime.js" />
     <Content Include="Scripts\App\tinymce.js" />
+    <Content Include="Scripts\App\vehicle.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\Admin\Views\web.config" />
-    <Content Include="Areas\Admin\Views\Articles\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\Articles\Delete.cshtml" />
-    <Content Include="Areas\Admin\Views\Articles\Details.cshtml" />
-    <Content Include="Areas\Admin\Views\Articles\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\Articles\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
     <Content Include="Areas\Admin\Views\MultiLangStrings\Create.cshtml" />
     <Content Include="Areas\Admin\Views\MultiLangStrings\Delete.cshtml" />
@@ -1308,13 +1301,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Admin\Views\SystemLog\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\ContactTypes\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\ContactTypes\Delete.cshtml" />
-    <Content Include="Areas\Admin\Views\ContactTypes\Details.cshtml" />
-    <Content Include="Areas\Admin\Views\ContactTypes\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\ContactTypes\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\ContactTypes\_CreateEdit.cshtml" />
-    <Content Include="Areas\Admin\Views\Articles\_CreateEdit.cshtml" />
     <Content Include="Areas\Admin\Views\SystemLog\DeleteAllLogFiles.cshtml" />
     <Content Include="bower_components\cldr-data\.bower.json" />
     <Content Include="bower_components\cldr-data\bower.json" />
@@ -1971,6 +1957,12 @@
     <Content Include="bower_components\cldr-data\main\root\timeZoneNames.json" />
     <Content Include="bower_components\cldr-data\main\root\units.json" />
     <Content Include="bower_components\cldr-data\main\root\variants.json" />
+    <Content Include="Areas\MemberArea\Views\web.config" />
+    <Content Include="Areas\MemberArea\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Shared\Error.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Shared\Lockout.cshtml" />
+    <Content Include="Areas\MemberArea\Views\_ViewStart.cshtml" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -2157,30 +2149,28 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
-    <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Article\Index.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Account\Login.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Account\Register.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Account\ResetPassword.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Account\SendCode.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Account\VerifyCode.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Manage\Index.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Manage\SetPassword.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\tinymce.woff" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\tinymce.ttf" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\tinymce.json" />
@@ -2191,25 +2181,26 @@
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\readme.md" />
     <Content Include="Scripts\tinymce\langs\readme.md" />
-    <Content Include="Views\Persons\Create.cshtml" />
-    <Content Include="Views\Persons\Delete.cshtml" />
-    <Content Include="Views\Persons\Details.cshtml" />
-    <Content Include="Views\Persons\Edit.cshtml" />
-    <Content Include="Views\Persons\Index.cshtml" />
-    <Content Include="Views\Contacts\Create.cshtml" />
-    <Content Include="Views\Contacts\Delete.cshtml" />
-    <Content Include="Views\Contacts\Details.cshtml" />
-    <Content Include="Views\Contacts\Edit.cshtml" />
-    <Content Include="Views\Contacts\Index.cshtml" />
-    <Content Include="Views\Contacts\_CreateEdit.cshtml" />
-    <Content Include="Views\Persons\_CreateEdit.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Persons\Create.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Persons\Delete.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Persons\Details.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Persons\Edit.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Persons\Index.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Persons\_CreateEdit.cshtml" />
     <Content Include="Scripts\jquery-2.2.2.min.map" />
+    <Content Include="Areas\MemberArea\Views\Vehicles\Create.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Vehicles\Delete.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Vehicles\Details.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Vehicles\Edit.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Vehicles\Index.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
+    <Folder Include="Areas\MemberArea\Models\" />
+    <Folder Include="Areas\MemberArea\Views\Base\" />
     <Folder Include="logs\" />
-    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

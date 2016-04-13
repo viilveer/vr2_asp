@@ -51,11 +51,6 @@ namespace DAL
 
         }
 
-        public IDbSet<Person> Persons { get; set; }
-        public IDbSet<Contact> Contacts { get; set; }
-        public IDbSet<ContactType> ContactTypes { get; set; }
-
-        public IDbSet<Article> Articles { get; set; }
         public IDbSet<Vehicle> Vehicles { get; set; }
         public IDbSet<Blog> Blogs{ get; set; }
         public IDbSet<BlogPost> BlogPosts{ get; set; }
