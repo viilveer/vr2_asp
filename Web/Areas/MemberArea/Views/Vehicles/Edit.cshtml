@@ -17,35 +17,35 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-
         <div class="form-group">
             @Html.LabelFor(model => model.Year, htmlAttributes: new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.HiddenFor(model => model.Year)
+                
                 @Html.DropDownListFor(model => model.Year, new List<SelectListItem>(), null, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Year, "", new {@class = "text-danger"})
+                @Html.HiddenFor(model => model.Year)
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Make, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.HiddenFor(model => model.Make)
+               
                 @Html.DropDownListFor(model => model.Make, new List<SelectListItem>(), null, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Make, "", new {@class = "text-danger"})
+                @Html.HiddenFor(model => model.Make)
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Model, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.HiddenFor(model => model.Model)
+               
                 @Html.DropDownListFor(model => model.Model, new List<SelectListItem>(), null, new {@class = "form-control"})
                 @Html.ValidationMessageFor(model => model.Model, "", new {@class = "text-danger"})
+                @Html.HiddenFor(model => model.Model)
             </div>
         </div>
-
-       
 
         <div class="form-group">
             @Html.LabelFor(model => model.Kw, htmlAttributes: new { @class = "control-label col-md-2" })

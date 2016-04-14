@@ -7,7 +7,6 @@ using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
 using DAL;
-using DAL.Interfaces;
 using Domain.Identity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;

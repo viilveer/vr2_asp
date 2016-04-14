@@ -5,11 +5,13 @@ using System.Linq;
 using System.Web;
 using Domain;
 using Domain.Identity;
+using Web.Areas.MemberArea.Components.Validators;
 
 namespace Web.Areas.MemberArea.ViewModels.vehicle
 {
     public class CreateModel
     {
+        [Vehicle]
         [Required]
         [MaxLength(64)]
         public string Make { get; set; }
@@ -36,7 +38,7 @@ namespace Web.Areas.MemberArea.ViewModels.vehicle
             vehicle.Kw = Kw;
             vehicle.Year = Year;
             vehicle.Model = Model;
-            vehicle.Make = Make;
+            vehicle.Make = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Make.Replace("-", " "));
             vehicle.CreatedAt = DateTime.Now;
             vehicle.CreatedBy = creator.Email;
 
