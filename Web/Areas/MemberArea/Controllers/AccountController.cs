@@ -41,6 +41,10 @@ namespace Web.Areas.MemberArea.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToLocal(returnUrl);
+            }
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -176,7 +180,7 @@ namespace Web.Areas.MemberArea.Controllers
                     return View(model);
                 }
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Dashboard", new {area = "MemberArea"});
 
             
         }
@@ -443,7 +447,7 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Dashboard", new { area = "Memberarea"});
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

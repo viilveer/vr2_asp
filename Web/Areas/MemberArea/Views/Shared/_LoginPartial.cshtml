@@ -23,7 +23,7 @@
                     @User.Identity.GetUserName() <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                    <li>@Html.ActionLink(@Resources.Common.ManageAccount, "Index", new {area = "", controller = "Manage"})</li>
+                    <li>@Html.ActionLink(@Resources.Common.ManageAccount, "Index", new {area = "MemberArea", controller = "Manage"})</li>
                     <li>
                         <a href="javascript:document.getElementById('logoutForm').submit()">@Resources.Common.LogOff</a>
                     </li>

@@ -1,4 +1,6 @@
-﻿using DAL.Interfaces;
+﻿using System.Collections.Generic;
+using System.Linq;
+using DAL.Interfaces;
 using Domain;
 
 namespace DAL.Repositories
@@ -9,5 +11,14 @@ namespace DAL.Repositories
         {
         }
 
+        public List<Vehicle> GetAllByUserId(int userId)
+        {
+            return DbSet.Where(u => u.UserId == userId).ToList();
+        }
+
+        public int CountByUserId(int userId)
+        {
+            return DbSet.Count(a => a.UserId == userId);
+        }
     }
 }

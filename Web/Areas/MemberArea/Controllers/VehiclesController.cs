@@ -27,7 +27,7 @@ namespace Web.Areas.MemberArea.Controllers
         // GET: Vehicles
         public ActionResult Index()
         {
-            var vehicles = _uow.GetRepository<IVehicleRepository>().All;
+            var vehicles = _uow.GetRepository<IVehicleRepository>().GetAllByUserId(Convert.ToInt32(User.Identity.GetUserId()));
             return View(vehicles);
         }
 

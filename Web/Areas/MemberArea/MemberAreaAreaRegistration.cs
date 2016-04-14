@@ -15,10 +15,17 @@ namespace Web.Areas.MemberArea
         public override void RegisterArea(AreaRegistrationContext context) 
         {
             context.MapRoute(
-                "MemberArea_default",
-                "MemberArea/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
+                name: "MemberArea_default",
+                url: "MemberArea/{controller}/{action}/{id}",
+                defaults: new
+                {
+                    area = "MemberArea",
+                    controller = "Account",
+                    action = "Login",
+                    id = UrlParameter.Optional
+                }
             );
         }
+
     }
 }
