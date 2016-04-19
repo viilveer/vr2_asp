@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net;
 using System.Web.Mvc;
 using DAL.Interfaces;
@@ -17,11 +18,13 @@ namespace Web.Areas.MemberArea.Controllers
         private readonly string _instanceId = Guid.NewGuid().ToString();
 
         private readonly IUOW _uow;
+        private ApplicationUserManager _userManager;
 
-        public VehiclesController(IUOW uow)
+        public VehiclesController(IUOW uow, ApplicationUserManager userManager)
         {
             _logger.Debug("InstanceId: " + _instanceId);
             _uow = uow;
+            _userManager = userManager;
         }
 
         // GET: Vehicles
@@ -61,9 +64,25 @@ namespace Web.Areas.MemberArea.Controllers
         {
             if (ModelState.IsValid)
             {
+                // TODO :: move to component
                 int userId = Convert.ToInt32(User.Identity.GetUserId());
                 UserInt user = _uow.GetRepository<IUserIntRepository>().GetById(userId);
-                _uow.GetRepository<IVehicleRepository>().Add(vehicleCreateModel.GetVehicle(user));
+                Vehicle vehicle = vehicleCreateModel.GetVehicle(user);
+                _uow.GetRepository<IVehicleRepository>().Add(vehicle);
+               
+                Blog blog = new Blog();
+                blog.VehicleId = vehicle.VehicleId;
+                blog.Name = new MultiLangString(vehicle.Make + " " + vehicle.Model); // TODO :: ugly
+                blog.CreatedAt = DateTime.Now;
+                blog.CreatedBy = user.Email;
+                _uow.GetRepository<IBlogRepository>().Add(blog);
+
+                if (_userManager.IsInRole(userId, "CarOwner") == false)
+                {
+                    _userManager.AddToRole(userId, "CarOwner");
+                }
+                
+
                 _uow.Commit();
                 return RedirectToAction("Index");
             }

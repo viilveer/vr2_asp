@@ -48,6 +48,10 @@
                     {
                         <li>@Html.ActionLink("Vehicles", "Index", "Vehicles", new { area = "MemberArea" }, null)</li>
                     }
+                    @if (Request.IsAuthenticated && User.IsInRole("CarOwner"))
+                    {
+                        <li>@Html.ActionLink("Blogs", "Index", "Blogs", new { area = "MemberArea" }, null)</li>
+                    }
                     @if (Request.IsAuthenticated && User.IsInRole("Admin"))
                     {
                         <li class="dropdown">

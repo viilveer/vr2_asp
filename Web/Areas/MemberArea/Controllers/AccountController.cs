@@ -155,7 +155,7 @@ namespace Web.Areas.MemberArea.Controllers
                
                     var user = new UserInt { UserName = model.Email, Email = model.Email };
                     var userSave = await _userManager.CreateAsync(user, model.Password);
-                    var roleSave = await _userManager.AddToRoleAsync(user.Id, "User");
+                    var roleSave = await _userManager.AddToRoleAsync(user.Id, "User"); // TODO :: fetch role and then add if exists
                     if (userSave.Succeeded == false || roleSave.Succeeded == false)
                     {
                         AddErrors(userSave);

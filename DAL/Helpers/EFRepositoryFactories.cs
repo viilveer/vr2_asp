@@ -46,6 +46,8 @@ namespace DAL.Helpers
                 {typeof (IUserLoginIntRepository), dbContext => new UserLoginIntRepository(dbContext)},
                 {typeof (IRoleIntRepository), dbContext => new RoleIntRepository(dbContext)},
                 {typeof (IVehicleRepository), dbContext => new VehicleRepository(dbContext)},
+                {typeof (IBlogRepository), dbContext => new BlogRepository(dbContext)},
+                {typeof (IBlogPostRepository), dbContext => new BlogPostRepository(dbContext)},
             };
         }
 
