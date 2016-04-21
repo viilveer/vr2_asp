@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain
 {
-    public class PostTag
+    public class PostTag : BaseEntity
     {
 
         public int PostTagId { get; set; }
@@ -14,19 +14,5 @@ namespace Domain
 
         [Required]
         public virtual MultiLangString Value { get; set; }
-
-        [Required]
-        [MaxLength(255)]
-        public string CreatedBy { get; set; }
-
-        [Required]
-        [DataType(DataType.DateTime)]
-        public DateTime CreatedAt { get; set; }
-
-        [MaxLength(255)]
-        public String UpdatedBy { get; set; }
-
-        [DataType(DataType.DateTime)]
-        public DateTime UpdatedAt { get; set; }
     }
 }

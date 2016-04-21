@@ -4,7 +4,7 @@ using Domain.Identity;
 
 namespace Domain
 {
-    public class Vehicle
+    public class Vehicle : BaseEntity
     {
         public int VehicleId { get; set; }
 
@@ -30,21 +30,5 @@ namespace Domain
         [MaxLength(64)]
         [Required]
         public string Engine { get; set; }
-
-        [MaxLength(255)]
-        [Required]
-        public string CreatedBy { get; set; }
-
-        [DataType(DataType.DateTime)]
-        [Required]
-        public DateTime CreatedAt { get; set; }
-
-        [MaxLength(255)]
-        public String UpdatedBy { get; set; }
-
-        [DataType(DataType.DateTime)]
-        public DateTime UpdatedAt { get; set; }
-
-
     }
 }

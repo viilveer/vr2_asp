@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Net;
 using System.Web.Mvc;
 using DAL.Interfaces;
@@ -73,7 +72,6 @@ namespace Web.Areas.MemberArea.Controllers
                 Blog blog = new Blog();
                 blog.VehicleId = vehicle.VehicleId;
                 blog.Name = new MultiLangString(vehicle.Make + " " + vehicle.Model); // TODO :: ugly
-                blog.CreatedAt = DateTime.Now;
                 blog.CreatedBy = user.Email;
                 _uow.GetRepository<IBlogRepository>().Add(blog);
 
@@ -125,9 +123,7 @@ namespace Web.Areas.MemberArea.Controllers
 
             if (ModelState.IsValid)
             {
-                int userId = Convert.ToInt32(User.Identity.GetUserId());
-                UserInt user = _uow.GetRepository<IUserIntRepository>().GetById(userId);
-                _uow.GetRepository<IVehicleRepository>().Update(vehicleUpdateModel.UpdateVehicle(vehicle, user));
+                _uow.GetRepository<IVehicleRepository>().Update(vehicleUpdateModel.UpdateVehicle(vehicle));
                 _uow.Commit();
 
                 return RedirectToAction("Index");

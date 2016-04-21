@@ -4,7 +4,7 @@ using Domain.Identity;
 
 namespace Domain
 {
-    public class UserBlogConnection
+    public class UserBlogConnection : BaseEntity
     {
         public int UserBlogConnectionId { get; set; }
 
@@ -15,14 +15,6 @@ namespace Domain
         [Required]
         public int BlogId { get; set; }
         public virtual Blog Blog { get; set; }
-
-        [Required]
-        [MaxLength(255)]
-        public string CreatedBy { get; set; }
-
-        [Required]
-        [DataType(DataType.DateTime)]
-        public DateTime CreatedAt { get; set; }
 
     }
 }

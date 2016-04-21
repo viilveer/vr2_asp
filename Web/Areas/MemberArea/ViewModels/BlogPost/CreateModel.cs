@@ -18,15 +18,13 @@ namespace Web.Areas.MemberArea.ViewModels.BlogPost
         [AllowHtml]
         public string Message { get; set; }
 
-        public Domain.BlogPost GetBlogPost(Domain.Blog blog, UserInt creator)
+        public Domain.BlogPost GetBlogPost(Domain.Blog blog)
         {
             return new Domain.BlogPost()
             {
                 BlogId = blog.BlogId,
                 Title = new MultiLangString(Title),
                 Message = new MultiLangString(Message),
-                CreatedAt = DateTime.Now,
-                CreatedBy = creator.Email
             };
         }
     }

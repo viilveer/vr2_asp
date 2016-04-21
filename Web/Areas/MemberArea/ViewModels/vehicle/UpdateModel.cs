@@ -27,15 +27,13 @@ namespace Web.Areas.MemberArea.ViewModels.vehicle
         [Required]
         public string Engine { get; set; }
 
-        public Vehicle UpdateVehicle(Vehicle vehicle, UserInt updater)
+        public Vehicle UpdateVehicle(Vehicle vehicle)
         {
             vehicle.Engine = Engine;
             vehicle.Kw = Kw;
             vehicle.Year = Year;
             vehicle.Model = Model;
             vehicle.Make = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Make.Replace("-", " "));
-            vehicle.UpdatedAt = DateTime.Now;
-            vehicle.UpdatedBy = updater.Email;
             return vehicle;
         }
     }

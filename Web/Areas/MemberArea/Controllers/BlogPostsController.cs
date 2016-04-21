@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using DAL;
 using DAL.Interfaces;
 using Domain;
-using Domain.Identity;
-using Microsoft.AspNet.Identity;
 using Web.Areas.MemberArea.ViewModels.BlogPost;
 
 namespace Web.Areas.MemberArea.Controllers
@@ -29,22 +21,6 @@ namespace Web.Areas.MemberArea.Controllers
             _uow = uow;
         }
 
-
-        // GET: MemberArea/BlogPosts/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            BlogPost blogPost = _uow.GetRepository<IBlogPostRepository>().GetById(id);
-            if (blogPost == null)
-            {
-                return HttpNotFound();
-            }
-            DetailsModel detailsModel = DetailsModelFactory.CreateFromBlogPost(blogPost);
-            return View(detailsModel);
-        }
 
         // GET: MemberArea/BlogPosts/Edit/5
         public ActionResult Edit(int? id)
@@ -81,10 +57,7 @@ namespace Web.Areas.MemberArea.Controllers
 
             if (ModelState.IsValid)
             {
-                int userId = Convert.ToInt32(User.Identity.GetUserId());
-                UserInt user = _uow.GetRepository<IUserIntRepository>().GetById(userId);
-
-                blogPost = model.UpdateBlogPost(blogPost, user);
+                blogPost = model.UpdateBlogPost(blogPost);
 
                 _uow.GetRepository<IBlogPostRepository>().Update(blogPost);
                 _uow.Commit();
@@ -113,9 +86,9 @@ namespace Web.Areas.MemberArea.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            _uow.GetRepository<IBlogRepository>().Delete(id);
+            _uow.GetRepository<IBlogRepository>().Delete(id); // todo :: delete with translations (look from baseapp)
             _uow.Commit();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Blogs"); // todo :: reconsider redirect
         }
     }
 }

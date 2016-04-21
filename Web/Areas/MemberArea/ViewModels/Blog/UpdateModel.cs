@@ -16,10 +16,8 @@ namespace Web.Areas.MemberArea.ViewModels.Blog
         [MaxLength(1024)]
         public string HeadLine { get; set; }
 
-        public Domain.Blog UpdateBlog(Domain.Blog blog, UserInt user)
+        public Domain.Blog UpdateBlog(Domain.Blog blog)
         {
-            blog.UpdatedAt = DateTime.Now;
-            blog.UpdatedBy = user.Email;
             blog.Name = new MultiLangString(Name);
             blog.HeadLine = new MultiLangString(HeadLine);
             return blog;

@@ -4,7 +4,7 @@ using Domain.Identity;
 
 namespace Domain
 {
-    public class UserMessage
+    public class UserMessage : BaseEntity
     {
 
         public int UserMessageId { get; set; }
@@ -19,19 +19,5 @@ namespace Domain
 
         [Required]
         public virtual MultiLangString Message { get; set; }
-
-        [Required]
-        [MaxLength(255)]
-        public string CreatedBy { get; set; }
-
-        [Required]
-        [DataType(DataType.DateTime)]
-        public DateTime CreatedAt { get; set; }
-
-        [MaxLength(255)]
-        public String UpdatedBy { get; set; }
-
-        [DataType(DataType.DateTime)]
-        public DateTime UpdatedAt { get; set; }
     }
 }

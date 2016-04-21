@@ -74,6 +74,7 @@
     <Compile Include="Helpers\FormattedDbEntityValidationException.cs" />
     <Compile Include="Interfaces\IBlogPostRepository.cs" />
     <Compile Include="Interfaces\IBlogRepository.cs" />
+    <Compile Include="Interfaces\IUserNameResolver.cs" />
     <Compile Include="Interfaces\IVehicleRepository.cs" />
     <Compile Include="Interfaces\IDbContext.cs" />
     <Compile Include="Interfaces\IEFRepository.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\UserRoleRepository.cs" />
     <Compile Include="UOW.cs" />
+    <Compile Include="Username.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataAnnotations\DataAnnotations.csproj">

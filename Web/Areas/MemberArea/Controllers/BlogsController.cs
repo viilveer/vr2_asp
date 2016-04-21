@@ -54,9 +54,9 @@ namespace Web.Areas.MemberArea.Controllers
 
             DetailsModel detailsModel = new DetailsModel()
             {
-                HeadLine = blog.HeadLine.Value,
+                HeadLine = blog.HeadLine?.Value,
                 BlogId = blog.BlogId,
-                Name = blog.Name.Value,
+                Name = blog.Name.Value, // name should be always there (filled in when creating a blog with vehicle)
                 CreateModel = createModel,
                 BlogPosts = blogPosts.Select(DetailsModelFactory.CreateFromBlogPost).ToList()
             };
@@ -81,10 +81,7 @@ namespace Web.Areas.MemberArea.Controllers
 
             if (ModelState.IsValid)
             {
-                int userId = Convert.ToInt32(User.Identity.GetUserId());
-                UserInt user = _uow.GetRepository<IUserIntRepository>().GetById(userId);
-
-                BlogPost blogPost = detailsModel.CreateModel.GetBlogPost(blog, user);
+                BlogPost blogPost = detailsModel.CreateModel.GetBlogPost(blog);
 
 
                 _uow.GetRepository<IBlogPostRepository>().Add(blogPost);
@@ -146,9 +143,7 @@ namespace Web.Areas.MemberArea.Controllers
 
             if (ModelState.IsValid)
             {
-                int userId = Convert.ToInt32(User.Identity.GetUserId());
-                UserInt user = _uow.GetRepository<IUserIntRepository>().GetById(userId);
-                blog = updateModel.UpdateBlog(blog, user);
+                blog = updateModel.UpdateBlog(blog);
                 _uow.GetRepository<IBlogRepository>().Update(blog);
                 _uow.Commit();
                 return RedirectToAction("Index");

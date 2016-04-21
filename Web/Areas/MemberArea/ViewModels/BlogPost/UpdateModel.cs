@@ -18,17 +18,15 @@ namespace Web.Areas.MemberArea.ViewModels.BlogPost
         public string Message { get; set; }
 
 
-        public Domain.BlogPost UpdateBlogPost(Domain.BlogPost blogPost, UserInt updater)
+        public Domain.BlogPost UpdateBlogPost(Domain.BlogPost blogPost)
         {
-            blogPost.UpdatedAt = DateTime.Now;
             blogPost.Message = new MultiLangString(Message);
             blogPost.Title = new MultiLangString(Title);
-            blogPost.UpdatedBy = updater.Email;
             return blogPost;
         }
     }
 
-    public class UpdateModelFactory
+    public static class UpdateModelFactory
     {
         public static UpdateModel CreateFromBlogPost(Domain.BlogPost blogPost)
         {

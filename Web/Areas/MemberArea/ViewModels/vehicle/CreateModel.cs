@@ -39,8 +39,6 @@ namespace Web.Areas.MemberArea.ViewModels.vehicle
             vehicle.Year = Year;
             vehicle.Model = Model;
             vehicle.Make = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Make.Replace("-", " "));
-            vehicle.CreatedAt = DateTime.Now;
-            vehicle.CreatedBy = creator.Email;
 
             return vehicle;
         }

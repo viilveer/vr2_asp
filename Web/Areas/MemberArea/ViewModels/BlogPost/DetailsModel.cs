@@ -18,7 +18,7 @@ namespace Web.Areas.MemberArea.ViewModels.BlogPost
         public DateTime UpdatedAt { get; set; }
     }
 
-    public class DetailsModelFactory
+    public static class DetailsModelFactory
     {
         public static DetailsModel CreateFromBlogPost(Domain.BlogPost blogPost)
         {
