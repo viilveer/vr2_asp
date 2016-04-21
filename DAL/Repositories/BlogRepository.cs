@@ -7,6 +7,7 @@ namespace DAL.Repositories
     {
         public BlogRepository(IDbContext dbContext) : base(dbContext)
         {
+
         }
     }
 }

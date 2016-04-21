@@ -252,6 +252,10 @@
     <Compile Include="Areas\MemberArea\Controllers\DashboardController.cs" />
     <Compile Include="Areas\MemberArea\MemberAreaAreaRegistration.cs" />
     <Compile Include="Areas\MemberArea\Controllers\AccountController.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\BlogPost\CreateModel.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\BlogPost\DetailsModel.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\BlogPost\UpdateModel.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\Blog\DetailsModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Blog\UpdateModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\dashboard\ViewModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\vehicle\CreateModel.cs" />
@@ -1974,11 +1978,8 @@
     <Content Include="Areas\MemberArea\Views\Blogs\Details.cshtml" />
     <Content Include="Areas\MemberArea\Views\Blogs\Edit.cshtml" />
     <Content Include="Areas\MemberArea\Views\Blogs\Index.cshtml" />
-    <Content Include="Areas\MemberArea\Views\BlogPosts\Create.cshtml" />
     <Content Include="Areas\MemberArea\Views\BlogPosts\Delete.cshtml" />
-    <Content Include="Areas\MemberArea\Views\BlogPosts\Details.cshtml" />
     <Content Include="Areas\MemberArea\Views\BlogPosts\Edit.cshtml" />
-    <Content Include="Areas\MemberArea\Views\BlogPosts\Index.cshtml" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

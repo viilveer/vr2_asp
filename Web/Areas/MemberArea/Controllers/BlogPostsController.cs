@@ -9,6 +9,9 @@ using System.Web.Mvc;
 using DAL;
 using DAL.Interfaces;
 using Domain;
+using Domain.Identity;
+using Microsoft.AspNet.Identity;
+using Web.Areas.MemberArea.ViewModels.BlogPost;
 
 namespace Web.Areas.MemberArea.Controllers
 {
@@ -26,12 +29,6 @@ namespace Web.Areas.MemberArea.Controllers
             _uow = uow;
         }
 
-        // GET: MemberArea/BlogPosts
-        public ActionResult Index()
-        {
-            var blogPosts = _uow.GetRepository<IBlogPostRepository>().All;
-            return View(blogPosts);
-        }
 
         // GET: MemberArea/BlogPosts/Details/5
         public ActionResult Details(int? id)
@@ -45,31 +42,8 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return HttpNotFound();
             }
-            return View(blogPost);
-        }
-
-        // GET: MemberArea/BlogPosts/Create
-        public ActionResult Create(int? blogId)
-        {
-            ViewBag.BlogId = blogId; // FIXME
-            return View();
-        }
-
-        // POST: MemberArea/BlogPosts/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "BlogPostId,BlogId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt")] BlogPost blogPost)
-        {
-            if (ModelState.IsValid)
-            {
-                _uow.GetRepository<IBlogPostRepository>().Add(blogPost);
-                _uow.Commit();
-                return RedirectToAction("Index");
-            }
-
-            return View(blogPost);
+            DetailsModel detailsModel = DetailsModelFactory.CreateFromBlogPost(blogPost);
+            return View(detailsModel);
         }
 
         // GET: MemberArea/BlogPosts/Edit/5
@@ -84,7 +58,8 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return HttpNotFound();
             }
-            return View(blogPost);
+            
+            return View(UpdateModelFactory.CreateFromBlogPost(blogPost));
         }
 
         // POST: MemberArea/BlogPosts/Edit/5
@@ -92,15 +67,30 @@ namespace Web.Areas.MemberArea.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "BlogPostId,BlogId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt")] BlogPost blogPost)
+        public ActionResult Edit([Bind(Include = "Message, Title")] UpdateModel model, int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            BlogPost blogPost = _uow.GetRepository<IBlogPostRepository>().GetById(id);
+            if (blogPost == null)
+            {
+                return HttpNotFound();
+            }
+
             if (ModelState.IsValid)
             {
+                int userId = Convert.ToInt32(User.Identity.GetUserId());
+                UserInt user = _uow.GetRepository<IUserIntRepository>().GetById(userId);
+
+                blogPost = model.UpdateBlogPost(blogPost, user);
+
                 _uow.GetRepository<IBlogPostRepository>().Update(blogPost);
                 _uow.Commit();
-                return RedirectToAction("Index");
+                return RedirectToAction("Edit");
             }
-            return View(blogPost);
+            return View(model);
         }
 
         // GET: MemberArea/BlogPosts/Delete/5

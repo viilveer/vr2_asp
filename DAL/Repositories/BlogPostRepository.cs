@@ -1,4 +1,6 @@
-﻿using DAL.Interfaces;
+﻿using System.Collections.Generic;
+using System.Linq;
+using DAL.Interfaces;
 using Domain;
 
 namespace DAL.Repositories
@@ -7,6 +9,11 @@ namespace DAL.Repositories
     {
         public BlogPostRepository(IDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public List<BlogPost> GetAllByBlogId(int blogId)
+        {
+            return DbSet.Where(u => u.BlogId == blogId).ToList();
         }
     }
 }
