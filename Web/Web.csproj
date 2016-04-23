@@ -250,6 +250,7 @@
     <Compile Include="Areas\MemberArea\Controllers\BlogPostsController.cs" />
     <Compile Include="Areas\MemberArea\Controllers\BlogsController.cs" />
     <Compile Include="Areas\MemberArea\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\MemberArea\Controllers\MessagesController.cs" />
     <Compile Include="Areas\MemberArea\Controllers\ProfileController.cs" />
     <Compile Include="Areas\MemberArea\MemberAreaAreaRegistration.cs" />
     <Compile Include="Areas\MemberArea\Controllers\AccountController.cs" />
@@ -259,6 +260,10 @@
     <Compile Include="Areas\MemberArea\ViewModels\Blog\DetailsModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Blog\UpdateModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Dashboard\ViewModel.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\MessageThread\CreateModel.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\MessageThread\DetailsModel.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\Message\CreateModel.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\Message\DetailsModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Profile\DetailsModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Vehicle\CreateModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Vehicle\UpdateModel.cs" />
@@ -272,6 +277,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CultureHelper.cs" />
+    <Compile Include="Helpers\Factories\UserIntFactory.cs" />
     <Compile Include="Helpers\HtmlHelper.cs" />
     <Compile Include="Helpers\IListHelper.cs" />
     <Compile Include="Helpers\ModelStateHelper.cs" />
@@ -1984,6 +1990,11 @@
     <Content Include="Areas\MemberArea\Views\BlogPosts\Delete.cshtml" />
     <Content Include="Areas\MemberArea\Views\BlogPosts\Edit.cshtml" />
     <Content Include="Areas\MemberArea\Views\Profile\Details.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Messages\Create.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Messages\Delete.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Messages\Details.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Messages\Edit.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Messages\Index.cshtml" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

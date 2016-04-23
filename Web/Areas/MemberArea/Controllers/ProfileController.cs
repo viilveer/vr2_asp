@@ -11,6 +11,7 @@ using Web.Areas.MemberArea.ViewModels.Profile;
 
 namespace Web.Areas.MemberArea.Controllers
 {
+    [Authorize(Roles = "User")]
     public class ProfileController : Controller
     {
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();

@@ -11,6 +11,6 @@ namespace Web.Helpers
         public static Func<string> GetCurrentUserNameFactory() =>
             () => HttpContext.Current != null && HttpContext.Current.User != null && HttpContext.Current.Request.IsAuthenticated
                 ? HttpContext.Current.User.Identity.Name
-                : "xx";
+                : "Anonymous";
     }
 }

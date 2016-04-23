@@ -7,6 +7,7 @@ using Domain.Identity;
 using Microsoft.AspNet.Identity;
 using Web.Areas.MemberArea.ViewModels.Vehicle;
 using Web.Controllers;
+using Web.Helpers.Factories;
 
 namespace Web.Areas.MemberArea.Controllers
 {
@@ -63,21 +64,18 @@ namespace Web.Areas.MemberArea.Controllers
         {
             if (ModelState.IsValid)
             {
-                // TODO :: move to component
-                int userId = Convert.ToInt32(User.Identity.GetUserId());
-                UserInt user = _uow.GetRepository<IUserIntRepository>().GetById(userId);
+                UserInt user = UserIntFactory.CreateFromIdentity(_uow, User);
                 Vehicle vehicle = vehicleCreateModel.GetVehicle(user);
                 _uow.GetRepository<IVehicleRepository>().Add(vehicle);
                
                 Blog blog = new Blog();
                 blog.VehicleId = vehicle.VehicleId;
                 blog.Name = new MultiLangString(vehicle.Make + " " + vehicle.Model); // TODO :: ugly
-                blog.CreatedBy = user.Email;
                 _uow.GetRepository<IBlogRepository>().Add(blog);
 
-                if (_userManager.IsInRole(userId, "CarOwner") == false)
+                if (_userManager.IsInRole(user.Id, "CarOwner") == false)
                 {
-                    _userManager.AddToRole(userId, "CarOwner");
+                    _userManager.AddToRole(user.Id, "CarOwner");
                 }
                 
 

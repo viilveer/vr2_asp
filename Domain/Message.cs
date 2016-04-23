@@ -10,6 +10,10 @@ namespace Domain
         public int MessageId { get; set; }
 
         [Required]
+        public int MessageThreadId { get; set; }
+        public virtual MessageThread MessageThread { get; set; }
+
+        [Required]
         public int SenderId { get; set; }
         public virtual UserInt Sender { get; set; }
 
