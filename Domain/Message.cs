@@ -4,20 +4,20 @@ using Domain.Identity;
 
 namespace Domain
 {
-    public class UserMessage : BaseEntity
+    public class Message : BaseEntity
     {
 
-        public int UserMessageId { get; set; }
+        public int MessageId { get; set; }
 
         [Required]
-        public int UserId { get; set; }
-        public virtual UserInt User { get; set; }
+        public int SenderId { get; set; }
+        public virtual UserInt Sender { get; set; }
 
         [Required]
         public int ReceiverId { get; set; }
         public virtual UserInt Receiver { get; set; }
 
         [Required]
-        public virtual MultiLangString Message { get; set; }
+        public virtual MultiLangString Text { get; set; }
     }
 }

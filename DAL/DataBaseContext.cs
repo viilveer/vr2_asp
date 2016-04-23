@@ -59,7 +59,7 @@ namespace DAL
         public IDbSet<PostComment> PostComments{ get; set; }
         public IDbSet<PostTag> PostTags{ get; set; }
         public IDbSet<UserBlogConnection> UserBlogConnections{ get; set; }
-        public IDbSet<UserMessage> UserMessages{ get; set; }
+        public IDbSet<Message> UserMessages{ get; set; }
         public IDbSet<MultiLangString> MultiLangStrings { get; set; }
         public IDbSet<Translation> Translations { get; set; }
 
