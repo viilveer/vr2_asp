@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using DAL.Interfaces;
 using Microsoft.AspNet.Identity;
-using Web.Areas.MemberArea.ViewModels.dashboard;
+using Web.Areas.MemberArea.ViewModels.Dashboard;
 using Web.Controllers;
 
 namespace Web.Areas.MemberArea.Controllers

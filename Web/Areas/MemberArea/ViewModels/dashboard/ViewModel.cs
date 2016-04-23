@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Web.Areas.MemberArea.ViewModels.dashboard
+namespace Web.Areas.MemberArea.ViewModels.Dashboard
 {
     public class ViewModel
     {

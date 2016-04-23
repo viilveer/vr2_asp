@@ -1,10 +1,7 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using Domain;
-using Domain.Identity;
+﻿using System.ComponentModel.DataAnnotations;
 using Web.Areas.MemberArea.Components.Validators;
 
-namespace Web.Areas.MemberArea.ViewModels.vehicle
+namespace Web.Areas.MemberArea.ViewModels.Vehicle
 {
     public class UpdateModel
     {
@@ -27,7 +24,7 @@ namespace Web.Areas.MemberArea.ViewModels.vehicle
         [Required]
         public string Engine { get; set; }
 
-        public Vehicle UpdateVehicle(Vehicle vehicle)
+        public Domain.Vehicle UpdateVehicle(Domain.Vehicle vehicle)
         {
             vehicle.Engine = Engine;
             vehicle.Kw = Kw;
@@ -40,7 +37,7 @@ namespace Web.Areas.MemberArea.ViewModels.vehicle
 
     public static class UpdateModelFactory
     {
-        public static UpdateModel CreateFromVehicle(Vehicle vehicle)
+        public static UpdateModel CreateFromVehicle(Domain.Vehicle vehicle)
         {
             return new UpdateModel() {Kw = vehicle.Kw, Engine = vehicle.Engine, Year = vehicle.Year, Model = vehicle.Model, Make = vehicle.Make.ToLower().Replace(" ", "-") };
         } 

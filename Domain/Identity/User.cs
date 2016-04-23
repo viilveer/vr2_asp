@@ -95,7 +95,7 @@ namespace Domain.Identity
     /// <summary>
     ///     IUser implementation, generic
     /// </summary>
-    public class User<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole> : IUser<TKey>
+    public class User<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole> : BaseEntity, IUser<TKey>
         where TRole : Role<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole>
         where TUser : User<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole>
         where TUserClaim : UserClaim<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole>

@@ -5,7 +5,7 @@ using DAL.Interfaces;
 using Domain;
 using Domain.Identity;
 using Microsoft.AspNet.Identity;
-using Web.Areas.MemberArea.ViewModels.vehicle;
+using Web.Areas.MemberArea.ViewModels.Vehicle;
 using Web.Controllers;
 
 namespace Web.Areas.MemberArea.Controllers

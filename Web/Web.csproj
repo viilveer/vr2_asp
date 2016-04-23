@@ -250,6 +250,7 @@
     <Compile Include="Areas\MemberArea\Controllers\BlogPostsController.cs" />
     <Compile Include="Areas\MemberArea\Controllers\BlogsController.cs" />
     <Compile Include="Areas\MemberArea\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\MemberArea\Controllers\ProfileController.cs" />
     <Compile Include="Areas\MemberArea\MemberAreaAreaRegistration.cs" />
     <Compile Include="Areas\MemberArea\Controllers\AccountController.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\BlogPost\CreateModel.cs" />
@@ -257,9 +258,10 @@
     <Compile Include="Areas\MemberArea\ViewModels\BlogPost\UpdateModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Blog\DetailsModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Blog\UpdateModel.cs" />
-    <Compile Include="Areas\MemberArea\ViewModels\dashboard\ViewModel.cs" />
-    <Compile Include="Areas\MemberArea\ViewModels\vehicle\CreateModel.cs" />
-    <Compile Include="Areas\MemberArea\ViewModels\vehicle\UpdateModel.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\Dashboard\ViewModel.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\Profile\DetailsModel.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\Vehicle\CreateModel.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\Vehicle\UpdateModel.cs" />
     <Compile Include="Controllers\ApiAccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -1981,6 +1983,7 @@
     <Content Include="Areas\MemberArea\Views\Blogs\Index.cshtml" />
     <Content Include="Areas\MemberArea\Views\BlogPosts\Delete.cshtml" />
     <Content Include="Areas\MemberArea\Views\BlogPosts\Edit.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Profile\Details.cshtml" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -2199,12 +2202,6 @@
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\readme.md" />
     <Content Include="Scripts\tinymce\langs\readme.md" />
-    <Content Include="Areas\MemberArea\Views\Persons\Create.cshtml" />
-    <Content Include="Areas\MemberArea\Views\Persons\Delete.cshtml" />
-    <Content Include="Areas\MemberArea\Views\Persons\Details.cshtml" />
-    <Content Include="Areas\MemberArea\Views\Persons\Edit.cshtml" />
-    <Content Include="Areas\MemberArea\Views\Persons\Index.cshtml" />
-    <Content Include="Areas\MemberArea\Views\Persons\_CreateEdit.cshtml" />
     <Content Include="Scripts\jquery-2.2.2.min.map" />
     <Content Include="Areas\MemberArea\Views\Vehicles\Create.cshtml" />
     <Content Include="Areas\MemberArea\Views\Vehicles\Delete.cshtml" />

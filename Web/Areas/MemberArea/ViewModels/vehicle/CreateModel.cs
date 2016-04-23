@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-using Domain;
+﻿using System.ComponentModel.DataAnnotations;
 using Domain.Identity;
 using Web.Areas.MemberArea.Components.Validators;
 
-namespace Web.Areas.MemberArea.ViewModels.vehicle
+namespace Web.Areas.MemberArea.ViewModels.Vehicle
 {
     public class CreateModel
     {
@@ -30,9 +25,9 @@ namespace Web.Areas.MemberArea.ViewModels.vehicle
         [Required]
         public string Engine { get; set; }
 
-        public Vehicle GetVehicle(UserInt creator)
+        public Domain.Vehicle GetVehicle(UserInt creator)
         {
-            Vehicle vehicle = new Vehicle();
+            Domain.Vehicle vehicle = new Domain.Vehicle();
             vehicle.UserId = creator.Id;
             vehicle.Engine = Engine;
             vehicle.Kw = Kw;
