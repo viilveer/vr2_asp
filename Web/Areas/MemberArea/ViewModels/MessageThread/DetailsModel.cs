@@ -6,7 +6,7 @@ namespace Web.Areas.MemberArea.ViewModels.MessageThread
     {
         public List<Message.DetailsModel> DetailsModels { get; set; }
 
-        public Message.CreateModel NewMessageModel { get; set; }
+        public ViewModels.Message.CreateModel NewMessageModel { get; set; }
 
         public string Title { get; set; }
 

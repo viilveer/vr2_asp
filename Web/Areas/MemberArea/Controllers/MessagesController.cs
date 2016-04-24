@@ -8,6 +8,7 @@ using Domain;
 using Domain.Identity;
 using Microsoft.AspNet.Identity;
 using Web.Areas.MemberArea.ViewModels.Message;
+using Web.Helpers;
 using Web.Helpers.Factories;
 
 namespace Web.Areas.MemberArea.Controllers
@@ -67,6 +68,46 @@ namespace Web.Areas.MemberArea.Controllers
             return View(detailsModel);
         }
 
+        // TODO :: finish
+        // GET: MemberArea/Messages/Details/5
+        [HttpPost]
+        public ActionResult Details(int? id, ViewModels.MessageThread.DetailsModel detailsModel)
+        {
+            int activeUserId = Convert.ToInt32(User.Identity.GetUserId());
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            MessageThread messageThread = _uow.GetRepository<IMessageThreadRepository>()
+                .GetUserThread((int)id, activeUserId);
+
+            if (messageThread == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                Message message = detailsModel.NewMessageModel.GetMessage();
+                message.MessageThreadId = messageThread.MessageThreadId;
+                MessagesHelper.AssignMessageReceiverAndSender(message, activeUserId, messageThread);
+                _uow.GetRepository<IMessageRepository>().Add(message);
+                _uow.Commit();
+                return RedirectToAction("Details", new {id = messageThread.MessageThreadId});
+            }
+
+
+            detailsModel.Sender = messageThread.Sender.Email; // TODO :: fix
+            detailsModel.Receiver = messageThread.Receiver.Email; // TODO :: fix
+            detailsModel.Title = messageThread.Title.Value;
+            detailsModel.DetailsModels = _uow.GetRepository<IMessageRepository>()
+                .GetAllByThreadId(messageThread.MessageThreadId)
+                .Select(DetailsModelFactory.CreateFromMessage)
+                .ToList();
+
+            return View(detailsModel);
+        }
+
         // GET: MemberArea/Messages/Create
         public ActionResult Create(int? receiverId)
         {
@@ -94,7 +135,7 @@ namespace Web.Areas.MemberArea.Controllers
             }
 
 
-            if (ModelState.IsValid) // TODO :: transaction
+            if (ModelState.IsValid)
             {
                 UserInt sender = UserIntFactory.CreateFromIdentity(_uow, User);
                 MessageThread thread = createModel.GetMessageThread(sender, user);
@@ -104,6 +145,8 @@ namespace Web.Areas.MemberArea.Controllers
                 Message message = createModel.GetMessage(sender, user);
                 message.MessageThreadId = thread.MessageThreadId;
                 _uow.GetRepository<IMessageRepository>().Add(message);
+
+                _uow.Commit();
 
                 return RedirectToAction("Index");
             }
@@ -134,7 +177,7 @@ namespace Web.Areas.MemberArea.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            _uow.GetRepository<IMessageThreadRepository>().Delete(id); // TODO :: delete with messages and check for user
+            _uow.GetRepository<IMessageThreadRepository>().Delete(id); // TODO :: delete with messages and check for user, only one copy should be deleted
             _uow.Commit();
             return RedirectToAction("Index");
         }

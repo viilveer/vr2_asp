@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DAL.Interfaces;
 using Domain;
 
@@ -12,7 +13,7 @@ namespace DAL.Repositories
 
         public List<Message> GetAllByThreadId(int threadId)
         {
-            throw new System.NotImplementedException();
+            return DbSet.Where(u => u.MessageThreadId == threadId).ToList();
         }
     }
 }

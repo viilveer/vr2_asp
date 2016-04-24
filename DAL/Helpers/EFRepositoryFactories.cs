@@ -48,7 +48,7 @@ namespace DAL.Helpers
                 {typeof (IVehicleRepository), dbContext => new VehicleRepository(dbContext)},
                 {typeof (IBlogRepository), dbContext => new BlogRepository(dbContext)},
                 {typeof (IBlogPostRepository), dbContext => new BlogPostRepository(dbContext)},
-                {typeof (IMessageThreadRepository), dbContext => new MessageRepository(dbContext)},
+                {typeof (IMessageThreadRepository), dbContext => new MessageThreadRepository(dbContext)},
                 {typeof (IMessageRepository), dbContext => new MessageRepository(dbContext)},
             };
         }

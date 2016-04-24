@@ -16,7 +16,7 @@ namespace DAL.Repositories
 
         public List<MessageThread> GetAllUserThreads(int userId)
         {
-            return DbSet.Where(u => u.SenderId == userId && u.ReceiverId == userId).ToList();
+            return DbSet.Where(u => u.SenderId == userId || u.ReceiverId == userId).ToList();
         }
 
         public MessageThread GetUserThread(int threadId, int userId)

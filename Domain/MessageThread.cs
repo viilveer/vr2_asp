@@ -8,6 +8,7 @@ using Domain.Identity;
 
 namespace Domain
 {
+    // TODO :: add MessageThreadUser table for users to add delete feature to users, remove sender and receiver, messagehelper must be altered after this refactor
     public class MessageThread : BaseEntity
     {
 

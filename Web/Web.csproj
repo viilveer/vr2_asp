@@ -280,6 +280,7 @@
     <Compile Include="Helpers\Factories\UserIntFactory.cs" />
     <Compile Include="Helpers\HtmlHelper.cs" />
     <Compile Include="Helpers\IListHelper.cs" />
+    <Compile Include="Helpers\MessagesHelper.cs" />
     <Compile Include="Helpers\ModelStateHelper.cs" />
     <Compile Include="Helpers\PagedListHelper.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
