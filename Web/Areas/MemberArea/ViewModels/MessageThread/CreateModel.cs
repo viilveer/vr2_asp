@@ -36,6 +36,7 @@ namespace Web.Areas.MemberArea.ViewModels.MessageThread
                 Text = new MultiLangString(Text),
                 ReceiverId = receiver.Id,
                 SenderId = sender.Id,
+                Status = MessageStatus.New,
             };
         }
 

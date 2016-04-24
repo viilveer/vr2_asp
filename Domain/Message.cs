@@ -23,5 +23,15 @@ namespace Domain
 
         [Required]
         public virtual MultiLangString Text { get; set; }
+
+        [Required]
+        public MessageStatus Status { get; set; }
+    }
+
+    public enum MessageStatus
+    {
+        New,
+        Read,
+        Replied
     }
 }
