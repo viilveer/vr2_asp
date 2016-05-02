@@ -1272,6 +1272,9 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="img\car1.jpg" />
+    <Content Include="img\car2.jpg" />
+    <Content Include="img\car3.jpg" />
     <Content Include="Scripts\App\app.js" />
     <Content Include="Scripts\App\ganalytics.js" />
     <Content Include="Scripts\App\jquery.validate.fixdata.js" />
