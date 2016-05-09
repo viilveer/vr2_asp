@@ -75,10 +75,6 @@
       <Project>{2e1eb913-5b0c-4f6b-9f80-6a4ce6c14c15}</Project>
       <Name>DataAnnotations</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Resources\Resources.csproj">
-      <Project>{7308994f-36c4-49c2-8421-215aff278799}</Project>
-      <Name>Resources</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

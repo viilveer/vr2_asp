@@ -1273,6 +1273,9 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="img\car1.jpg" />
+    <Content Include="img\car2.jpg" />
+    <Content Include="img\car3.jpg" />
     <Content Include="Scripts\App\app.js" />
     <Content Include="Scripts\App\ganalytics.js" />
     <Content Include="Scripts\App\jquery.validate.fixdata.js" />
@@ -2260,10 +2263,6 @@
     <ProjectReference Include="..\Identity\Identity.csproj">
       <Project>{5b0755b3-5cf6-4cfb-b328-e152c98e6e22}</Project>
       <Name>Identity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Resources\Resources.csproj">
-      <Project>{7308994f-36c4-49c2-8421-215aff278799}</Project>
-      <Name>Resources</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
