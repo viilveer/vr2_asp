@@ -22,7 +22,7 @@ namespace DAL.Repositories
 
         public MessageThread GetUserThread(int threadId, int userId)
         {
-            return DbSet.Where(u => u.MessageThreadId == threadId).Include(u => u.MessageThreadReceivers).Single();
+            return DbSet.Where(u => u.MessageThreadId == threadId && u.MessageThreadReceivers.Any(x => x.UserId == userId)).Include(u => u.MessageThreadReceivers).Single();
         }
 
     }

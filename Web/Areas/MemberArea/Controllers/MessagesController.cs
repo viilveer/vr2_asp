@@ -9,13 +9,15 @@ using Domain.Identity;
 using Microsoft.AspNet.Identity;
 using Web.Areas.MemberArea.ViewModels.Message;
 using Web.Areas.MemberArea.ViewModels.MessageThread;
+using Web.Controllers;
 using Web.Helpers;
 using Web.Helpers.Factories;
 using CreateModel = Web.Areas.MemberArea.ViewModels.Message.CreateModel;
 
 namespace Web.Areas.MemberArea.Controllers
 {
-    public class MessagesController : Controller
+    [Authorize(Roles = "User")]
+    public class MessagesController : BaseController
     {
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly string _instanceId = Guid.NewGuid().ToString();
@@ -91,6 +93,7 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 Message message = detailsModel.NewMessageModel.GetMessage();
                 message.MessageThreadId = messageThread.MessageThreadId; // TODO :: FIX
+                message.AuthorId = activeUserId;
                 _uow.GetRepository<IMessageRepository>().Add(message);
                 _uow.Commit();
                 return RedirectToAction("Details", new {id = messageThread.MessageThreadId});

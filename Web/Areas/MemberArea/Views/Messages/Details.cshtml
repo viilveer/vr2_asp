@@ -1,4 +1,5 @@
-﻿@model Web.Areas.MemberArea.ViewModels.MessageThread.DetailsModel
+﻿@using Microsoft.AspNet.Identity
+@model Web.Areas.MemberArea.ViewModels.MessageThread.DetailsModel
 
 @{
     ViewBag.Title = "Details";
@@ -7,98 +8,58 @@
 <h2>Details</h2>
 
 <div>
-    <h4>MessageThread</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Receiver)
-        </dt>
+    <h4>@Html.DisplayFor(model => model.Title)</h4>
+    <h5>@Html.DisplayNameFor(model => model.Author) : @Html.DisplayFor(model => model.Author)</h5>
+</div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Receiver)
-        </dd>
+<div class="panel">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
+    <!--Widget body-->
+    <div id="demo-chat-body" class="collapse in">
+        <div class="nano">
+            <div class="nano-content pad-all" tabindex="0" style="right: -17px;">
+                <ul class="list-unstyled media-block">
+                    @foreach (var item in Model.DetailsModels)
+                    {
+                        <li class="mar-btm">
+                            <div class="media-body pad-hor @(User.Identity.GetUserId() == item.AuthorId.ToString() ? "" : "speech-right")">
+                                <div class="speech">
+                                    @Html.ActionLink(item.Sender, "Details", "Profile", new {id = item.AuthorId}, new {@class = "media-heading"})
+                                    <p>@Html.DisplayFor(modelItem => item.Text)</p>
+                                    <p class="speech-time">
+                                        <i class="fa fa-clock-o fa-fw"></i>@item.DateTimeCreated.ToString("g")
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Author)
-        </dd>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-    </dl>
+            <!--Widget footer-->
+            <div class="panel-footer">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="row">
+                    <div class="col-xs-11">
+                        @Html.TextBoxFor(model => model.NewMessageModel.Text, new {@class = "form-control chat-input"})
+                        @Html.ValidationMessageFor(model => model.NewMessageModel.Text, "", new {@class = "text-danger"})
+                    </div>
+                    <div class="col-xs-2">
+                        <input type="submit" value="Send" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
 <p>
     @Html.ActionLink("Back to List", "Index")
 </p>
-
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
-    <div class="form-horizontal">
-        <h4>BlogPost</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.NewMessageModel.Text, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.NewMessageModel.Text, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.NewMessageModel.Text, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Reply" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
-
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
-<p>
-    @Html.ActionLink("Back to List", "Index")
-</p>
-
-
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.DetailsModels.FirstOrDefault().Receiver)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DetailsModels.FirstOrDefault().Sender)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DetailsModels.FirstOrDefault().Text)
-        </th>
-    </tr>
-
-    @foreach (var item in Model.DetailsModels)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Receiver)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sender)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Text)
-            </td>
-        </tr>
-    }
-
-</table>
