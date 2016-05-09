@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Domain.Identity;
 
@@ -14,18 +15,16 @@ namespace Domain
         public virtual MessageThread MessageThread { get; set; }
 
         [Required]
-        public int SenderId { get; set; }
-        public virtual UserInt Sender { get; set; }
-
-        [Required]
-        public int ReceiverId { get; set; }
-        public virtual UserInt Receiver { get; set; }
+        public int AuthorId { get; set; }
+        public virtual UserInt Author { get; set; }
 
         [Required]
         public virtual MultiLangString Text { get; set; }
 
         [Required]
         public MessageStatus Status { get; set; }
+
+        public ICollection<MessageReceiver> MessageReceivers { get; set; }
     }
 
     public enum MessageStatus

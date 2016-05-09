@@ -7,7 +7,6 @@ namespace DAL.Interfaces
     {
         List<MessageThread> GetAllUserThreads(int userId);
         MessageThread GetUserThread(int threadId, int userId);
-        List<MessageThread> GetAllBySenderId(int userId);
-        List<MessageThread> GetAllByReceiverId(int userId);
+     
     }
 }

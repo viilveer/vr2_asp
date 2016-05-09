@@ -21,8 +21,7 @@ namespace Web.Areas.MemberArea.ViewModels.Message
             return new DetailsModel()
             {
                 Text = message.Text.Value,
-                Sender = message.Sender.Email, // TODO :: fix
-                Receiver = message.Receiver.Email, // TODO :: fix
+                Sender = message.Author.Email, // TODO :: fix
                 StartedDateTime = message.CreatedAt,
             };
         }

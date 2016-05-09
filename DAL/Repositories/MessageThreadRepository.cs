@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,24 +17,13 @@ namespace DAL.Repositories
 
         public List<MessageThread> GetAllUserThreads(int userId)
         {
-            return DbSet.Where(u => u.SenderId == userId || u.ReceiverId == userId).ToList();
+            return DbSet.Where(m => m.MessageThreadReceivers.Any(x => x.UserId==userId)).Include(u => u.MessageThreadReceivers).ToList();
         }
 
         public MessageThread GetUserThread(int threadId, int userId)
         {
-            return DbSet.Single(u => u.MessageThreadId == threadId && (u.ReceiverId == userId || u.SenderId == userId));
+            return DbSet.Where(u => u.MessageThreadId == threadId).Include(u => u.MessageThreadReceivers).Single();
         }
 
-        // Use in SENT folder (if exists)
-        public List<MessageThread> GetAllBySenderId(int userId)
-        {
-            return DbSet.Where(u => u.SenderId == userId).ToList();
-        }
-
-        // Use in RECEIVED folder (if exists)
-        public List<MessageThread> GetAllByReceiverId(int userId)
-        {
-            return DbSet.Where(u => u.ReceiverId == userId).ToList();
-        }
     }
 }

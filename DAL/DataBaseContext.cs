@@ -61,6 +61,8 @@ namespace DAL
         public IDbSet<UserBlogConnection> UserBlogConnections{ get; set; }
         public IDbSet<MessageThread> MessageThreads{ get; set; }
         public IDbSet<Message> Messages{ get; set; }
+        public IDbSet<MessageReceiver> MessageReceivers{ get; set; }
+        public IDbSet<MessageThreadReceiver> MessageThreadReceivers{ get; set; }
         public IDbSet<MultiLangString> MultiLangStrings { get; set; }
         public IDbSet<Translation> Translations { get; set; }
 

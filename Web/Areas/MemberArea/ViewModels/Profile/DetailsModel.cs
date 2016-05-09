@@ -8,6 +8,7 @@ namespace Web.Areas.MemberArea.ViewModels.Profile
 {
     public class DetailsModel
     {
+        public int id { get; set; }
         public string Email { get; set; }
 
         public string UserName { get; set; }
@@ -21,6 +22,7 @@ namespace Web.Areas.MemberArea.ViewModels.Profile
         {
             return new DetailsModel()
             {
+                id = user.Id,
                 Email = user.Email,
                 UserName = user.FirstLastName, // TODO :: this is empty, fix when creating a better registration
                 MemberSinceDateTime = user.CreatedAt,

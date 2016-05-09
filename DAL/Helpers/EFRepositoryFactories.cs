@@ -50,6 +50,8 @@ namespace DAL.Helpers
                 {typeof (IBlogPostRepository), dbContext => new BlogPostRepository(dbContext)},
                 {typeof (IMessageThreadRepository), dbContext => new MessageThreadRepository(dbContext)},
                 {typeof (IMessageRepository), dbContext => new MessageRepository(dbContext)},
+                {typeof (IMessageReceiverRepository), dbContext => new MessageReceiverRepository(dbContext)},
+                {typeof (IMessageThreadReceiverRepository), dbContext => new MessageThreadReceiverRepository(dbContext)},
             };
         }
 

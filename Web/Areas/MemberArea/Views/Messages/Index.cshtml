@@ -12,10 +12,7 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Receiver.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Sender.Email)
+            @Html.DisplayNameFor(model => model.Author.Email)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.CreatedAt)
@@ -35,10 +32,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Receiver.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Sender.Email)
+            @Html.DisplayFor(modelItem => item.Author.Email)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CreatedAt)
@@ -53,7 +47,6 @@
             @Html.DisplayFor(modelItem => item.UpdatedBy)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.MessageThreadId }) |
             @Html.ActionLink("Details", "Details", new { id=item.MessageThreadId }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.MessageThreadId })
         </td>
@@ -61,3 +54,4 @@
 }
 
 </table>
+x

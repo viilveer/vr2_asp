@@ -168,4 +168,7 @@
   <data name="Login_UseLocalAccountToLogin" xml:space="preserve">
     <value>Logi sisse kasutades kohaliku kontot.</value>
   </data>
+  <data name="SendMessageToUser" xml:space="preserve">
+    <value>Saada kasutajale sõnum</value>
+  </data>
 </root>

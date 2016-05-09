@@ -15,5 +15,10 @@ namespace DAL.Repositories
         {
             return DbSet.Where(u => u.MessageThreadId == threadId).ToList();
         }
+
+        public List<Message> GetAllByThreadIdAndUserId(int threadId, int userId)
+        {
+            return DbSet.Where(u => u.MessageThreadId == threadId).ToList();
+        }
     }
 }

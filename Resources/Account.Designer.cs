@@ -115,6 +115,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send message to user.
+        /// </summary>
+        public static string SendMessageToUser {
+            get {
+                return ResourceManager.GetString("SendMessageToUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Code.
         /// </summary>
         public static string VerifyCodeViewModel_Code {

@@ -34,5 +34,14 @@
             @Html.DisplayFor(model => model.MemberSinceDateTime)
         </dd>
 
+        <dt>
+            Saada kiri
+        </dt>
+
+        <dd>
+            
+            @Html.ActionLink(@Resources.Account.SendMessageToUser, "Create", "Messages", new {receiverId = Model.id}, null)
+        </dd>
+
     </dl>
 </div>

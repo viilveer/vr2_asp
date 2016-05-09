@@ -8,8 +8,10 @@ using Domain;
 using Domain.Identity;
 using Microsoft.AspNet.Identity;
 using Web.Areas.MemberArea.ViewModels.Message;
+using Web.Areas.MemberArea.ViewModels.MessageThread;
 using Web.Helpers;
 using Web.Helpers.Factories;
+using CreateModel = Web.Areas.MemberArea.ViewModels.Message.CreateModel;
 
 namespace Web.Areas.MemberArea.Controllers
 {
@@ -55,8 +57,7 @@ namespace Web.Areas.MemberArea.Controllers
 
             ViewModels.MessageThread.DetailsModel detailsModel = new ViewModels.MessageThread.DetailsModel()
             {
-                Sender = messageThread.Sender.Email, // TODO :: fix
-                Receiver = messageThread.Receiver.Email, // TODO :: fix
+                Author = messageThread.Author.Email, // TODO :: fix
                 Title = messageThread.Title.Value,
                 NewMessageModel = new CreateModel(),
                 DetailsModels = _uow.GetRepository<IMessageRepository>()
@@ -89,16 +90,14 @@ namespace Web.Areas.MemberArea.Controllers
             if (ModelState.IsValid)
             {
                 Message message = detailsModel.NewMessageModel.GetMessage();
-                message.MessageThreadId = messageThread.MessageThreadId;
-                MessagesHelper.AssignMessageReceiverAndSender(message, activeUserId, messageThread);
+                message.MessageThreadId = messageThread.MessageThreadId; // TODO :: FIX
                 _uow.GetRepository<IMessageRepository>().Add(message);
                 _uow.Commit();
                 return RedirectToAction("Details", new {id = messageThread.MessageThreadId});
             }
 
 
-            detailsModel.Sender = messageThread.Sender.Email; // TODO :: fix
-            detailsModel.Receiver = messageThread.Receiver.Email; // TODO :: fix
+            detailsModel.Author = messageThread.Author.Email; // TODO :: fix
             detailsModel.Title = messageThread.Title.Value;
             detailsModel.DetailsModels = _uow.GetRepository<IMessageRepository>()
                 .GetAllByThreadId(messageThread.MessageThreadId)
@@ -137,14 +136,27 @@ namespace Web.Areas.MemberArea.Controllers
 
             if (ModelState.IsValid)
             {
-                UserInt sender = UserIntFactory.CreateFromIdentity(_uow, User);
-                MessageThread thread = createModel.GetMessageThread(sender, user);
-                _uow.GetRepository<IMessageThreadRepository>().Add(thread);
-                
 
-                Message message = createModel.GetMessage(sender, user);
-                message.MessageThreadId = thread.MessageThreadId;
-                _uow.GetRepository<IMessageRepository>().Add(message);
+                UserInt sender = UserIntFactory.CreateFromIdentity(_uow, User);
+                NewThreadModel newThreadModel = new NewThreadModel(sender, user);
+                newThreadModel.Prepare(createModel.Title, createModel.Text);
+
+                _uow.GetRepository<IMessageThreadRepository>().Add(newThreadModel.MessageThread);
+
+                newThreadModel.Message.MessageThreadId = newThreadModel.MessageThread.MessageThreadId;
+                _uow.GetRepository<IMessageRepository>().Add(newThreadModel.Message);
+
+                foreach (var messageReceiver in newThreadModel.MessageReceivers)
+                {
+                    messageReceiver.MessageId = newThreadModel.Message.MessageId;
+                    _uow.GetRepository<IMessageReceiverRepository>().Add(messageReceiver);
+                }
+
+                foreach (var messageThreadReceiver in newThreadModel.MessageThreadReceivers)
+                {
+                    messageThreadReceiver.MessageThreadId = newThreadModel.Message.MessageId;
+                    _uow.GetRepository<IMessageThreadReceiverRepository>().Add(messageThreadReceiver);
+                }
 
                 _uow.Commit();
 
@@ -177,7 +189,12 @@ namespace Web.Areas.MemberArea.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            _uow.GetRepository<IMessageThreadRepository>().Delete(id); // TODO :: delete with messages and check for user, only one copy should be deleted
+            int userId = Convert.ToInt32(User.Identity.GetUserId());
+            
+            List<Message> messages =_uow.GetRepository<IMessageRepository>()
+                .GetAllByThreadIdAndUserId(id, userId);
+
+         
             _uow.Commit();
             return RedirectToAction("Index");
         }
