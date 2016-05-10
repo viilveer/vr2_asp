@@ -19,7 +19,8 @@ namespace Domain
         public virtual UserInt Author { get; set; }
 
         [Required]
-        public virtual MultiLangString Title { get; set; }
+        [MaxLength(255)]
+        public string Title { get; set; }
         public virtual ICollection<MessageThreadReceiver> MessageThreadReceivers { get; set; }
     }
 }

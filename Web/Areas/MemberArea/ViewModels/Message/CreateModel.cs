@@ -13,7 +13,7 @@ namespace Web.Areas.MemberArea.ViewModels.Message
         {
             return new Domain.Message()
             {
-                Text = new MultiLangString(Text),
+                Text = Text,
                 Status = MessageStatus.New,
             };
         }

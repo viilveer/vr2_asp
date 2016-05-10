@@ -66,7 +66,7 @@ namespace Web.Areas.MemberArea.ViewModels.MessageThread
            
             MessageThread = new Domain.MessageThread()
             {
-                Title = new MultiLangString(title),
+                Title = title,
                 AuthorId = _sender.Id,
             };
         }
@@ -76,7 +76,7 @@ namespace Web.Areas.MemberArea.ViewModels.MessageThread
         {
             Message = new Domain.Message()
             {
-                Text = new MultiLangString(text),
+                Text = text,
                 AuthorId = _sender.Id,
                 Status = MessageStatus.New,
             };

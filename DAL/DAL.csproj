@@ -74,6 +74,7 @@
     <Compile Include="Helpers\EFRepositoryProvider.cs" />
     <Compile Include="Helpers\FormattedDbEntityValidationException.cs" />
     <Compile Include="Interfaces\IBlogPostRepository.cs" />
+    <Compile Include="Interfaces\IUserBlogConnectionRepository.cs" />
     <Compile Include="Interfaces\IBlogRepository.cs" />
     <Compile Include="Interfaces\IMessageThreadReceiverRepository.cs" />
     <Compile Include="Interfaces\IMessageReceiverRepository.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Repositories\MessageThreadReceiverRepository.cs" />
     <Compile Include="Repositories\MessageReceiverRepository.cs" />
     <Compile Include="Repositories\MessageRepository.cs" />
+    <Compile Include="Repositories\UserBlogConnectionRepository.cs" />
     <Compile Include="Repositories\MessageThreadRepository.cs" />
     <Compile Include="Repositories\VehicleRepository.cs" />
     <Compile Include="Repositories\EFRepository.cs" />

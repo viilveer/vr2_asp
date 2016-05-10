@@ -10,12 +10,15 @@ namespace Domain
 
         [Required]
         public int BlogId { get; set; }
+
         public virtual Blog Blog { get; set; }
 
-        public virtual MultiLangString Title { get; set; }
+        [MaxLength(255)]
+        public string  Title { get; set; }
 
         [Required]
-        public virtual MultiLangString Message { get; set; }
+        [MaxLength(65365)]
+        public string  Message { get; set; }
 
     }
 }

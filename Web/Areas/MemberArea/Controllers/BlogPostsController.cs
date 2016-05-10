@@ -21,6 +21,48 @@ namespace Web.Areas.MemberArea.Controllers
             _uow = uow;
         }
 
+        // GET: MemberArea/BlogPosts/Edit/5
+        public ActionResult Create(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Blog blog = _uow.GetRepository<IBlogRepository>().GetById(id);
+            if (blog == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(new CreateModel());
+        }
+
+        // POST: MemberArea/BlogPosts/Create/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Message, Title")] CreateModel model, int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Blog blog = _uow.GetRepository<IBlogRepository>().GetById(id);
+            if (blog == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                _uow.GetRepository<IBlogPostRepository>().Add(model.GetBlogPost(blog));
+                _uow.Commit();
+                return RedirectToAction("Edit", new {id = id.Value});
+            }
+            return View(model);
+        }
+
 
         // GET: MemberArea/BlogPosts/Edit/5
         public ActionResult Edit(int? id)
@@ -61,7 +103,7 @@ namespace Web.Areas.MemberArea.Controllers
 
                 _uow.GetRepository<IBlogPostRepository>().Update(blogPost);
                 _uow.Commit();
-                return RedirectToAction("Edit");
+                return RedirectToAction("Edit", new {id = id.Value});
             }
             return View(model);
         }

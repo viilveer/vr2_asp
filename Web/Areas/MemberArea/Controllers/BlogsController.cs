@@ -5,7 +5,6 @@ using System.Net;
 using System.Web.Mvc;
 using DAL.Interfaces;
 using Domain;
-using Domain.Identity;
 using Microsoft.AspNet.Identity;
 using Web.Areas.MemberArea.ViewModels.BlogPost;
 using Web.Controllers;
@@ -49,55 +48,18 @@ namespace Web.Areas.MemberArea.Controllers
                 return HttpNotFound();
             }
 
-            CreateModel createModel = new CreateModel();
             List<BlogPost> blogPosts = _uow.GetRepository<IBlogPostRepository>().GetAllByBlogId(blog.BlogId);
 
             DetailsModel detailsModel = new DetailsModel()
             {
-                HeadLine = blog.HeadLine?.Value,
+                HeadLine = blog.HeadLine,
                 BlogId = blog.BlogId,
-                Name = blog.Name.Value, // name should be always there (filled in when creating a blog with vehicle)
-                CreateModel = createModel,
+                Name = blog.Name, // name should be always there (filled in when creating a blog with vehicle)
                 BlogPosts = blogPosts.Select(DetailsModelFactory.CreateFromBlogPost).ToList()
             };
             return View(detailsModel);
         }
 
-        // GET: MemberArea/Blogs/Details/5
-        // TODO :: Fix WET code
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Details(int? id, DetailsModel detailsModel)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Blog blog = _uow.GetRepository<IBlogRepository>().GetById(id);
-            if (blog == null)
-            {
-                return HttpNotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                BlogPost blogPost = detailsModel.CreateModel.GetBlogPost(blog);
-
-
-                _uow.GetRepository<IBlogPostRepository>().Add(blogPost);
-                _uow.Commit();
-                return RedirectToAction("Edit", "BlogPosts",  new {id = blogPost.BlogPostId});
-            }
-
-            List<BlogPost> blogPosts = _uow.GetRepository<IBlogPostRepository>().GetAllByBlogId(blog.BlogId);
-
-            detailsModel.HeadLine = blog.HeadLine.Value;
-            detailsModel.BlogId = blog.BlogId;
-            detailsModel.Name = blog.Name.Value;
-            detailsModel.BlogPosts = blogPosts.Select(DetailsModelFactory.CreateFromBlogPost).ToList();
-
-            return View(detailsModel);
-        }
 
 
         // GET: MemberArea/Blogs/Edit/5
@@ -115,8 +77,8 @@ namespace Web.Areas.MemberArea.Controllers
 
             UpdateModel updateModel = new UpdateModel()
             {
-                HeadLine = blog.HeadLine?.Value,
-                Name = blog.Name?.Value,
+                HeadLine = blog.HeadLine,
+                Name = blog.Name,
                 VehicleName = blog.Vehicle.Make + " " + blog.Vehicle.Model
             };
 
@@ -151,6 +113,51 @@ namespace Web.Areas.MemberArea.Controllers
             return View(updateModel);
         }
 
-     
+        // GET: MemberArea/Blog/ConnectTo/5
+        public ActionResult ConnectTo(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            int blogId = id.Value;
+            int userId = Convert.ToInt32(User.Identity.GetUserId());
+            
+            UserBlogConnection userBlogConnection =
+                _uow.GetRepository<IUserBlogConnectionRepository>()
+                    .GetUserAndBlogConnection(userId, blogId);
+
+            if (userBlogConnection == null) // TODO:: handle count > 1?
+            {
+                UserBlogConnection connection = new UserBlogConnection()
+                {
+                    UserId = userId,
+                    BlogId = blogId,
+                };
+                _uow.GetRepository<IUserBlogConnectionRepository>().Add(connection);
+                _uow.Commit();
+            }
+
+            return RedirectToAction("Details", "Blogs", new { area = "MemberArea", id = id });
+        }
+
+        // GET: MemberArea/Blog/ConnectTo/5
+        public ActionResult DisconnectFrom(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            int blogId = Convert.ToInt32(id);
+            int userId = Convert.ToInt32(User.Identity.GetUserId());
+
+            
+            _uow.GetRepository<IUserBlogConnectionRepository>().DeleteByUserIdAndBlogId(userId, blogId);
+            _uow.Commit();
+
+            return RedirectToAction("Details", "Blogs", new { area = "MemberArea", id = id });
+        }
+
+
     }
 }

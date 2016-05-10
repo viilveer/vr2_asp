@@ -7,8 +7,6 @@ namespace Web.Areas.MemberArea.ViewModels.Blog
     {
         public IEnumerable<BlogPost.DetailsModel> BlogPosts { get; set; }
 
-        public CreateModel CreateModel { get; set; }
-
         public string Name { get; set; }
 
         public string HeadLine { get; set; }

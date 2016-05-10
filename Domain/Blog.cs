@@ -14,9 +14,10 @@ namespace Domain
         public virtual Vehicle Vehicle { get; set; }
 
         [Required]
-        public virtual MultiLangString Name { get; set; }
-
-        public virtual MultiLangString HeadLine { get; set; }
+        [MaxLength(65365)]
+        public string Name { get; set; }
+        [MaxLength(255)]
+        public string HeadLine { get; set; }
 
     }
 }

@@ -18,8 +18,8 @@ namespace Web.Areas.MemberArea.ViewModels.Blog
 
         public Domain.Blog UpdateBlog(Domain.Blog blog)
         {
-            blog.Name = new MultiLangString(Name);
-            blog.HeadLine = new MultiLangString(HeadLine);
+            blog.Name = Name;
+            blog.HeadLine = HeadLine;
             return blog;
         }
     }

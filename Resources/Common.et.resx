@@ -147,4 +147,13 @@
   <data name="Submit" xml:space="preserve">
     <value>Kinnita</value>
   </data>
+  <data name="Create" xml:space="preserve">
+    <value>Loo</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Kustuta</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Muuda</value>
+  </data>
 </root>

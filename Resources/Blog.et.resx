@@ -117,61 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="RegisterButtonRegister" xml:space="preserve">
-    <value>Register</value>
+  <data name="AllMyBlogs" xml:space="preserve">
+    <value>Minu blogid</value>
   </data>
-  <data name="RegisterCreateNewAccount" xml:space="preserve">
-    <value>Create a new account.</value>
+  <data name="BlogNoun" xml:space="preserve">
+    <value>Blogi</value>
   </data>
-  <data name="RegisterTitle" xml:space="preserve">
-    <value>Register</value>
+  <data name="ConnectTo" xml:space="preserve">
+    <value>Lisa blogi lemmikuks</value>
   </data>
-  <data name="ViewModel_Email" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="ViewModel_Password" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="ViewModel_RememberMe" xml:space="preserve">
-    <value>Remember me?</value>
-  </data>
-  <data name="ViewModel_ConfirmPassword" xml:space="preserve">
-    <value>Confirm password</value>
-  </data>
-  <data name="ViewModel_ConfirmPasswordNoMatch" xml:space="preserve">
-    <value>The password and confirmation password do not match.</value>
-  </data>
-  <data name="ViewModel_PasswordLengthError" xml:space="preserve">
-    <value>The {0} must be at least {2} characters long.</value>
-  </data>
-  <data name="VerifyCodeViewModel_RememberBrowser" xml:space="preserve">
-    <value>Remember this browser?</value>
-  </data>
-  <data name="ViewModel_EmailRequired" xml:space="preserve">
-    <value>Email is required.</value>
-  </data>
-  <data name="ViewModel_PasswordRequired" xml:space="preserve">
-    <value>Password is required.</value>
-  </data>
-  <data name="VerifyCodeViewModel_Code" xml:space="preserve">
-    <value>Code</value>
-  </data>
-  <data name="ViewModel_EmailInvalid" xml:space="preserve">
-    <value>Email invalid.</value>
-  </data>
-  <data name="Login_ButtonLogin" xml:space="preserve">
-    <value>Log in</value>
-  </data>
-  <data name="Login_Title" xml:space="preserve">
-    <value>Log in</value>
-  </data>
-  <data name="Login_UseLocalAccountToLogin" xml:space="preserve">
-    <value>Use a local account to log in.</value>
-  </data>
-  <data name="SendMessageToUser" xml:space="preserve">
-    <value>Send message to user</value>
-  </data>
-  <data name="AddAsConnection" xml:space="preserve">
-    <value>Add as a connection</value>
+  <data name="DisconnectFrom" xml:space="preserve">
+    <value>Eemalda blogi lemmikutest</value>
   </data>
 </root>

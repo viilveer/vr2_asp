@@ -20,8 +20,8 @@ namespace Web.Areas.MemberArea.ViewModels.BlogPost
 
         public Domain.BlogPost UpdateBlogPost(Domain.BlogPost blogPost)
         {
-            blogPost.Message = new MultiLangString(Message);
-            blogPost.Title = new MultiLangString(Title);
+            blogPost.Message = Message;
+            blogPost.Title = Title;
             return blogPost;
         }
     }
@@ -32,8 +32,8 @@ namespace Web.Areas.MemberArea.ViewModels.BlogPost
         {
             return new UpdateModel()
             {
-                Title = blogPost.Title.Value,
-                Message = blogPost.Message.Value,
+                Title = blogPost.Title,
+                Message = blogPost.Message,
             };
         }
     }

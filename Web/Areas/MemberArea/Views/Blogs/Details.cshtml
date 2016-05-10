@@ -7,68 +7,13 @@
 }
 
 
-<h2>Details</h2>
-
-<div>
-    <h4>Blogi @Model.Name</h4>
-    <hr/>
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.HeadLine)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.HeadLine)
-        </dd>
-    </dl>
-</div>
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
-    <div class="form-horizontal">
-        <h4>BlogPost</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.CreateModel.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CreateModel.Title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CreateModel.Title, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CreateModel.Message, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextAreaFor(model => model.CreateModel.Message, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CreateModel.Message, "", new { @class = "text-danger" })
-            </div>
-        </div>
+<h2>@Resources.Blog.BlogNoun @Model.Name</h2>
 
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create new blogpost" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/scripts/app/tinymce.js")
-}
 <p>
     @Html.ActionLink("Edit", "Edit", new {id = Model.BlogId}) |
+    @Html.ActionLink("Create post", "Create", "BlogPosts", new {id = Model.BlogId}, null) |
     @Html.ActionLink("Back to List", "Index")
 </p>
 
@@ -78,9 +23,6 @@
     <tr>
         <th>
             @Html.DisplayNameFor(blogPosts => blogPosts.BlogPosts.FirstOrDefault().Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(blogPosts => blogPosts.BlogPosts.FirstOrDefault().CreatedBy)
         </th>
         <th>
             @Html.DisplayNameFor(blogPosts => blogPosts.BlogPosts.FirstOrDefault().CreatedAt)
@@ -98,16 +40,13 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedBy)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UpdatedAt)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", "BlogPosts", new {id = item.BlogPostId}, null) |
+                @Html.ActionLink("View", "Edit", "BlogPosts", new {id = item.BlogPostId}, null) |
                 @Html.ActionLink("Delete", "Delete", "BlogPosts", new {id = item.BlogPostId}, null) 
             </td>
         </tr>
@@ -115,3 +54,6 @@
 
 </table>
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

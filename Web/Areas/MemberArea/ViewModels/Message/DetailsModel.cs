@@ -25,7 +25,7 @@ namespace Web.Areas.MemberArea.ViewModels.Message
                 Id = message.MessageId,
                 AuthorId = message.AuthorId,
                 DateTimeCreated = message.CreatedAt,
-                Text = message.Text.Value,
+                Text = message.Text,
                 Sender = message.Author.Email, // TODO :: fix
                 StartedDateTime = message.CreatedAt,
             };

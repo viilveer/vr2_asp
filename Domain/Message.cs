@@ -19,7 +19,8 @@ namespace Domain
         public virtual UserInt Author { get; set; }
 
         [Required]
-        public virtual MultiLangString Text { get; set; }
+        [MaxLength(65365)]
+        public string Text { get; set; }
 
         [Required]
         public MessageStatus Status { get; set; }

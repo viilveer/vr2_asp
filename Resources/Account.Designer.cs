@@ -61,6 +61,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add as a connection.
+        /// </summary>
+        public static string AddAsConnection {
+            get {
+                return ResourceManager.GetString("AddAsConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log in.
         /// </summary>
         public static string Login_ButtonLogin {

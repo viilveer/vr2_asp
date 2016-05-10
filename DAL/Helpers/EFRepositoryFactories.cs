@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DAL.Interfaces;
 using DAL.Repositories;
 
@@ -35,11 +32,6 @@ namespace DAL.Helpers
         {
             return new Dictionary<Type, Func<IDbContext, object>>
             {
-                //{typeof(IUserRepository), dbContext => new UserRepository(dbContext)},
-                //{typeof(IUserRoleRepository), dbContext => new UserRoleRepository(dbContext)},
-                //{typeof(IUserClaimRepository), dbContext => new UserClaimRepository(dbContext)},
-                //{typeof(IUserLoginRepository), dbContext => new UserLoginRepository(dbContext)},
-                //{typeof(IRoleRepository), dbContext => new RoleRepository(dbContext)},
                 {typeof (IUserIntRepository), dbContext => new UserIntRepository(dbContext)},
                 {typeof (IUserRoleIntRepository), dbContext => new UserRoleIntRepository(dbContext)},
                 {typeof (IUserClaimIntRepository), dbContext => new UserClaimIntRepository(dbContext)},
@@ -52,6 +44,7 @@ namespace DAL.Helpers
                 {typeof (IMessageRepository), dbContext => new MessageRepository(dbContext)},
                 {typeof (IMessageReceiverRepository), dbContext => new MessageReceiverRepository(dbContext)},
                 {typeof (IMessageThreadReceiverRepository), dbContext => new MessageThreadReceiverRepository(dbContext)},
+                {typeof (IUserBlogConnectionRepository), dbContext => new UserBlogConnectionRepository(dbContext)},
             };
         }
 

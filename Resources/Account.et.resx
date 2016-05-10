@@ -171,4 +171,7 @@
   <data name="SendMessageToUser" xml:space="preserve">
     <value>Saada kasutajale sõnum</value>
   </data>
+  <data name="AddAsConnection" xml:space="preserve">
+    <value>Hakka kasutajat jälgima</value>
+  </data>
 </root>

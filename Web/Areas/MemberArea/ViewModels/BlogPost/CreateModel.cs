@@ -23,8 +23,8 @@ namespace Web.Areas.MemberArea.ViewModels.BlogPost
             return new Domain.BlogPost()
             {
                 BlogId = blog.BlogId,
-                Title = new MultiLangString(Title),
-                Message = new MultiLangString(Message),
+                Title = Title,
+                Message = Message
             };
         }
     }

@@ -35,12 +35,19 @@
         </dd>
 
         <dt>
-            Saada kiri
         </dt>
 
         <dd>
-            
+
             @Html.ActionLink(@Resources.Account.SendMessageToUser, "Create", "Messages", new {receiverId = Model.id}, null)
+        </dd>
+
+        <dt>
+        </dt>
+
+        <dd>
+
+            @Html.ActionLink(@Resources.Account.AddAsConnection, "Create", "Messages", new { receiverId = Model.id }, null)
         </dd>
 
     </dl>

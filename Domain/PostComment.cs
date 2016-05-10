@@ -12,6 +12,7 @@ namespace Domain
         public virtual BlogPost BlogPost { get; set; }
        
         [Required]
-        public virtual MultiLangString Message { get; set; }
+        [MaxLength(9000)]
+        public string Message { get; set; }
     }
 }

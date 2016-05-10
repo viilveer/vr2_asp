@@ -60,7 +60,7 @@ namespace Web.Areas.MemberArea.Controllers
             ViewModels.MessageThread.DetailsModel detailsModel = new ViewModels.MessageThread.DetailsModel()
             {
                 Author = messageThread.Author.Email, // TODO :: fix
-                Title = messageThread.Title.Value,
+                Title = messageThread.Title,
                 NewMessageModel = new CreateModel(),
                 DetailsModels = _uow.GetRepository<IMessageRepository>()
                     .GetAllByThreadId(messageThread.MessageThreadId)
@@ -101,7 +101,7 @@ namespace Web.Areas.MemberArea.Controllers
 
 
             detailsModel.Author = messageThread.Author.Email; // TODO :: fix
-            detailsModel.Title = messageThread.Title.Value;
+            detailsModel.Title = messageThread.Title;
             detailsModel.DetailsModels = _uow.GetRepository<IMessageRepository>()
                 .GetAllByThreadId(messageThread.MessageThreadId)
                 .Select(DetailsModelFactory.CreateFromMessage)
