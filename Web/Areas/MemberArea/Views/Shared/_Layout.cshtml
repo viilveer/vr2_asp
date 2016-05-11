@@ -46,11 +46,15 @@
                 <ul class="nav navbar-nav">
                     @if (Request.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("Vehicles", "Index", "Vehicles", new { area = "MemberArea" }, null)</li>
+                        <li>@Html.ActionLink(@Resources.Vehicles.MyVehicles, "Index", "Vehicles", new { area = "MemberArea" }, null)</li>
                     }
                     @if (Request.IsAuthenticated && User.IsInRole("CarOwner"))
                     {
-                        <li>@Html.ActionLink("Blogs", "Index", "Blogs", new { area = "MemberArea" }, null)</li>
+                        <li>@Html.ActionLink(@Resources.Blog.AllMyBlogs, "Index", "Blogs", new { area = "MemberArea" }, null)</li>
+                    }
+                    @if (Request.IsAuthenticated && User.IsInRole("User"))
+                    {
+                        <li>@Html.ActionLink(@Resources.Messages.MyMessages, "Index", "Messages", new { area = "MemberArea" }, null)</li>
                     }
                     @if (Request.IsAuthenticated && User.IsInRole("Admin"))
                     {
@@ -58,7 +62,6 @@
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle">Admin <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li class="divider"></li>
-                                <li>@Html.ActionLink("MultiLangStrings", "Index", new { area = "Admin", controller = "MultiLangStrings" })</li>
                                 <li>@Html.ActionLink("Translations", "Index", new { area = "Admin", controller = "Translations" })</li>
                                 <li>@Html.ActionLink("System logs", "Index", new { area = "Admin", controller = "SystemLog" })</li>
                             </ul>
@@ -75,7 +78,7 @@
                         </li>
                     }
                 </ul>
-                @Html.Partial("_LoginPartial")
+                @Html.Partial("~/Areas/MemberArea/Views/Shared/_LoginPartial.cshtml")
             </div>
         </div>
     </div>

@@ -3,11 +3,12 @@ using System.Net;
 using System.Web.Mvc;
 using DAL.Interfaces;
 using Domain.Identity;
+using Web.Controllers;
 
 namespace Web.Areas.Admin.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class UserClaimsController : Controller
+    public class UserClaimsController : BaseController
     {
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly string _instanceId = Guid.NewGuid().ToString();

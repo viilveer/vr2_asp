@@ -6,11 +6,12 @@ using DAL.Interfaces;
 using Domain.Identity;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using Web.Controllers;
 
 namespace Web.Areas.Admin.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class RolesController : Controller
+    public class RolesController : BaseController
     {
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly string _instanceId = Guid.NewGuid().ToString();
