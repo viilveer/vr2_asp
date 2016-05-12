@@ -8,6 +8,13 @@ namespace Web
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.Add(new StyleBundle("~/content/MemberArea").Include(
+                "~/Content/MemberArea/styles.css",
+                "~/Content/MemberArea/buttons.css"
+                ));
+            bundles.Add(new ScriptBundle("~/bundles/MemberArea").Include(
+                "~/Scripts/App/memberarea.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                 "~/bower_components/jquery/dist/jquery.js"));
 

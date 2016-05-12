@@ -1,53 +1,67 @@
-﻿@model IEnumerable<Domain.Blog>
+﻿@using PagedList.Mvc
+@using Web.Helpers
+@model Web.Areas.MemberArea.ViewModels.Blog.IndexModel
 
-@{
-    ViewBag.Title = "Index";
-}
 
-<h2>@Resources.Blog.AllMyBlogs</h2>
+<div class="content-box-large">
+    <div class="panel-heading">
+        <div class="panel-title">@Resources.Vehicles.MyVehicles</div>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Vehicle.Make)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UpdatedBy)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UpdatedAt)
-        </th>
-        <th></th>
-    </tr>
+                    <th>
+                        <a href="@Url.Action("Index", new {SortProperty = GridViewHelper.GetSortProperty("_model", Model.SortProperty)})">
+                            @Html.DisplayNameFor(model => model.Blogs.FirstOrDefault().Vehicle.Make)
+                            <i class="fa @GridViewHelper.GetSortIcon("_model", Model.SortProperty)"></i>
+                        </a>
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Blogs.FirstOrDefault().CreatedBy)
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Vehicle.Make)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedBy)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedAt)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UpdatedBy)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UpdatedAt)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.BlogId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.BlogId }) |
-        </td>
-    </tr>
-}
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Blogs.FirstOrDefault().CreatedAt)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Blogs.FirstOrDefault().UpdatedBy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Blogs.FirstOrDefault().UpdatedAt)
+                    </th>
+                    <th></th>
+                </tr>
 
-</table>
+                @foreach (var item in Model.Blogs)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Vehicle.Make)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedBy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedAt)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UpdatedBy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UpdatedAt)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.BlogId }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.BlogId }) |
+                        </td>
+                    </tr>
+                }
+
+            </table>
+            @Html.PagedListPager(Model.Blogs, page => Url.Action("Index", new { PageNumber = page }))
+        </div>
+    </div>
+</div>
+

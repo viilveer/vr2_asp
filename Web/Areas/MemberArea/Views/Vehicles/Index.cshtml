@@ -1,69 +1,78 @@
-﻿@model IEnumerable<Domain.Vehicle>
-
-@{
-    ViewBag.Title = "Index";
-}
-
-<h2>Index</h2>
+﻿@using PagedList.Mvc
+@using Web.Helpers
+@model Web.Areas.MemberArea.ViewModels.Vehicle.IndexModel
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.User.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Make)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Model)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Year)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Kw)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Engine)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </th>
-        <th></th>
-    </tr>
+<div class="content-box-large">
+    <div class="panel-heading">
+        <div class="panel-title">@Resources.Vehicles.MyVehicles</div>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.User.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Make)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Model)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Year)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Kw)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Engine)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedAt)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.VehicleId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.VehicleId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.VehicleId })
-        </td>
-    </tr>
-}
+                    <th>
+                        <a href="@Url.Action("Index", new {SortProperty = GridViewHelper.GetSortProperty("_make", Model.SortProperty)})">
+                            @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().Make)
+                            <i class="fa @GridViewHelper.GetSortIcon("_make", Model.SortProperty)"></i>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="@Url.Action("Index", new {SortProperty = GridViewHelper.GetSortProperty("_model", Model.SortProperty)})">
+                            @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().Model)
+                            <i class="fa @GridViewHelper.GetSortIcon("_model", Model.SortProperty)"></i>
+                        </a>
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().Year)
 
-</table>
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().Kw)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().Engine)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().CreatedAt)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model.Vehicles)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Make)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Model)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Year)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Kw)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Engine)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedAt)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new {id = item.VehicleId}) |
+                            @Html.ActionLink("Details", "Details", new {id = item.VehicleId}) |
+                            @Html.ActionLink("Delete", "Delete", new {id = item.VehicleId})
+                        </td>
+                    </tr>
+                }
+
+            </table>
+            @Html.PagedListPager(Model.Vehicles, page => Url.Action("Index", new { PageNumber = page }))
+        </div>
+    </div>
+</div>

@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using DAL.Interfaces;
 using Domain;
 using Microsoft.AspNet.Identity;
+using PagedList;
+using Web.Areas.MemberArea.ViewModels.Blog;
 using Web.Areas.MemberArea.ViewModels.BlogPost;
 using Web.Controllers;
 using DetailsModel = Web.Areas.MemberArea.ViewModels.Blog.DetailsModel;
@@ -28,10 +30,23 @@ namespace Web.Areas.MemberArea.Controllers
         }
 
         // GET: MemberArea/Blogs
-        public ActionResult Index()
+        public ActionResult Index(IndexModel vm)
         {
-            var blogs = _uow.GetRepository<IBlogRepository>().All;
-            return View(blogs);
+            int totalVehicleCount;
+            string realSortProperty;
+
+            // if not set, set base values
+            vm.PageNumber = vm.PageNumber ?? 1;
+            vm.PageSize = vm.PageSize ?? 25;
+
+            var res = _uow.GetRepository<IBlogRepository>().GetListByUserId(User.Identity.GetUserId<int>(), vm.SortProperty, vm.PageNumber.Value - 1, vm.PageSize.Value, out totalVehicleCount, out realSortProperty);
+
+            vm.SortProperty = realSortProperty;
+
+            // https://github.com/kpi-ua/X.PagedList
+            vm.Blogs = new StaticPagedList<Blog>(res, vm.PageNumber.Value, vm.PageSize.Value, totalVehicleCount);
+
+            return View(vm);
         }
 
         // GET: MemberArea/Blogs/Details/5

@@ -5,6 +5,8 @@ using DAL.Interfaces;
 using Domain;
 using Domain.Identity;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using PagedList;
 using Web.Areas.MemberArea.ViewModels.Vehicle;
 using Web.Controllers;
 using Web.Helpers.Factories;
@@ -19,19 +21,34 @@ namespace Web.Areas.MemberArea.Controllers
 
         private readonly IUOW _uow;
         private ApplicationUserManager _userManager;
+        private ApplicationSignInManager _signInManager;
 
-        public VehiclesController(IUOW uow, ApplicationUserManager userManager)
+        public VehiclesController(IUOW uow, ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             _logger.Debug("InstanceId: " + _instanceId);
             _uow = uow;
+            _signInManager = signInManager;
             _userManager = userManager;
         }
 
         // GET: Vehicles
-        public ActionResult Index()
+        public ActionResult Index(IndexModel vm)
         {
-            var vehicles = _uow.GetRepository<IVehicleRepository>().GetAllByUserId(Convert.ToInt32(User.Identity.GetUserId()));
-            return View(vehicles);
+            int totalVehicleCount;
+            string realSortProperty;
+
+            // if not set, set base values
+            vm.PageNumber = vm.PageNumber ?? 1;
+            vm.PageSize = vm.PageSize ?? 25;
+
+            var res = _uow.GetRepository<IVehicleRepository>().GetListByUserId(User.Identity.GetUserId<int>(), vm.SortProperty, vm.PageNumber.Value - 1, vm.PageSize.Value, out totalVehicleCount, out realSortProperty);
+
+            vm.SortProperty = realSortProperty;
+
+            // https://github.com/kpi-ua/X.PagedList
+            vm.Vehicles = new StaticPagedList<Vehicle>(res, vm.PageNumber.Value, vm.PageSize.Value, totalVehicleCount);
+
+            return View(vm);
         }
 
         // GET: Vehicles/Details/5
@@ -77,8 +94,8 @@ namespace Web.Areas.MemberArea.Controllers
                 {
                     _userManager.AddToRole(user.Id, "CarOwner");
                 }
-                
 
+                
                 _uow.Commit();
                 return RedirectToAction("Index");
             }

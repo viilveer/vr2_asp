@@ -46,7 +46,7 @@ namespace Web.Areas.MemberArea.Controllers
                 return RedirectToLocal(returnUrl);
             }
             ViewBag.ReturnUrl = returnUrl;
-            return View();
+            return View("Login", "_Empty");
         }
 
         //
@@ -78,7 +78,7 @@ namespace Web.Areas.MemberArea.Controllers
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                    return View("Login", "_Empty");
             }
         }
 
@@ -133,7 +133,7 @@ namespace Web.Areas.MemberArea.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            return View("Register", "_Empty");
         }
 
         //
@@ -177,7 +177,7 @@ namespace Web.Areas.MemberArea.Controllers
                 {
                     transaction.Dispose();
                     Console.WriteLine(ex.InnerException);
-                    return View(model);
+                    return View("Register", "_Empty");
                 }
             }
             return RedirectToAction("Index", "Dashboard", new {area = "MemberArea"});
@@ -410,7 +410,7 @@ namespace Web.Areas.MemberArea.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            _authenticationManager.SignOut();
+            _authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }
 

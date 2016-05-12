@@ -166,7 +166,7 @@
     <value>Log in</value>
   </data>
   <data name="Login_UseLocalAccountToLogin" xml:space="preserve">
-    <value>Use a local account to log in.</value>
+    <value>Log in</value>
   </data>
   <data name="SendMessageToUser" xml:space="preserve">
     <value>Send message to user</value>

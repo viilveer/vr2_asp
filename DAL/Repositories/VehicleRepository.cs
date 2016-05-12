@@ -11,9 +11,40 @@ namespace DAL.Repositories
         {
         }
 
-        public List<Vehicle> GetAllByUserId(int userId)
+        public List<Vehicle> GetListByUserId(int userId, string sortProperty, int pageNumber, int pageSize, out int totalVehicleCount, out string realSortProperty)
         {
-            return DbSet.Where(u => u.UserId == userId).ToList();
+            sortProperty = sortProperty?.ToLower() ?? "";
+            realSortProperty = sortProperty;
+
+
+            //start building up the query
+            var res = DbSet
+                .Where(p => p.UserId == userId);
+
+
+            // set up sorting
+            switch (sortProperty)
+            {
+                case "_model":
+                    res = res
+                        .OrderBy(o => o.Model).ThenBy(o => o.Make);
+                    break;
+
+                default:
+                case "_make":
+                    res = res
+                        .OrderBy(o => o.Make).ThenBy(o => o.Model);
+                    realSortProperty = "_make";
+                    break;
+            }
+
+            totalVehicleCount = res.Count();
+
+            var reslist = res
+                .Skip(pageNumber * pageSize).Take(pageSize)
+                .ToList();
+
+            return reslist;
         }
 
         public int CountByUserId(int userId)

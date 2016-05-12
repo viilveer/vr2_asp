@@ -32,81 +32,27 @@
     @RenderSection("headerscripts", required: false)
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink(@Resources.Common.ApplicationName, "Index", "Dashboard", new { area = "MemberArea" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    @if (Request.IsAuthenticated)
-                    {
-                        <li>@Html.ActionLink(@Resources.Vehicles.MyVehicles, "Index", "Vehicles", new { area = "MemberArea" }, null)</li>
-                    }
-                    @if (Request.IsAuthenticated && User.IsInRole("CarOwner"))
-                    {
-                        <li>@Html.ActionLink(@Resources.Blog.AllMyBlogs, "Index", "Blogs", new { area = "MemberArea" }, null)</li>
-                    }
-                    @if (Request.IsAuthenticated && User.IsInRole("User"))
-                    {
-                        <li>@Html.ActionLink(@Resources.Messages.MyMessages, "Index", "Messages", new { area = "MemberArea" }, null)</li>
-                    }
-                    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
-                    {
-                        <li class="dropdown">
-                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">Admin <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li class="divider"></li>
-                                <li>@Html.ActionLink("Translations", "Index", new { area = "Admin", controller = "Translations" })</li>
-                                <li>@Html.ActionLink("System logs", "Index", new { area = "Admin", controller = "SystemLog" })</li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">Identity <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Users", "Index", new { area = "Admin", controller = "Users" })</li>
-                                <li>@Html.ActionLink("Roles", "Index", new { area = "Admin", controller = "Roles" })</li>
-                                <li>@Html.ActionLink("Users in Roles", "Index", new { area = "Admin", controller = "UserRoles" })</li>
-                                <li>@Html.ActionLink("Logins", "Index", new { area = "Admin", controller = "UserLogins" })</li>
-                                <li>@Html.ActionLink("Claims", "Index", new { area = "Admin", controller = "UserClaims" })</li>
-                            </ul>
-                        </li>
-                    }
-                </ul>
-                @Html.Partial("~/Areas/MemberArea/Views/Shared/_LoginPartial.cshtml")
-            </div>
+
+@Html.Partial("~/Areas/MemberArea/Views/Shared/_Header.cshtml")
+<div class="page-content">
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Partial("~/Areas/MemberArea/Views/Shared/_Nav.cshtml")
+        </div>
+        <div class="col-md-10">
+            @RenderBody()
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>
-                &copy; @DateTime.Now.Year - @Resources.Common.ApplicationName
-                @if (Request.IsAuthenticated)
-            {
-                    <text>(<a href="javascript:document.getElementById('logoutForm').submit()">@Resources.Common.LogOff</a>)</text>
-                }
-                (Culture:<b>@Culture</b> UICulture:<b>@UICulture</b>)
-            </p>
-        </footer>
-    </div>
+</div>
+    @Html.Partial("~/Areas/MemberArea/Views/Shared/_Footer.cshtml")
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/cldr")
-    @Scripts.Render("~/bundles/globalize")
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/moment")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/Scripts/tinymce/tinymce.min.js")
-   
-    @Scripts.Render("~/bundles/app")
 
-    @RenderSection("scripts", required: false)
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/MemberArea")
+@Styles.Render("~/content/MemberArea")
+@Scripts.Render("~/bundles/moment")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/Scripts/tinymce/tinymce.min.js")
+@RenderSection("scripts", required: false)
 </body>
 </html>

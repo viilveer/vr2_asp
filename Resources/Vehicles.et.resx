@@ -117,7 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Sisestatud</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Lisa uus sõiduk</value>
+  </data>
+  <data name="Engine" xml:space="preserve">
+    <value>Mootor</value>
+  </data>
+  <data name="Kw" xml:space="preserve">
+    <value>Kw</value>
+  </data>
+  <data name="Make" xml:space="preserve">
+    <value>Mark</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>Mudel</value>
+  </data>
   <data name="MyVehicles" xml:space="preserve">
     <value>Sõidukid</value>
+  </data>
+  <data name="UpdatedAt" xml:space="preserve">
+    <value>Uuendatud</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Väljalaske aasta</value>
   </data>
 </root>

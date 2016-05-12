@@ -78,6 +78,14 @@
       <HintPath>..\packages\NLog.Web.4.2\lib\net35\NLog.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -259,6 +267,7 @@
     <Compile Include="Areas\MemberArea\ViewModels\BlogPost\DetailsModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\BlogPost\UpdateModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Blog\DetailsModel.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\Blog\IndexModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Blog\UpdateModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Dashboard\ViewModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\MessageThread\CreateModel.cs" />
@@ -267,6 +276,7 @@
     <Compile Include="Areas\MemberArea\ViewModels\Message\DetailsModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Profile\DetailsModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Vehicle\CreateModel.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\Vehicle\IndexModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Vehicle\UpdateModel.cs" />
     <Compile Include="Controllers\ApiAccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -279,6 +289,7 @@
     </Compile>
     <Compile Include="Helpers\CultureHelper.cs" />
     <Compile Include="Helpers\Factories\UserIntFactory.cs" />
+    <Compile Include="Helpers\GridViewHelper.cs" />
     <Compile Include="Helpers\HtmlHelper.cs" />
     <Compile Include="Helpers\IListHelper.cs" />
     <Compile Include="Helpers\MessagesHelper.cs" />
@@ -1251,6 +1262,9 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\MemberArea\buttons.css" />
+    <Content Include="Content\MemberArea\styles.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -1280,6 +1294,7 @@
     <Content Include="Scripts\App\ganalytics.js" />
     <Content Include="Scripts\App\jquery.validate.fixdata.js" />
     <Content Include="Scripts\App\jquery.validate.globalize.datetime.js" />
+    <Content Include="Scripts\App\memberarea.js" />
     <Content Include="Scripts\App\tinymce.js" />
     <Content Include="Scripts\App\vehicle.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -2001,6 +2016,10 @@
     <Content Include="Areas\MemberArea\Views\Messages\Edit.cshtml" />
     <Content Include="Areas\MemberArea\Views\Messages\Index.cshtml" />
     <Content Include="Areas\MemberArea\Views\BlogPosts\Create.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Shared\_Footer.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Shared\_Header.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Shared\_Nav.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Shared\_Empty.cshtml" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

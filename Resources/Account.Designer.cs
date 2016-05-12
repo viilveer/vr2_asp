@@ -88,7 +88,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use a local account to log in..
+        ///   Looks up a localized string similar to Log in.
         /// </summary>
         public static string Login_UseLocalAccountToLogin {
             get {

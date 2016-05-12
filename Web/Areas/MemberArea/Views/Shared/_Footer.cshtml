@@ -1,0 +1,22 @@
+﻿@using Web.Helpers
+@{
+    var culture = CultureHelper.GetCurrentUICulture().ToLower();
+
+    var nameValueCollection = HttpUtility.ParseQueryString(Request?.Url?.Query ?? "");
+    nameValueCollection.Remove("culture");
+    string returnUrl = Request?.Url?.AbsolutePath + "?" + nameValueCollection;
+
+    //var returnUrl = Request.Url?.PathAndQuery ?? "";
+}
+<footer>
+    <div class="container">
+
+        <div class="copy text-center">
+            &copy; @DateTime.Now.Year - @Resources.Common.ApplicationName <br />
+            (Culture:<b>@Culture</b> UICulture:<b>@UICulture</b>) <br />
+            @Html.ActionLink("Est", "SetLanguage", new { area = "", controller = "Language", culture = "et", returnUrl }, htmlAttributes: new { id = "langLinkEst" })
+             | 
+            @Html.ActionLink("Eng", "SetLanguage", new { area = "", controller = "Language", culture = "en", returnUrl }, htmlAttributes: new { id = "langLinkEng" })
+        </div>
+    </div>
+</footer>

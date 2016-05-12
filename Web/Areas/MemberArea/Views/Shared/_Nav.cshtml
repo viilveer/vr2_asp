@@ -1,0 +1,42 @@
+﻿<div class="sidebar content-box" style="display: block;">
+    <ul class="nav">
+        @if (Request.IsAuthenticated && User.IsInRole("User"))
+        {
+            <li>@Html.ActionLink(@Resources.Common.Dashboard, "Index", "Dashboard", new { area = "MemberArea" }, null)</li>
+            <li>@Html.ActionLink(@Resources.Vehicles.MyVehicles, "Index", "Vehicles", new { area = "MemberArea" }, null)</li>
+            <li>@Html.ActionLink(@Resources.Messages.MyMessages, "Index", "Messages", new { area = "MemberArea" }, null)</li>
+            if (User.IsInRole("CarOwner"))
+            {
+                <li>@Html.ActionLink(@Resources.Blog.AllMyBlogs, "Index", "Blogs", new { area = "MemberArea" }, null)</li>
+            }
+            if (User.IsInRole("Admin"))
+            {
+                <li class="submenu">
+                    <a href="#">
+                        <i class="glyphicon glyphicon-list"></i> Admin
+                        <span class="caret pull-right"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="divider"></li>
+                        <li>@Html.ActionLink("Translations", "Index", new { area = "Admin", controller = "Translations" })</li>
+                        <li>@Html.ActionLink("System logs", "Index", new { area = "Admin", controller = "SystemLog" })</li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#">
+                        <i class="glyphicon glyphicon-list"></i> Identity
+                        <span class="caret pull-right"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink("Users", "Index", new { area = "Admin", controller = "Users" })</li>
+                        <li>@Html.ActionLink("Roles", "Index", new { area = "Admin", controller = "Roles" })</li>
+                        <li>@Html.ActionLink("Users in Roles", "Index", new { area = "Admin", controller = "UserRoles" })</li>
+                        <li>@Html.ActionLink("Logins", "Index", new { area = "Admin", controller = "UserLogins" })</li>
+                        <li>@Html.ActionLink("Claims", "Index", new { area = "Admin", controller = "UserClaims" })</li>
+                    </ul>
+                </li>
+            }
+        }
+
+    </ul>
+</div>

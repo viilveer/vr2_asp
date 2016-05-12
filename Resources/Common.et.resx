@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApplicationName" xml:space="preserve">
-    <value>MinuRakendus</value>
+    <value>Autod</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Katkesta</value>
@@ -155,5 +155,8 @@
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Muuda</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Avaleht</value>
   </data>
 </root>
