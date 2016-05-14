@@ -18,12 +18,13 @@ namespace Web.Areas.MemberArea.ViewModels.BlogPost
         [AllowHtml]
         public string Message { get; set; }
 
-        public Domain.BlogPost GetBlogPost(Domain.Blog blog)
+        public Domain.BlogPost GetBlogPost(Domain.Blog blog, int authorId)
         {
             return new Domain.BlogPost()
             {
                 BlogId = blog.BlogId,
                 Title = Title,
+                AuthorId = authorId,
                 Message = Message
             };
         }

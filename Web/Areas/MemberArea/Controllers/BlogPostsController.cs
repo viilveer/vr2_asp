@@ -3,6 +3,7 @@ using System.Net;
 using System.Web.Mvc;
 using DAL.Interfaces;
 using Domain;
+using Microsoft.AspNet.Identity;
 using Web.Areas.MemberArea.ViewModels.BlogPost;
 
 namespace Web.Areas.MemberArea.Controllers
@@ -28,7 +29,7 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Blog blog = _uow.GetRepository<IBlogRepository>().GetById(id);
+            Blog blog = _uow.GetRepository<IBlogRepository>().GetOneByUserAndId(id.Value, User.Identity.GetUserId<int>());
             if (blog == null)
             {
                 return HttpNotFound();
@@ -48,7 +49,7 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Blog blog = _uow.GetRepository<IBlogRepository>().GetById(id);
+            Blog blog = _uow.GetRepository<IBlogRepository>().GetOneByUserAndId(id.Value, User.Identity.GetUserId<int>());
             if (blog == null)
             {
                 return HttpNotFound();
@@ -56,9 +57,9 @@ namespace Web.Areas.MemberArea.Controllers
 
             if (ModelState.IsValid)
             {
-                _uow.GetRepository<IBlogPostRepository>().Add(model.GetBlogPost(blog));
+                _uow.GetRepository<IBlogPostRepository>().Add(model.GetBlogPost(blog, User.Identity.GetUserId<int>()));
                 _uow.Commit();
-                return RedirectToAction("Edit", new {id = id.Value});
+                return RedirectToAction("Edit", "Blogs", new { area = "MemberArea", id = id.Value });
             }
             return View(model);
         }
@@ -71,7 +72,7 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BlogPost blogPost = _uow.GetRepository<IBlogPostRepository>().GetById(id);
+            BlogPost blogPost = _uow.GetRepository<IBlogPostRepository>().GetOneByUserAndId(id.Value, User.Identity.GetUserId<int>());
             if (blogPost == null)
             {
                 return HttpNotFound();
@@ -91,7 +92,7 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BlogPost blogPost = _uow.GetRepository<IBlogPostRepository>().GetById(id);
+            BlogPost blogPost = _uow.GetRepository<IBlogPostRepository>().GetOneByUserAndId(id.Value, User.Identity.GetUserId<int>());
             if (blogPost == null)
             {
                 return HttpNotFound();

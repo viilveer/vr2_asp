@@ -3,6 +3,14 @@
     ViewBag.Title = Resources.Common.ApplicationName;
 }
 
+<div class="col-md-6">
+    @Html.Partial("~/Areas/MemberArea/Views/Dashboard/_FavoritedBlogs.cshtml")
+   
+</div>
+<div class="col-md-6">
+    @Html.Partial("~/Areas/MemberArea/Views/Dashboard/_NewBlogs.cshtml")
+</div>
+
 <div class="jumbotron">
     Minu sõidukite arv: @Model.VehicleCount
 </div>

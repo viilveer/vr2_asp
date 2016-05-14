@@ -8,6 +8,7 @@ namespace Web.Areas.MemberArea.ViewModels.BlogPost
         public int BlogPostId { get; set; }
 
         public string Title { get; set; }
+        public string AuthorName { get; set; }
 
         public string Message { get; set; }
 
@@ -26,6 +27,7 @@ namespace Web.Areas.MemberArea.ViewModels.BlogPost
             {
                 BlogPostId = blogPost.BlogPostId,
                 Title = blogPost.Title,
+                AuthorName = blogPost.Author.FirstLastName,
                 Message = blogPost.Message,
                 CreatedBy = blogPost.CreatedBy,
                 CreatedAt = blogPost.CreatedAt,

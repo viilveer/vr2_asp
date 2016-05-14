@@ -13,10 +13,14 @@ namespace DAL.Repositories
 
         }
 
+        public Blog GetOneByUserAndId(int id, int userId)
+        {
+            return DbSet.Single(o => o.AuthorId == userId && o.BlogId == id);
+        }
+
         public IEnumerable<Blog> GetListByUserId(int userId, string sortProperty, int pageNumber, int pageSize, out int totalBlogCount, out string realSortProperty)
         {
             sortProperty = sortProperty?.ToLower() ?? "";
-            realSortProperty = sortProperty;
 
 
             //start building up the query
@@ -27,16 +31,11 @@ namespace DAL.Repositories
             // set up sorting
             switch (sortProperty)
             {
+                default:
                 case "_make":
                     res = res
-                        .OrderBy(o => o.Vehicle.Make).ThenBy(o => o.Vehicle.Make);
-                    break;
-
-                default:
-                case "_name":
-                    res = res
                         .OrderBy(o => o.Name).ThenBy(o => o.Name);
-                    realSortProperty = "title";
+                    realSortProperty = "_make";
                     break;
             }
 

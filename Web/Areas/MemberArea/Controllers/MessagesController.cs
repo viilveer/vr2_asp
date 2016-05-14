@@ -7,10 +7,10 @@ using DAL.Interfaces;
 using Domain;
 using Domain.Identity;
 using Microsoft.AspNet.Identity;
+using PagedList;
 using Web.Areas.MemberArea.ViewModels.Message;
 using Web.Areas.MemberArea.ViewModels.MessageThread;
 using Web.Controllers;
-using Web.Helpers;
 using Web.Helpers.Factories;
 using CreateModel = Web.Areas.MemberArea.ViewModels.Message.CreateModel;
 
@@ -31,13 +31,23 @@ namespace Web.Areas.MemberArea.Controllers
         }
 
         // GET: MemberArea/Messages
-        public ActionResult Index()
+        public ActionResult Index(IndexModel vm)
         {
-            List<MessageThread> messageThreads =
-                _uow.GetRepository<IMessageThreadRepository>()
-                    .GetAllUserThreads(Convert.ToInt32(User.Identity.GetUserId()));
+            int totalItemCount;
+            string realSortProperty;
 
-            return View(messageThreads);
+            // if not set, set base values
+            vm.PageNumber = vm.PageNumber ?? 1;
+            vm.PageSize = vm.PageSize ?? 25;
+
+            var res = _uow.GetRepository<IMessageThreadRepository>().GetUserThreads(User.Identity.GetUserId<int>(), vm.SortProperty, vm.PageNumber.Value - 1, vm.PageSize.Value, out totalItemCount, out realSortProperty);
+
+            vm.SortProperty = realSortProperty;
+
+            // https://github.com/kpi-ua/X.PagedList
+            vm.Messages = new StaticPagedList<MessageThread>(res, vm.PageNumber.Value, vm.PageSize.Value, totalItemCount);
+
+            return View(vm);
         }
 
         // TODO :: finish

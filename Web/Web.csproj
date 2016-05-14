@@ -274,6 +274,7 @@
     <Compile Include="Areas\MemberArea\ViewModels\MessageThread\DetailsModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Message\CreateModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Message\DetailsModel.cs" />
+    <Compile Include="Areas\MemberArea\ViewModels\MessageThread\IndexModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Profile\DetailsModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Vehicle\CreateModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Vehicle\IndexModel.cs" />
@@ -2020,6 +2021,8 @@
     <Content Include="Areas\MemberArea\Views\Shared\_Header.cshtml" />
     <Content Include="Areas\MemberArea\Views\Shared\_Nav.cshtml" />
     <Content Include="Areas\MemberArea\Views\Shared\_Empty.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Dashboard\_NewBlogs.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Dashboard\_FavoritedBlogs.cshtml" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

@@ -5,17 +5,16 @@
 
 <div class="content-box-large">
     <div class="panel-heading">
-        <div class="panel-title">@Resources.Vehicles.MyVehicles</div>
+        <div class="panel-title">@Resources.Blog.AllMyBlogs</div>
     </div>
     <div class="panel-body">
         <div class="table-responsive">
             <table class="table">
                 <tr>
-
                     <th>
-                        <a href="@Url.Action("Index", new {SortProperty = GridViewHelper.GetSortProperty("_model", Model.SortProperty)})">
+                        <a href="@Url.Action("Index", new {SortProperty = GridViewHelper.GetSortProperty("_make", Model.SortProperty)})">
                             @Html.DisplayNameFor(model => model.Blogs.FirstOrDefault().Vehicle.Make)
-                            <i class="fa @GridViewHelper.GetSortIcon("_model", Model.SortProperty)"></i>
+                            <i class="fa @GridViewHelper.GetSortIcon("_make", Model.SortProperty)"></i>
                         </a>
                     </th>
                     <th>

@@ -6,6 +6,7 @@ namespace DAL.Interfaces
 {
     public interface IBlogRepository : IEFRepository<Blog>
     {
-        IEnumerable<Blog> GetListByUserId(int getUserId, string sortProperty, int i, int value, out int totalBlogCount, out string realSortProperty);
+        Blog GetOneByUserAndId(int id, int userId);
+        IEnumerable<Blog> GetListByUserId(int userId, string sortProperty, int pageNumber, int pageSize, out int totalItemCount, out string realSortProperty);
     }
 }

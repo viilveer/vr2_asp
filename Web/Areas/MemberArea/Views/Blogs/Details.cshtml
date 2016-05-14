@@ -1,58 +1,62 @@
-﻿@using Domain
+﻿@using PagedList.Mvc
+@using Web.Helpers
 @model Web.Areas.MemberArea.ViewModels.Blog.DetailsModel
 
+<div class="content-box-large">
+    <div class="panel-heading">
+        <div class="panel-title">@Resources.Messages.MyMessages</div>
 
-@{
-    ViewBag.Title = "Details";
-}
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.BlogId }) |
+            @Html.ActionLink("Create post", "Create", "BlogPosts", new { id = Model.BlogId }, null) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BlogPosts.FirstOrDefault().Title)
 
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BlogPosts.FirstOrDefault().AuthorName)
+                    </th>
+                    <th>
+                        <a href="@Url.Action("Index", new {SortProperty = GridViewHelper.GetSortProperty("_createdAt", Model.SortProperty)})">
+                            @Html.DisplayNameFor(model => model.BlogPosts.FirstOrDefault().CreatedAt)
+                            <i class="fa @GridViewHelper.GetSortIcon("_createdAt", Model.SortProperty)"></i>
+                        </a>
+                    </th>
+                    <th></th>
+                </tr>
 
-<h2>@Resources.Blog.BlogNoun @Model.Name</h2>
+                @foreach (var item in Model.BlogPosts)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AuthorName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedAt)
+                        </td>
 
+                        <td>
+                           @Html.ActionLink(Resources.Common.Edit, "Edit", "BlogPosts", new { id = item.BlogPostId }, null) |
+                           @Html.ActionLink(Resources.Common.Delete, "Delete", "BlogPosts", new { id = item.BlogPostId }, null)
+                        </td>
+                    </tr>
+                }
 
-
-<p>
-    @Html.ActionLink("Edit", "Edit", new {id = Model.BlogId}) |
-    @Html.ActionLink("Create post", "Create", "BlogPosts", new {id = Model.BlogId}, null) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
-
-
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(blogPosts => blogPosts.BlogPosts.FirstOrDefault().Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(blogPosts => blogPosts.BlogPosts.FirstOrDefault().CreatedAt)
-        </th>
-        <th>
-            @Html.DisplayNameFor(blogPosts => blogPosts.BlogPosts.FirstOrDefault().UpdatedAt)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model.BlogPosts)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
-            </td>
-            <td>
-                @Html.ActionLink("View", "Edit", "BlogPosts", new {id = item.BlogPostId}, null) |
-                @Html.ActionLink("Delete", "Delete", "BlogPosts", new {id = item.BlogPostId}, null) 
-            </td>
-        </tr>
-    }
-
-</table>
+            </table>
+            @Html.PagedListPager(Model.BlogPosts, page => Url.Action("Index", new {PageNumber = page}))
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

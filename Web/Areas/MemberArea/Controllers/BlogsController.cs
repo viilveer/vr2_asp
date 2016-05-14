@@ -50,8 +50,7 @@ namespace Web.Areas.MemberArea.Controllers
         }
 
         // GET: MemberArea/Blogs/Details/5
-        //TODO :: add blogposting here
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, DetailsModel detailsModel)
         {
             if (id == null)
             {
@@ -63,15 +62,23 @@ namespace Web.Areas.MemberArea.Controllers
                 return HttpNotFound();
             }
 
-            List<BlogPost> blogPosts = _uow.GetRepository<IBlogPostRepository>().GetAllByBlogId(blog.BlogId);
+            int totalItemCount;
+            string realSortProperty;
 
-            DetailsModel detailsModel = new DetailsModel()
-            {
-                HeadLine = blog.HeadLine,
-                BlogId = blog.BlogId,
-                Name = blog.Name, // name should be always there (filled in when creating a blog with vehicle)
-                BlogPosts = blogPosts.Select(DetailsModelFactory.CreateFromBlogPost).ToList()
-            };
+            // if not set, set base values
+            detailsModel.PageNumber = detailsModel.PageNumber ?? 1;
+            detailsModel.PageSize = detailsModel.PageSize ?? 25;
+            detailsModel.HeadLine = blog.HeadLine;
+            detailsModel.BlogId = blog.BlogId;
+            detailsModel.Name = blog.Name;
+
+            var res = _uow.GetRepository<IBlogPostRepository>().GetAllByBlogId(User.Identity.GetUserId<int>(), detailsModel.SortProperty, detailsModel.PageNumber.Value - 1, detailsModel.PageSize.Value, out totalItemCount, out realSortProperty);
+
+            detailsModel.SortProperty = realSortProperty;
+
+            // https://github.com/kpi-ua/X.PagedList
+            detailsModel.BlogPosts = new StaticPagedList<ViewModels.BlogPost.DetailsModel>(res.Select(DetailsModelFactory.CreateFromBlogPost).ToList(), detailsModel.PageNumber.Value, detailsModel.PageSize.Value, totalItemCount);
+
             return View(detailsModel);
         }
 

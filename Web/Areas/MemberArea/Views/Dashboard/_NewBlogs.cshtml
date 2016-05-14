@@ -1,0 +1,19 @@
+﻿@model Web.Areas.MemberArea.ViewModels.Dashboard.ViewModel
+
+<h4>New Blogs-</h4>     
+@foreach (var item in Model.NewBlogPostList)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-box-header">
+                <div class="panel-title">@item.Title</div>
+
+            </div>
+            <div class="content-box-large box-with-header">
+                @item.Message
+                <br><br>
+            </div>
+        </div>
+    </div>
+    
+}

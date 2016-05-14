@@ -9,5 +9,8 @@ namespace Web.Areas.MemberArea.ViewModels.Dashboard
     {
         public int VehicleCount { get; set; }
 
+        public List<Domain.BlogPost> NewBlogPostList { get; set; }
+        public List<Domain.BlogPost> FavoriteBlogPostList { get; set; }
+
     }
 }

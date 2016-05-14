@@ -87,6 +87,7 @@ namespace Web.Areas.MemberArea.Controllers
                
                 Blog blog = new Blog();
                 blog.VehicleId = vehicle.VehicleId;
+                blog.AuthorId = user.Id;
                 blog.Name = vehicle.Make + " " + vehicle.Model; // TODO :: ugly
                 _uow.GetRepository<IBlogRepository>().Add(blog);
 
