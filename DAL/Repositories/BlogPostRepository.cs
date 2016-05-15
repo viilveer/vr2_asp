@@ -25,7 +25,13 @@ namespace DAL.Repositories
 
         public List<BlogPost> GetDashBoardFavoriteBlogBlogPosts(int userId, int limit)
         {
-            return DbSet.Where(u => u.Blog.UserBlogConnections.Any(x => x.UserId == userId)).OrderByDescending(u => u.CreatedAt).Include(u => u.Blog.UserBlogConnections).Take(limit).ToList();
+            return DbSet
+                .Where(u => u.Blog.UserBlogConnections.Any(x => x.UserId == userId))
+                .OrderByDescending(u => u.CreatedAt)
+                .Include("Blog")
+                .Include("Blog.UserBlogConnections")
+                .Take(limit)
+                .ToList();
 
         }
 

@@ -1,0 +1,27 @@
+﻿@using Domain
+@{BlogPost item = (BlogPost)ViewData["item"];}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="content-box-header">
+            <div class="panel-title">@item.Title</div>
+            <div class="pull-right">
+                @if (item.Blog.UserBlogConnections.Count > 0)
+                {
+                    @Html.ActionLink("Unfavorite", "DisconnectFrom", "Blogs", new {id = item.BlogId}, null)
+                }
+                else
+                {
+                    @Html.ActionLink("Favorite", "ConnectTo", "Blogs", new {id = item.BlogId}, null)
+                }
+                |
+                @Html.ActionLink("Go To Blog", "Index", "Blogs", new {id = item.BlogId}, null)
+            </div>
+        </div>
+        <div class="content-box-large box-with-header">
+            @Html.Raw(item.Message)
+            <br><br>
+        </div>
+    </div>
+</div>

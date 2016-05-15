@@ -7,7 +7,7 @@
             <li>@Html.ActionLink(@Resources.Messages.MyMessages, "Index", "Messages", new { area = "MemberArea" }, null)</li>
             if (User.IsInRole("CarOwner"))
             {
-                <li>@Html.ActionLink(@Resources.Blog.AllMyBlogs, "Index", "Blogs", new { area = "MemberArea" }, null)</li>
+                <li>@Html.ActionLink(@Resources.Blog.AllMyBlogs, "Index", "MyBlogs", new { area = "MemberArea" }, null)</li>
             }
             if (User.IsInRole("Admin"))
             {

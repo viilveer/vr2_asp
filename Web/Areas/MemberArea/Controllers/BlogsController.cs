@@ -15,7 +15,7 @@ using UpdateModel = Web.Areas.MemberArea.ViewModels.Blog.UpdateModel;
 
 namespace Web.Areas.MemberArea.Controllers
 {
-    [Authorize(Roles = "CarOwner")]
+    [Authorize(Roles = "User")]
     public class BlogsController : BaseController
     {
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
@@ -84,57 +84,6 @@ namespace Web.Areas.MemberArea.Controllers
 
 
 
-        // GET: MemberArea/Blogs/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Blog blog = _uow.GetRepository<IBlogRepository>().GetById(id);
-            if (blog == null)
-            {
-                return HttpNotFound();
-            }
-
-            UpdateModel updateModel = new UpdateModel()
-            {
-                HeadLine = blog.HeadLine,
-                Name = blog.Name,
-                VehicleName = blog.Vehicle.Make + " " + blog.Vehicle.Model
-            };
-
-
-            return View(updateModel);
-        }
-
-        // POST: MemberArea/Blogs/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public  ActionResult Edit([Bind(Include = "Name, HeadLine")] UpdateModel updateModel, int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Blog blog = _uow.GetRepository<IBlogRepository>().GetById(id); // TODO :: write custom repo query (include user)
-            if (blog == null)
-            {
-                return HttpNotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                blog = updateModel.UpdateBlog(blog);
-                _uow.GetRepository<IBlogRepository>().Update(blog);
-                _uow.Commit();
-                return RedirectToAction("Index");
-            }
-            return View(updateModel);
-        }
-
         // GET: MemberArea/Blog/ConnectTo/5
         public ActionResult ConnectTo(int? id)
         {
@@ -170,8 +119,8 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            int blogId = Convert.ToInt32(id);
-            int userId = Convert.ToInt32(User.Identity.GetUserId());
+            int blogId = id.Value;
+            int userId = User.Identity.GetUserId<int>();
 
             
             _uow.GetRepository<IUserBlogConnectionRepository>().DeleteByUserIdAndBlogId(userId, blogId);

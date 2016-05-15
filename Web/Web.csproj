@@ -257,6 +257,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Areas\MemberArea\Components\Validators\ProductAttribute.cs" />
     <Compile Include="Areas\MemberArea\Controllers\BlogPostsController.cs" />
+    <Compile Include="Areas\MemberArea\Controllers\MyBlogsController.cs" />
     <Compile Include="Areas\MemberArea\Controllers\BlogsController.cs" />
     <Compile Include="Areas\MemberArea\Controllers\DashboardController.cs" />
     <Compile Include="Areas\MemberArea\Controllers\MessagesController.cs" />
@@ -2023,6 +2024,11 @@
     <Content Include="Areas\MemberArea\Views\Shared\_Empty.cshtml" />
     <Content Include="Areas\MemberArea\Views\Dashboard\_NewBlogs.cshtml" />
     <Content Include="Areas\MemberArea\Views\Dashboard\_FavoritedBlogs.cshtml" />
+    <Content Include="Areas\MemberArea\Views\MyBlogs\Delete.cshtml" />
+    <Content Include="Areas\MemberArea\Views\MyBlogs\Details.cshtml" />
+    <Content Include="Areas\MemberArea\Views\MyBlogs\Edit.cshtml" />
+    <Content Include="Areas\MemberArea\Views\MyBlogs\Index.cshtml" />
+    <Content Include="Areas\MemberArea\Views\Dashboard\_BlogEntity.cshtml" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

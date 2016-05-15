@@ -12,7 +12,7 @@ namespace DAL.Repositories
 
         public UserBlogConnection GetUserAndBlogConnection(int userId, int blogId)
         {
-            return DbSet.Single(u => u.UserId == userId && u.BlogId == blogId);
+            return DbSet.FirstOrDefault(u => u.UserId == userId && u.BlogId == blogId);
         }
 
         public void DeleteByUserIdAndBlogId(int userId, int blogId)
