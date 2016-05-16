@@ -7,5 +7,6 @@ namespace DAL.Interfaces
         UserBlogConnection GetUserAndBlogConnection(int userId, int blogId);
 
         void DeleteByUserIdAndBlogId(int userId, int blogId);
+        void DeleteByBlogId(int blogId);
     }
 }

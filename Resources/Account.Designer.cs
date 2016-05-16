@@ -196,6 +196,42 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First name.
+        /// </summary>
+        public static string ViewModel_FirstName {
+            get {
+                return ResourceManager.GetString("ViewModel_FirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First name is required.
+        /// </summary>
+        public static string ViewModel_FirstNameRequired {
+            get {
+                return ResourceManager.GetString("ViewModel_FirstNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last name.
+        /// </summary>
+        public static string ViewModel_LastName {
+            get {
+                return ResourceManager.GetString("ViewModel_LastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last name is required.
+        /// </summary>
+        public static string ViewModel_LastNameRequired {
+            get {
+                return ResourceManager.GetString("ViewModel_LastNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string ViewModel_Password {

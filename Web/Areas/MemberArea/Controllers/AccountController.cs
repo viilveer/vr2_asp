@@ -77,7 +77,7 @@ namespace Web.Areas.MemberArea.Controllers
                     return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, RememberMe = model.RememberMe});
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("summary", "Invalid login attempt.");
                     return View("Login", "_Empty");
             }
         }
@@ -153,7 +153,7 @@ namespace Web.Areas.MemberArea.Controllers
                     }
                 
                
-                    var user = new UserInt { UserName = model.Email, Email = model.Email };
+                    var user = new UserInt { UserName = model.Email, Email = model.Email, LastName = model.LastName, FirstName = model.FirstName};
                     var userSave = await _userManager.CreateAsync(user, model.Password);
                     var roleSave = await _userManager.AddToRoleAsync(user.Id, "User"); // TODO :: fetch role and then add if exists
                     if (userSave.Succeeded == false || roleSave.Succeeded == false)
@@ -437,7 +437,7 @@ namespace Web.Areas.MemberArea.Controllers
         {
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError("", error);
+                ModelState.AddModelError("summary", error);
             }
         }
 

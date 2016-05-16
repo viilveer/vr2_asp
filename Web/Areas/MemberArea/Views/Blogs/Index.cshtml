@@ -5,7 +5,7 @@
 
 <div class="content-box-large">
     <div class="panel-heading">
-        <div class="panel-title">@Resources.Blog.AllMyBlogs</div>
+        <div class="panel-title">All blogs -</div>
     </div>
     <div class="panel-body">
         <div class="table-responsive">
@@ -24,12 +24,6 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Blogs.FirstOrDefault().CreatedAt)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Blogs.FirstOrDefault().UpdatedBy)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Blogs.FirstOrDefault().UpdatedAt)
-                    </th>
                     <th></th>
                 </tr>
 
@@ -46,14 +40,7 @@
                             @Html.DisplayFor(modelItem => item.CreatedAt)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.UpdatedBy)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UpdatedAt)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.BlogId }) |
-                            @Html.ActionLink("Details", "Details", new { id = item.BlogId }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.BlogId }) 
                         </td>
                     </tr>
                 }

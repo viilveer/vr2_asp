@@ -14,7 +14,8 @@ namespace Domain
         [Display(Name = "Vehicle", ResourceType = typeof(Resources.Domain))]
         [Required]
         public int VehicleId { get; set; }
-        public virtual Vehicle Vehicle { get; set; }
+        [Required]
+        public Vehicle Vehicle { get; set; }
 
         [Required]
         [MaxLength(65365)]
@@ -25,7 +26,6 @@ namespace Domain
         [Required]
         public int AuthorId { get; set; }
         public virtual UserInt Author { get; set; }
-        [Required]
         public virtual ICollection<UserBlogConnection> UserBlogConnections { get; set; }
 
     }

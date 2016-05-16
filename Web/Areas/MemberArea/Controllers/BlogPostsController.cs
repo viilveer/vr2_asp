@@ -59,7 +59,7 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 _uow.GetRepository<IBlogPostRepository>().Add(model.GetBlogPost(blog, User.Identity.GetUserId<int>()));
                 _uow.Commit();
-                return RedirectToAction("Edit", "MyBlogs", new { area = "MemberArea", id = id.Value });
+                return RedirectToAction("Edit", "BlogPosts", new { area = "MemberArea", id = id.Value });
             }
             return View(model);
         }
@@ -129,9 +129,16 @@ namespace Web.Areas.MemberArea.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            _uow.GetRepository<IBlogRepository>().Delete(id); // todo :: delete with translations (look from baseapp)
+            BlogPost blogPost = _uow.GetRepository<IBlogPostRepository>().GetOneByUserAndId(id, User.Identity.GetUserId<int>());
+
+            if (blogPost == null)
+            {
+                return HttpNotFound();
+            }
+
+            _uow.GetRepository<IBlogPostRepository>().Delete(id);
             _uow.Commit();
-            return RedirectToAction("Index", "MyBlogs"); // todo :: reconsider redirect
+            return RedirectToAction("Details", "MyBlogs", new {id = blogPost.BlogId});
         }
     }
 }

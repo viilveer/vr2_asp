@@ -15,6 +15,7 @@
                     <div class="box">
                         <div class="content-wrap">
                             <h6>@Resources.Account.Login_UseLocalAccountToLogin</h6>
+                            @Html.ValidationMessage("summary", new {@class = "text-danger"})
                             @Html.TextBoxFor(m => m.Email, new {@class = "form-control", placeholder = @Resources.Account.ViewModel_Email})
                             @Html.ValidationMessageFor(m => m.Email, "", new {@class = "text-danger"})
                             @Html.PasswordFor(m => m.Password, new {@class = "form-control", placeholder = @Resources.Account.ViewModel_Password })

@@ -2028,7 +2028,7 @@
     <Content Include="Areas\MemberArea\Views\MyBlogs\Details.cshtml" />
     <Content Include="Areas\MemberArea\Views\MyBlogs\Edit.cshtml" />
     <Content Include="Areas\MemberArea\Views\MyBlogs\Index.cshtml" />
-    <Content Include="Areas\MemberArea\Views\Dashboard\_BlogEntity.cshtml" />
+    <Content Include="Areas\MemberArea\Views\BlogPosts\_BlogEntity.cshtml" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

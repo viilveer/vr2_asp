@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Net;
 using System.Web.Mvc;
 using DAL.Interfaces;
@@ -6,6 +9,7 @@ using Domain;
 using Domain.Identity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using NLog.Fluent;
 using PagedList;
 using Web.Areas.MemberArea.ViewModels.Vehicle;
 using Web.Controllers;
@@ -81,23 +85,41 @@ namespace Web.Areas.MemberArea.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserInt user = UserIntFactory.CreateFromIdentity(_uow, User);
-                Vehicle vehicle = vehicleCreateModel.GetVehicle(user);
-                _uow.GetRepository<IVehicleRepository>().Add(vehicle);
-               
-                Blog blog = new Blog();
-                blog.VehicleId = vehicle.VehicleId;
-                blog.AuthorId = user.Id;
-                blog.Name = vehicle.Make + " " + vehicle.Model; // TODO :: ugly
-                _uow.GetRepository<IBlogRepository>().Add(blog);
-
-                if (_userManager.IsInRole(user.Id, "CarOwner") == false)
+               _uow.BeginTransaction();
+                try
                 {
-                    _userManager.AddToRole(user.Id, "CarOwner");
-                }
+                    UserInt user = UserIntFactory.CreateFromIdentity(_uow, User);
+                    Vehicle vehicle = vehicleCreateModel.GetVehicle(user);
+                    _uow.GetRepository<IVehicleRepository>().Add(vehicle);
 
-                
-                _uow.Commit();
+                    _uow.Commit();
+                    _uow.RefreshAllEntities();
+                    _logger.Debug(vehicle.VehicleId.ToString);
+                    Blog blog = new Blog
+                    {
+                        Vehicle = vehicle,
+                        VehicleId = vehicle.VehicleId,
+                        AuthorId = user.Id,
+                        Name = vehicle.Make + " " + vehicle.Model // TODO :: ugly
+                    };
+
+                    _uow.GetRepository<IBlogRepository>().Add(blog);
+                    _uow.Commit();
+
+                    if (_userManager.IsInRole(user.Id, "CarOwner") == false)
+                    {
+                        _userManager.AddToRole(user.Id, "CarOwner");
+                    }
+                    _uow.CommitTransaction();
+
+                   
+                }
+                catch (Exception ex)
+                {
+                    _uow.RollbackTransaction();
+                    throw ex;
+                }
+               
                 return RedirectToAction("Index");
             }
 
@@ -166,9 +188,21 @@ namespace Web.Areas.MemberArea.Controllers
         // POST: Vehicles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public RedirectToRouteResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id)
         {
-            _uow.GetRepository<IVehicleRepository>().Delete(id);
+            // vehicle grants access to all sub objects
+            Vehicle vehicle = _uow.GetRepository<IVehicleRepository>()
+                .GetByIdAndUserId(id, User.Identity.GetUserId<int>());
+
+            if (vehicle == null)
+            {
+                return HttpNotFound();
+            }
+            _uow.GetRepository<IBlogPostRepository>().DeleteByBlogId(vehicle.Blog.BlogId);
+            _uow.GetRepository<IUserBlogConnectionRepository>().DeleteByBlogId(vehicle.Blog.BlogId);
+            _uow.GetRepository<IBlogRepository>().Delete(vehicle.Blog.BlogId);
+            _uow.GetRepository<IVehicleRepository>().Delete(vehicle.VehicleId);
+
             return RedirectToAction("Index");
         }
     }

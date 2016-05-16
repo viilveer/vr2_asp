@@ -3,6 +3,6 @@
 <h4>New Blogs-</h4>     
 @foreach (var item in Model.NewBlogPostList)
 {
-    @Html.Partial("_BlogEntity", new ViewDataDictionary { { "item", item } });
+    @Html.Partial("~/Areas/MemberArea/Views/BlogPosts/_BlogEntity.cshtml", new ViewDataDictionary { { "item", item } });
 
 }

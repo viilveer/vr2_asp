@@ -6,7 +6,7 @@ namespace Web.Areas.MemberArea.ViewModels.Blog
 {
     public class DetailsModel
     {
-        public IPagedList<BlogPost.DetailsModel> BlogPosts { get; set; }
+        public IPagedList<Domain.BlogPost> BlogPosts { get; set; }
 
         public string Name { get; set; }
 

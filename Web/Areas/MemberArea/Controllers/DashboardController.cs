@@ -26,7 +26,6 @@ namespace Web.Areas.MemberArea.Controllers
         public ActionResult Index()
         {
             ViewModel vm = new ViewModel();
-            vm.VehicleCount =_uow.GetRepository<IVehicleRepository>().CountByUserId(User.Identity.GetUserId<int>());
             vm.NewBlogPostList =_uow.GetRepository<IBlogPostRepository>().GetDashBoardNewestBlogPosts(10);
             vm.FavoriteBlogPostList =_uow.GetRepository<IBlogPostRepository>().GetDashBoardFavoriteBlogBlogPosts(User.Identity.GetUserId<int>(), 10);
             return View(vm);

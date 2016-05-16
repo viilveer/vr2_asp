@@ -76,6 +76,16 @@ namespace Web.ViewModels
         [Display(ResourceType = typeof (Account), Name = "ViewModel_Email")]
         public string Email { get; set; }
 
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof(Account),
+            ErrorMessageResourceName = "ViewModel_FirstNameRequired")]
+        [Display(ResourceType = typeof(Account), Name = "ViewModel_FirstName")]
+        public string FirstName { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof(Account),
+            ErrorMessageResourceName = "ViewModel_LastNameRequired")]
+        [Display(ResourceType = typeof(Account), Name = "ViewModel_LastName")]
+        public string LastName { get; set; }
+
         [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof (Account),
             ErrorMessageResourceName = "ViewModel_PasswordRequired")]
         [StringLength(100, ErrorMessageResourceType = typeof (Account),

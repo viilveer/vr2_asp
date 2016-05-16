@@ -13,6 +13,10 @@ namespace DAL.Interfaces
         void Commit();
         void RefreshAllEntities();
 
+        void BeginTransaction();
+        void CommitTransaction();
+        void RollbackTransaction();
+
         //UOW Methods, that dont fit into specific repo
 
         //get repository for type

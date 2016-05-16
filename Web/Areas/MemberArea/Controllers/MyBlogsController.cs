@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using DAL.Interfaces;
@@ -8,7 +6,6 @@ using Domain;
 using Microsoft.AspNet.Identity;
 using PagedList;
 using Web.Areas.MemberArea.ViewModels.Blog;
-using Web.Areas.MemberArea.ViewModels.BlogPost;
 using Web.Controllers;
 using DetailsModel = Web.Areas.MemberArea.ViewModels.Blog.DetailsModel;
 using UpdateModel = Web.Areas.MemberArea.ViewModels.Blog.UpdateModel;
@@ -56,7 +53,7 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Blog blog = _uow.GetRepository<IBlogRepository>().GetById(id);
+            Blog blog = _uow.GetRepository<IBlogRepository>().GetOneByUserAndId(id.Value, User.Identity.GetUserId<int>());
             if (blog == null)
             {
                 return HttpNotFound();
@@ -72,12 +69,12 @@ namespace Web.Areas.MemberArea.Controllers
             detailsModel.BlogId = blog.BlogId;
             detailsModel.Name = blog.Name;
 
-            var res = _uow.GetRepository<IBlogPostRepository>().GetAllByBlogId(User.Identity.GetUserId<int>(), detailsModel.SortProperty, detailsModel.PageNumber.Value - 1, detailsModel.PageSize.Value, out totalItemCount, out realSortProperty);
+            var res = _uow.GetRepository<IBlogPostRepository>().GetAllByBlogId(id.Value, detailsModel.SortProperty, detailsModel.PageNumber.Value - 1, detailsModel.PageSize.Value, out totalItemCount, out realSortProperty);
 
             detailsModel.SortProperty = realSortProperty;
 
             // https://github.com/kpi-ua/X.PagedList
-            detailsModel.BlogPosts = new StaticPagedList<ViewModels.BlogPost.DetailsModel>(res.Select(DetailsModelFactory.CreateFromBlogPost).ToList(), detailsModel.PageNumber.Value, detailsModel.PageSize.Value, totalItemCount);
+            detailsModel.BlogPosts = new StaticPagedList<BlogPost>(res, detailsModel.PageNumber.Value, detailsModel.PageSize.Value, totalItemCount);
 
             return View(detailsModel);
         }
@@ -91,7 +88,7 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Blog blog = _uow.GetRepository<IBlogRepository>().GetById(id);
+            Blog blog = _uow.GetRepository<IBlogRepository>().GetOneByUserAndId(id.Value, User.Identity.GetUserId<int>());
             if (blog == null)
             {
                 return HttpNotFound();
@@ -119,7 +116,7 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Blog blog = _uow.GetRepository<IBlogRepository>().GetById(id); // TODO :: write custom repo query (include user)
+            Blog blog = _uow.GetRepository<IBlogRepository>().GetOneByUserAndId(id.Value, User.Identity.GetUserId<int>());
             if (blog == null)
             {
                 return HttpNotFound();

@@ -21,5 +21,10 @@ namespace DAL.Repositories
             if (entity == null) return;
             Delete(entity);
         }
+
+        public void DeleteByBlogId(int blogId)
+        {
+            DbSet.RemoveRange(DbSet.Where(u => u.BlogId == blogId));
+        }
     }
 }

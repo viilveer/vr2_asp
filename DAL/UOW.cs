@@ -35,6 +35,24 @@ namespace DAL
             ((DbContext) DbContext).SaveChanges();
         }
 
+        public void BeginTransaction()
+        {
+            if (((DbContext)DbContext).Database.CurrentTransaction != null)
+            {
+                ((DbContext)DbContext).Database.BeginTransaction();
+            }
+        }
+
+        public void CommitTransaction()
+        {
+            ((DbContext) DbContext).Database.CurrentTransaction?.Commit();
+        }
+
+        public void RollbackTransaction()
+        {
+            ((DbContext) DbContext).Database.CurrentTransaction?.Rollback();
+        }
+
         public void RefreshAllEntities()
         {
             foreach (var entity in ((DbContext) DbContext).ChangeTracker.Entries())

@@ -51,5 +51,10 @@ namespace DAL.Repositories
         {
             return DbSet.Count(a => a.UserId == userId);
         }
+
+        public Vehicle GetByIdAndUserId(int id, int userId)
+        {
+            return DbSet.FirstOrDefault(x => x.UserId == userId && x.VehicleId == id);
+        }
     }
 }

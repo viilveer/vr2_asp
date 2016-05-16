@@ -174,4 +174,16 @@
   <data name="AddAsConnection" xml:space="preserve">
     <value>Hakka kasutajat jälgima</value>
   </data>
+  <data name="ViewModel_FirstName" xml:space="preserve">
+    <value>Eesnimi</value>
+  </data>
+  <data name="ViewModel_FirstNameRequired" xml:space="preserve">
+    <value>Eestnimi on kohustuslik</value>
+  </data>
+  <data name="ViewModel_LastName" xml:space="preserve">
+    <value>Perenimi</value>
+  </data>
+  <data name="ViewModel_LastNameRequired" xml:space="preserve">
+    <value>Perenimi on kohustulik</value>
+  </data>
 </root>

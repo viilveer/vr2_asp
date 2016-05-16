@@ -15,12 +15,17 @@ namespace DAL.Repositories
 
         public BlogPost GetOneByUserAndId(int id, int userId)
         {
-            return DbSet.Single(o => o.AuthorId == userId && o.BlogPostId == id);
+            return DbSet.FirstOrDefault(o => o.AuthorId == userId && o.BlogPostId == id);
         }
 
         public List<BlogPost> GetDashBoardNewestBlogPosts(int limit)
         {
             return DbSet.OrderByDescending(u => u.CreatedAt).Include(u => u.Blog).Take(limit).ToList();
+        }
+
+        public void DeleteByBlogId(int blogId)
+        {
+            DbSet.RemoveRange(DbSet.Where(x => x.BlogId == blogId));
         }
 
         public List<BlogPost> GetDashBoardFavoriteBlogBlogPosts(int userId, int limit)

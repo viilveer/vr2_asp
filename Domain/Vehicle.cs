@@ -36,5 +36,7 @@ namespace Domain
         [Required]
         [Display(Name = "Engine", ResourceType = typeof(Resources.Vehicles))]
         public string Engine { get; set; }
+
+        public Blog Blog { get; set; }
     }
 }

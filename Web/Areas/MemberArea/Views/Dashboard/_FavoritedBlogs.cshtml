@@ -3,6 +3,6 @@
 <h4>Favorited Blogs-</h4> 
 @foreach (var item in Model.FavoriteBlogPostList)
 {
-    @Html.Partial("_BlogEntity", new ViewDataDictionary { { "item", item } });
+    @Html.Partial("~/Areas/MemberArea/Views/BlogPosts/_BlogEntity.cshtml", new ViewDataDictionary { { "item", item } });
 
 }

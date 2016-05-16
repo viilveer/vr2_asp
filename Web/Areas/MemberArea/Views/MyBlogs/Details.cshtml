@@ -21,7 +21,7 @@
 
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.BlogPosts.FirstOrDefault().AuthorName)
+                        @Html.DisplayNameFor(model => model.BlogPosts.FirstOrDefault().Author.FirstName)
                     </th>
                     <th>
                         <a href="@Url.Action("Index", new {SortProperty = GridViewHelper.GetSortProperty("_createdAt", Model.SortProperty)})">
@@ -39,7 +39,7 @@
                             @Html.DisplayFor(modelItem => item.Title)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.AuthorName)
+                            @Html.DisplayFor(modelItem => item.Author.FirstLastName)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.CreatedAt)
