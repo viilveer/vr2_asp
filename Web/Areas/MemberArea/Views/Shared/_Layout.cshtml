@@ -1,4 +1,5 @@
 ﻿@using System.Threading
+@using Santhos.Web.Mvc.BootstrapFlashMessages
 @{
     var titleTag = (string.IsNullOrWhiteSpace(ViewBag.Title) ? "" : ViewBag.Title + " - ") + Resources.Common.ApplicationName;
 
@@ -40,6 +41,7 @@
             @Html.Partial("~/Areas/MemberArea/Views/Shared/_Nav.cshtml")
         </div>
         <div class="col-md-10">
+            @Html.FlashMessages(true)
             @RenderBody()
         </div>
     </div>

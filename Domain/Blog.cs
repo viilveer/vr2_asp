@@ -26,7 +26,7 @@ namespace Domain
         [Required]
         public int AuthorId { get; set; }
         public virtual UserInt Author { get; set; }
-        public virtual ICollection<UserBlogConnection> UserBlogConnections { get; set; }
+        public ICollection<UserBlogConnection> UserBlogConnections { get; set; }
 
     }
 }

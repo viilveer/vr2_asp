@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using DAL.Interfaces;
 using Domain;
 using Microsoft.AspNet.Identity;
+using Santhos.Web.Mvc.BootstrapFlashMessages;
 using Web.Areas.MemberArea.ViewModels.BlogPost;
 
 namespace Web.Areas.MemberArea.Controllers
@@ -59,8 +60,10 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 _uow.GetRepository<IBlogPostRepository>().Add(model.GetBlogPost(blog, User.Identity.GetUserId<int>()));
                 _uow.Commit();
+                this.FlashSuccess("You created new blog post-");
                 return RedirectToAction("Edit", "BlogPosts", new { area = "MemberArea", id = id.Value });
             }
+            this.FlashDanger("There were errors on form-");
             return View(model);
         }
 
@@ -104,8 +107,10 @@ namespace Web.Areas.MemberArea.Controllers
 
                 _uow.GetRepository<IBlogPostRepository>().Update(blogPost);
                 _uow.Commit();
+                this.FlashSuccess("You successfully edited a blogpost-");
                 return RedirectToAction("Edit", new {id = id.Value});
             }
+            this.FlashDanger("There were errors on form-");
             return View(model);
         }
 
@@ -138,6 +143,7 @@ namespace Web.Areas.MemberArea.Controllers
 
             _uow.GetRepository<IBlogPostRepository>().Delete(id);
             _uow.Commit();
+            this.FlashSuccess("You successfully deleted a blogpost-");
             return RedirectToAction("Details", "MyBlogs", new {id = blogPost.BlogId});
         }
     }

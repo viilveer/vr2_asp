@@ -7,7 +7,7 @@
         <div class="content-box-header">
             <div class="panel-title">@item.Title</div>
             <div class="pull-right">
-                @if (item.Blog.UserBlogConnections.Count > 0)
+                @if (item.Blog.UserBlogConnections?.Count > 0)
                 {
                     @Html.ActionLink("Unfavorite", "DisconnectFrom", "Blogs", new {id = item.BlogId}, null)
                 }

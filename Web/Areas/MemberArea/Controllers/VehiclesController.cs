@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
-using System.Data.SqlClient;
 using System.Net;
 using System.Web.Mvc;
 using DAL.Interfaces;
 using Domain;
 using Domain.Identity;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using NLog.Fluent;
 using PagedList;
+using Santhos.Web.Mvc.BootstrapFlashMessages;
 using Web.Areas.MemberArea.ViewModels.Vehicle;
 using Web.Controllers;
 using Web.Helpers.Factories;
@@ -25,13 +21,11 @@ namespace Web.Areas.MemberArea.Controllers
 
         private readonly IUOW _uow;
         private ApplicationUserManager _userManager;
-        private ApplicationSignInManager _signInManager;
 
-        public VehiclesController(IUOW uow, ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public VehiclesController(IUOW uow, ApplicationUserManager userManager)
         {
             _logger.Debug("InstanceId: " + _instanceId);
             _uow = uow;
-            _signInManager = signInManager;
             _userManager = userManager;
         }
 
@@ -119,10 +113,11 @@ namespace Web.Areas.MemberArea.Controllers
                     _uow.RollbackTransaction();
                     throw ex;
                 }
-               
+                this.FlashSuccess("Vehicle created");
+
                 return RedirectToAction("Index");
             }
-
+            this.FlashDanger("There were errors on form");
             return View(vehicleCreateModel);
         }
 
@@ -163,9 +158,10 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 _uow.GetRepository<IVehicleRepository>().Update(vehicleUpdateModel.UpdateVehicle(vehicle));
                 _uow.Commit();
-
+                this.FlashSuccess("Vehicle edited");
                 return RedirectToAction("Index");
             }
+            this.FlashDanger("There were errors on form");
             return View(vehicleUpdateModel);
         }
 
@@ -202,7 +198,9 @@ namespace Web.Areas.MemberArea.Controllers
             _uow.GetRepository<IUserBlogConnectionRepository>().DeleteByBlogId(vehicle.Blog.BlogId);
             _uow.GetRepository<IBlogRepository>().Delete(vehicle.Blog.BlogId);
             _uow.GetRepository<IVehicleRepository>().Delete(vehicle.VehicleId);
-
+            _uow.Commit();
+            
+            this.FlashSuccess("Vehicle deleted");
             return RedirectToAction("Index");
         }
     }

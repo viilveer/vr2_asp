@@ -6,6 +6,7 @@ using DAL.Interfaces;
 using Domain;
 using Microsoft.AspNet.Identity;
 using PagedList;
+using Santhos.Web.Mvc.BootstrapFlashMessages;
 using Web.Areas.MemberArea.ViewModels.Blog;
 using Web.Areas.MemberArea.ViewModels.BlogPost;
 using Web.Controllers;
@@ -105,6 +106,7 @@ namespace Web.Areas.MemberArea.Controllers
                 };
                 _uow.GetRepository<IUserBlogConnectionRepository>().Add(connection);
                 _uow.Commit();
+                this.FlashSuccess("You successfully favorited a blog-");
             }
 
             return RedirectToAction("Details", "Blogs", new { area = "MemberArea", id = id });
@@ -122,6 +124,7 @@ namespace Web.Areas.MemberArea.Controllers
 
             
             _uow.GetRepository<IUserBlogConnectionRepository>().DeleteByUserIdAndBlogId(userId, blogId);
+            this.FlashSuccess("You successfully removed a blog from favorites-");
             _uow.Commit();
 
             return RedirectToAction("Details", "Blogs", new { area = "MemberArea", id = id });

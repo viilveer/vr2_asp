@@ -5,6 +5,7 @@ using DAL.Interfaces;
 using Domain;
 using Microsoft.AspNet.Identity;
 using PagedList;
+using Santhos.Web.Mvc.BootstrapFlashMessages;
 using Web.Areas.MemberArea.ViewModels.Blog;
 using Web.Controllers;
 using DetailsModel = Web.Areas.MemberArea.ViewModels.Blog.DetailsModel;
@@ -127,8 +128,10 @@ namespace Web.Areas.MemberArea.Controllers
                 blog = updateModel.UpdateBlog(blog);
                 _uow.GetRepository<IBlogRepository>().Update(blog);
                 _uow.Commit();
+                this.FlashSuccess("Blog post edited");
                 return RedirectToAction("Index");
             }
+            this.FlashDanger("There were errors on form");
             return View(updateModel);
         }
 
