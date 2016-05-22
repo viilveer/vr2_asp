@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Web.ViewModels
+namespace WebAPI.ViewModels
 {
     // Models returned by ApiAccountController actions.
 

@@ -284,7 +284,6 @@
     <Compile Include="Areas\MemberArea\ViewModels\Vehicle\CreateModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Vehicle\IndexModel.cs" />
     <Compile Include="Areas\MemberArea\ViewModels\Vehicle\UpdateModel.cs" />
-    <Compile Include="Controllers\ApiAccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LanguageController.cs" />
@@ -307,7 +306,6 @@
     <Compile Include="Helpers\UserNameFactory.cs" />
     <Compile Include="ViewModels\AccountBindingModels.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
-    <Compile Include="ViewModels\ApiAccountViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />

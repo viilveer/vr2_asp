@@ -2,18 +2,17 @@
 @using Web.Helpers
 @model Web.Areas.MemberArea.ViewModels.Blog.DetailsModel
 
-        <h2>Blog-: @Model.Name - @Model.HeadLine</h2>
+<h2>Blog-: @Model.Name - @Model.HeadLine</h2>
 
-        <p>
-            @Html.ActionLink("Back to List", "Index")
-        </p>
-            @foreach (var item in Model.BlogPosts)
-            {
-                @Html.Partial("~/Areas/MemberArea/Views/BlogPosts/_BlogEntity.cshtml", new ViewDataDictionary { { "item", item } });
-            }
+<p>
+@Html.ActionLink("Back to List", "Index")
+</p>
+@foreach (var item in Model.BlogPosts)
+{
+    @Html.Partial("~/Areas/MemberArea/Views/BlogPosts/_BlogEntity.cshtml", new ViewDataDictionary { { "item", item } });
+}
 
-            @Html.PagedListPager(Model.BlogPosts, page => Url.Action("Index", new {PageNumber = page}))
-</div>
+@Html.PagedListPager(Model.BlogPosts, page => Url.Action("Index", new {PageNumber = page}))
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
