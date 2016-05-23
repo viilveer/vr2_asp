@@ -2,157 +2,160 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using API_DAL.Interfaces;
+using System.Web;
+using Interfaces.Repositories;
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
+using NLog;
+
 
 namespace API_DAL.Repositories
 {
-    // this is universal base EF repository implementation, to be included in all other repos
-    // covers all basic crud methods, common for all other repos
-    public class ApiRepository<T> : IApiRepository<T> where T : class
+    public class ApiRepository<T> : IBaseRepository<T> where T : class
     {
-        private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
-        private readonly string _instanceId = Guid.NewGuid().ToString();
+        private readonly IAuthenticationManager _authenticationManager;
+        protected HttpClient HttpClient;
+        protected string EndPoint;
+        private readonly ILogger _logger = NLog.LogManager.GetCurrentClassLogger();
+
+        public ApiRepository(HttpClient httpClient, string endPoint, IAuthenticationManager authenticationManager)
+        {
+            _authenticationManager = authenticationManager;
+            HttpClient = httpClient;
+            EndPoint = endPoint;
+        }
+
 
         public List<T> All
         {
             get
             {
-                throw new NotImplementedException();
+                var response = HttpClient.GetAsync(EndPoint).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var res = response.Content.ReadAsAsync<List<T>>().Result;
+                    return res;
+                }
+                _logger.Debug(response.RequestMessage.RequestUri + " - " + response.StatusCode);
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    LogUserOutAndRedirectToLogin();
+                }
+                return new List<T>();
             }
-        }
-
-
-        //Constructor, requires dbContext as dependency
-        public ApiRepository()
-        {
-            _logger.Info("_instanceId: " + _instanceId);
-        }
-
-        //public IQueryable<T> All
-        //{
-        //	get { return DbSet; }
-        //}
-
-        //public List<T> All => DbSet.ToList();
-
-        //public IQueryable<T> GetAllIncluding(params Expression<Func<T, object>>[] includeProperties)
-        //{
-        //	return includeProperties.
-        //		Aggregate<Expression<Func<T, object>>, IQueryable<T>>(DbSet,
-        //		  (current, includeProperty) => current.Include(includeProperty));
-        //	/*
-        //	// non linq version
-        //	foreach (var includeProperty in includeProperties)
-        //	{
-        //		query = query.Include(includeProperty);
-        //	}
-        //	return query;
-        //	*/
-        //}
-
-
-        //public T GetById(params object[] id)
-        //{
-        //    //return DbSet.Find(id);
-        //}
-
-        //public void Add(T entity)
-        //{
-        //    //DbEntityEntry dbEntityEntry = DbContext.Entry(entity);
-        //    //if (dbEntityEntry.State != EntityState.Detached)
-        //    //{
-        //    //    dbEntityEntry.State = EntityState.Added;
-        //    //}
-        //    //else
-        //    //{
-        //    //    DbSet.Add(entity);
-        //    //}
-        //}
-
-        //public void Update(T entity)
-        //{
-        //    //DbEntityEntry dbEntityEntry = DbContext.Entry(entity);
-        //    //if (dbEntityEntry.State == EntityState.Detached)
-        //    //{
-        //    //    DbSet.Attach(entity);
-        //    //}
-        //    //dbEntityEntry.State = EntityState.Modified;
-        //}
-
-        //public void Delete(T entity)
-        //{
-        //    //DbEntityEntry dbEntityEntry = DbContext.Entry(entity);
-        //    //if (dbEntityEntry.State != EntityState.Deleted)
-        //    //{
-        //    //    dbEntityEntry.State = EntityState.Deleted;
-        //    //}
-        //    //else
-        //    //{
-        //    //    DbSet.Attach(entity);
-        //    //    DbSet.Remove(entity);
-        //    //}
-        //}
-
-        //public void Delete(params object[] id)
-        //{
-        //    //var entity = GetById(id);
-        //    //if (entity == null) return;
-        //    //Delete(entity);
-        //}
-
-
-
-        ////public void UpdateOrInsert(T entity)
-        ////{
-        ////	var entityKeys = GetKeyNames(entity);
-        ////	DbEntityEntry dbEntityEntry = DbContext.Entry(entity);
-        ////	if (dbEntityEntry.Property(entityKeys[0]).CurrentValue == (object)0)
-        ////	{
-        ////		// insert
-        ////		Add(entity);
-        ////	}
-        ////	else
-        ////	{
-        ////		// update
-        ////		Update(entity);
-        ////	}
-        ////}
-
-        public void Dispose()
-        {
-            _logger.Debug("InstanceId: " + _instanceId);
         }
 
         public List<T> AllIncluding(params Expression<Func<T, object>>[] includeProperties)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Not implemented in Web API!?!?");
         }
 
         public T GetById(params object[] id)
         {
-            throw new NotImplementedException();
+            var uri = id[0];
+            for (int i = 1; i < id.Length; i++)
+            {
+                uri = uri + "/" + id[i];
+            }
+
+            var response = HttpClient.GetAsync(EndPoint + uri).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var res = response.Content.ReadAsAsync<T>().Result;
+                return res;
+            }
+            _logger.Debug(response.RequestMessage.RequestUri + " - " + response.StatusCode);
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                LogUserOutAndRedirectToLogin();
+            }
+            return null;
+
         }
 
         public void Add(T entity)
         {
-            throw new NotImplementedException();
+            var response = HttpClient.PostAsJsonAsync(EndPoint, entity).Result;
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                LogUserOutAndRedirectToLogin();
+            }
+            else if (!response.IsSuccessStatusCode)
+            {
+                _logger.Debug(response.RequestMessage.RequestUri + " - " + response.StatusCode);
+                throw new Exception(response.RequestMessage.RequestUri + " - " + response.StatusCode);
+            }
         }
 
         public void Update(T entity)
         {
-            throw new NotImplementedException();
+            // break restful practices, dont use endpoint/id
+            // id is already in entity
+            // baseurl http://...../api/
+            // enpoint ControllerName/
+            var response = HttpClient.PutAsJsonAsync(EndPoint, entity).Result;
+
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                LogUserOutAndRedirectToLogin();
+            }
+            else if (!response.IsSuccessStatusCode)
+            {
+                _logger.Debug(response.RequestMessage.RequestUri + " - " + response.StatusCode);
+                throw new Exception(response.RequestMessage.RequestUri + " - " + response.StatusCode);
+            }
         }
 
         public void Delete(T entity)
         {
-            throw new NotImplementedException();
+            // baseaddr+EndPoint+Delete+/
+            // PUT http://..../api/Persons/Delete/
+
+            var response = HttpClient.PutAsJsonAsync(EndPoint + nameof(Delete) + "/", entity).Result;
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                LogUserOutAndRedirectToLogin();
+            }
+            else if (!response.IsSuccessStatusCode)
+            {
+                _logger.Debug(response.RequestMessage.RequestUri + " - " + response.StatusCode);
+                throw new Exception(response.RequestMessage.RequestUri + " - " + response.StatusCode);
+            }
         }
 
         public void Delete(params object[] id)
         {
-            throw new NotImplementedException();
+            var uri = id[0];
+            for (int i = 1; i < id.Length; i++)
+            {
+                uri = uri + "/" + id[i];
+            }
+            // DELETE http://..../api/controller/id0/id1/id2/....
+            var response = HttpClient.DeleteAsync(EndPoint + uri).Result;
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                LogUserOutAndRedirectToLogin();
+            }
+            else if (!response.IsSuccessStatusCode)
+            {
+                _logger.Debug(response.RequestMessage.RequestUri + " - " + response.StatusCode);
+                throw new Exception(response.RequestMessage.RequestUri + " - " + response.StatusCode);
+            }
+        }
+        public void Dispose()
+        {
+        }
+
+        private void LogUserOutAndRedirectToLogin()
+        {
+            _authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            HttpContext.Current.Response.ClearContent();
+            HttpContext.Current.Response.ClearHeaders();
+            HttpContext.Current.Response.Redirect(@"~/Account/Login");
         }
     }
 }

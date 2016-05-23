@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DAL.Interfaces;
 using Domain;
+using Interfaces.Repositories;
 using NLog;
 
 namespace DAL
@@ -61,18 +62,9 @@ namespace DAL
             }
         }
 
-        //standard repos
-        public IEFRepository<MultiLangString> MultiLangStrings => GetStandardRepo<MultiLangString>();
-        public IEFRepository<Translation> Translations => GetStandardRepo<Translation>();
+        public IMultiLangStringRepository MultiLangStrings => GetRepo<IMultiLangStringRepository>();
+        public ITranslationRepository Translations => GetRepo<ITranslationRepository>();
 
-        // repo with custom methods
-        // add it also in EFRepositoryFactories.cs, in method GetCustomFactories
-
-        //public IUserRepository Users => GetRepo<IUserRepository>();
-        //public IUserRoleRepository UserRoles => GetRepo<IUserRoleRepository>();
-        //public IRoleRepository Roles => GetRepo<IRoleRepository>();
-        //public IUserClaimRepository UserClaims => GetRepo<IUserClaimRepository>();
-        //public IUserLoginRepository UserLogins => GetRepo<IUserLoginRepository>();
         public IUserIntRepository UsersInt => GetRepo<IUserIntRepository>();
         public IUserRoleIntRepository UserRolesInt => GetRepo<IUserRoleIntRepository>();
         public IRoleIntRepository RolesInt => GetRepo<IRoleIntRepository>();
@@ -80,7 +72,7 @@ namespace DAL
         public IUserLoginIntRepository UserLoginsInt => GetRepo<IUserLoginIntRepository>();
 
         // calling standard EF repo provider
-        private IEFRepository<T> GetStandardRepo<T>() where T : class
+        private IBaseRepository<T> GetStandardRepo<T>() where T : class
         {
             return RepositoryProvider.GetRepositoryForEntityType<T>();
         }

@@ -2,9 +2,10 @@ using System;
 using System.Web;
 using DAL;
 using DAL.Helpers;
-using DAL.Interfaces;
 using Domain.Identity;
 using Identity;
+using Interfaces;
+using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
@@ -25,7 +26,8 @@ namespace WebAPI.App_Start
 
     using Ninject;
     using Ninject.Web.Common;
-
+    using Interfaces.UOW;
+    using DAL.Interfaces;
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
@@ -82,6 +84,7 @@ namespace WebAPI.App_Start
             kernel.Bind<EFRepositoryFactories>().To<EFRepositoryFactories>().InSingletonScope();
             kernel.Bind<IEFRepositoryProvider>().To<EFRepositoryProvider>().InRequestScope();
             kernel.Bind<IUOW>().To<UOW>().InRequestScope();
+            kernel.Bind<BaseIUOW>().To<UOW>().InRequestScope();
 
             kernel.Bind<IUserStore<User>>().To<UserStore>().InRequestScope();
             kernel.Bind<IRoleStore<Role>>().To<RoleStore>().InRequestScope();

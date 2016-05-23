@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using DAL.Interfaces;
+using Interfaces.Repositories;
 using Domain.Identity;
 
 namespace DAL.Repositories

@@ -1,5 +1,6 @@
 ﻿using System;
 using DAL.Interfaces;
+using Interfaces;
 
 namespace DAL
 {

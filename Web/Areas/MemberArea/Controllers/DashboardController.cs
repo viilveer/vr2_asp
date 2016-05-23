@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
 using DAL.Interfaces;
+using Interfaces.Repositories;
+using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
 using Web.Areas.MemberArea.ViewModels.Dashboard;
 using Web.Controllers;
@@ -14,9 +16,9 @@ namespace Web.Areas.MemberArea.Controllers
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly string _instanceId = Guid.NewGuid().ToString();
 
-        private readonly IUOW _uow;
+        private readonly BaseIUOW _uow;
 
-        public DashboardController(IUOW uow)
+        public DashboardController(BaseIUOW uow)
         {
             _logger.Debug("InstanceId: " + _instanceId);
             _uow = uow;

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DAL.Interfaces;
+using Interfaces.Repositories;
 using Domain;
 
 namespace DAL.Repositories

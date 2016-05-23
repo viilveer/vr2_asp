@@ -3,6 +3,8 @@ using System.Net;
 using System.Web.Mvc;
 using DAL.Interfaces;
 using Domain;
+using Interfaces.Repositories;
+using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
 using Santhos.Web.Mvc.BootstrapFlashMessages;
 using Web.Areas.MemberArea.ViewModels.BlogPost;
@@ -15,9 +17,9 @@ namespace Web.Areas.MemberArea.Controllers
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly string _instanceId = Guid.NewGuid().ToString();
 
-        private readonly IUOW _uow;
+        private readonly BaseIUOW _uow;
 
-        public BlogPostsController(IUOW uow)
+        public BlogPostsController(BaseIUOW uow)
         {
             _logger.Debug("InstanceId: " + _instanceId);
             _uow = uow;

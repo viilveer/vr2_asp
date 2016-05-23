@@ -73,24 +73,9 @@
     <Compile Include="Helpers\EFRepositoryFactories.cs" />
     <Compile Include="Helpers\EFRepositoryProvider.cs" />
     <Compile Include="Helpers\FormattedDbEntityValidationException.cs" />
-    <Compile Include="Interfaces\IBlogPostRepository.cs" />
-    <Compile Include="Interfaces\IUserBlogConnectionRepository.cs" />
-    <Compile Include="Interfaces\IBlogRepository.cs" />
-    <Compile Include="Interfaces\IMessageThreadReceiverRepository.cs" />
-    <Compile Include="Interfaces\IMessageReceiverRepository.cs" />
-    <Compile Include="Interfaces\IMessageRepository.cs" />
-    <Compile Include="Interfaces\IUserNameResolver.cs" />
-    <Compile Include="Interfaces\IMessageThreadRepository.cs" />
-    <Compile Include="Interfaces\IVehicleRepository.cs" />
     <Compile Include="Interfaces\IDbContext.cs" />
-    <Compile Include="Interfaces\IEFRepository.cs" />
     <Compile Include="Interfaces\IEFRepositoryProvider.cs" />
-    <Compile Include="Interfaces\IRoleRepository.cs" />
     <Compile Include="Interfaces\IUOW.cs" />
-    <Compile Include="Interfaces\IUserClaimRepository.cs" />
-    <Compile Include="Interfaces\IUserLoginRepository.cs" />
-    <Compile Include="Interfaces\IUserRepository.cs" />
-    <Compile Include="Interfaces\IUserRoleRepository.cs" />
     <Compile Include="NLogCommandInterceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BlogPostRepository.cs" />
@@ -118,6 +103,10 @@
     <ProjectReference Include="..\Domain\Domain.csproj">
       <Project>{54e9dc6c-c740-4878-b57e-546c09b4e8ca}</Project>
       <Name>Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Interfaces\Interfaces.csproj">
+      <Project>{8c1f78a6-c263-4182-9f25-8f80e9bcd23e}</Project>
+      <Name>Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

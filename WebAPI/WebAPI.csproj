@@ -371,6 +371,10 @@
       <Project>{5b0755b3-5cf6-4cfb-b328-e152c98e6e22}</Project>
       <Name>Identity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Interfaces\Interfaces.csproj">
+      <Project>{8C1F78A6-C263-4182-9F25-8F80E9BCD23E}</Project>
+      <Name>Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Resources\Resources.csproj">
       <Project>{7308994f-36c4-49c2-8421-215aff278799}</Project>
       <Name>Resources</Name>

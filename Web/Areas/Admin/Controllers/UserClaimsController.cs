@@ -3,6 +3,7 @@ using System.Net;
 using System.Web.Mvc;
 using DAL.Interfaces;
 using Domain.Identity;
+using Interfaces.Repositories;
 using Web.Controllers;
 
 namespace Web.Areas.Admin.Controllers

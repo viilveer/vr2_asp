@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using API_DAL.Interfaces;
+using System.Net.Http;
+using Interfaces.Repositories;
 using Domain.Identity;
+using Microsoft.Owin.Security;
 
 namespace API_DAL.Repositories
 {
     public class UserLoginIntRepository :
         UserLoginRepository<int, RoleInt, UserInt, UserClaimInt, UserLoginInt, UserRoleInt>, IUserLoginIntRepository
     {
+        public UserLoginIntRepository(HttpClient httpClient, string endPoint, IAuthenticationManager authenticationManager) : base(httpClient, endPoint, authenticationManager)
+        {
+        }
     }
 
     public class UserLoginRepository : UserLoginRepository<string, Role, User, UserClaim, UserLogin, UserRole>,
         IUserLoginRepository
     {
-       
+        public UserLoginRepository(HttpClient httpClient, string endPoint, IAuthenticationManager authenticationManager) : base(httpClient, endPoint, authenticationManager)
+        {
+        }
     }
 
     public class UserLoginRepository<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole> : ApiRepository<TUserLogin>
@@ -25,7 +32,9 @@ namespace API_DAL.Repositories
         where TUserLogin : UserLogin<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole>
         where TUserRole : UserRole<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole>
     {
-
+        public UserLoginRepository(HttpClient httpClient, string endPoint, IAuthenticationManager authenticationManager) : base(httpClient, endPoint, authenticationManager)
+        {
+        }
 
         //public List<TUserLogin> GetAllIncludeUser()
         //{

@@ -4,6 +4,8 @@ using System.Web.Mvc;
 using DAL.Interfaces;
 using Domain;
 using Domain.Identity;
+using Interfaces.Repositories;
+using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
 using PagedList;
 using Santhos.Web.Mvc.BootstrapFlashMessages;
@@ -19,10 +21,10 @@ namespace Web.Areas.MemberArea.Controllers
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly string _instanceId = Guid.NewGuid().ToString();
 
-        private readonly IUOW _uow;
+        private readonly BaseIUOW _uow;
         private ApplicationUserManager _userManager;
 
-        public VehiclesController(IUOW uow, ApplicationUserManager userManager)
+        public VehiclesController(BaseIUOW uow, ApplicationUserManager userManager)
         {
             _logger.Debug("InstanceId: " + _instanceId);
             _uow = uow;
@@ -79,7 +81,7 @@ namespace Web.Areas.MemberArea.Controllers
         {
             if (ModelState.IsValid)
             {
-               _uow.BeginTransaction();
+               //_uow.BeginTransaction();
                 try
                 {
                     UserInt user = UserIntFactory.CreateFromIdentity(_uow, User);
@@ -87,7 +89,7 @@ namespace Web.Areas.MemberArea.Controllers
                     _uow.GetRepository<IVehicleRepository>().Add(vehicle);
 
                     _uow.Commit();
-                    _uow.RefreshAllEntities();
+                    //_uow.RefreshAllEntities();
                     _logger.Debug(vehicle.VehicleId.ToString);
                     Blog blog = new Blog
                     {
@@ -104,13 +106,13 @@ namespace Web.Areas.MemberArea.Controllers
                     {
                         _userManager.AddToRole(user.Id, "CarOwner");
                     }
-                    _uow.CommitTransaction();
+                    //_uow.CommitTransaction();
 
                    
                 }
                 catch (Exception ex)
                 {
-                    _uow.RollbackTransaction();
+                    //_uow.RollbackTransaction();
                     throw ex;
                 }
                 this.FlashSuccess("Vehicle created");

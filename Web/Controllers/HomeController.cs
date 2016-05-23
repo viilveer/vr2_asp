@@ -4,15 +4,16 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DAL.Interfaces;
+using Interfaces.UOW;
 using Web.ViewModels;
 
 namespace Web.Controllers
 {
     public class HomeController : BaseController
     {
-        private readonly IUOW _uow;
+        private readonly BaseIUOW _uow;
 
-        public HomeController(IUOW uow)
+        public HomeController(BaseIUOW uow)
         {
             _uow = uow;
         }

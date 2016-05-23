@@ -34,7 +34,6 @@ namespace WebAPI
             //app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 
             // get the DI container (ninject kernel) through DependencyResolver, and get user manager through it
-            var a = DependencyResolver.Current.GetService<ApplicationUserManager>();
             app.CreatePerOwinContext(() => DependencyResolver.Current.GetService<ApplicationUserManager>());
 
             // Enable the application to use a cookie to store information for the signed in user

@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain;
+using Interfaces.UOW;
 
 namespace DAL.Interfaces
 {
-    public interface IUOW
+    public interface IUOW : BaseIUOW
+
     {
-        //save pending changes to the data store
-        void Commit();
+       
         void RefreshAllEntities();
 
         void BeginTransaction();
@@ -18,27 +19,5 @@ namespace DAL.Interfaces
         void RollbackTransaction();
 
         //UOW Methods, that dont fit into specific repo
-
-        //get repository for type
-        T GetRepository<T>() where T : class;
-
-        // standard autocreated repos, since we do not have any special methods in interfaces
-        IEFRepository<MultiLangString> MultiLangStrings { get; }
-        IEFRepository<Translation> Translations { get; }
-
-
-        // Identity, PK - string
-        //IUserRepository Users { get; }
-        //IUserRoleRepository UserRoles { get; }
-        //IRoleRepository Roles { get; }
-        //IUserClaimRepository UserClaims { get; }
-        //IUserLoginRepository UserLogins { get; }
-
-        // Identity, PK - int
-        IUserIntRepository UsersInt { get; }
-        IUserRoleIntRepository UserRolesInt { get; }
-        IRoleIntRepository RolesInt { get; }
-        IUserClaimIntRepository UserClaimsInt { get; }
-        IUserLoginIntRepository UserLoginsInt { get; }
     }
 }

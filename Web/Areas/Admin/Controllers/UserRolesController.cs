@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using DAL;
 using DAL.Interfaces;
 using Domain.Identity;
+using Interfaces.Repositories;
 using Microsoft.Owin.Security;
 using NLog;
 using Web.Areas.Admin.ViewModels;

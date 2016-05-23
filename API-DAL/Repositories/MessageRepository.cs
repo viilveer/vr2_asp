@@ -1,12 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using API_DAL.Interfaces;
+using System.Net.Http;
+using Interfaces.Repositories;
 using Domain;
+using Microsoft.Owin.Security;
 
 namespace API_DAL.Repositories
 {
     public class MessageRepository : ApiRepository<Message>, IMessageRepository
     {
+        public MessageRepository(HttpClient httpClient, string endPoint, IAuthenticationManager authenticationManager) : base(httpClient, endPoint, authenticationManager)
+        {
+        }
         public List<Message> GetAllByThreadId(int threadId)
         {
             throw new System.NotImplementedException();

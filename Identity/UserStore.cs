@@ -6,9 +6,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using DAL.Interfaces;
-using DAL.Repositories;
 using Domain.Identity;
+using Interfaces.Repositories;
+using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
 
 namespace Identity
@@ -21,7 +21,7 @@ namespace Identity
         IRoleIntRepository, IUserClaimIntRepository, IUserLoginIntRepository, IUserIntRepository, IUserRoleIntRepository
         >
     {
-        public UserStoreInt(IUOW uow)
+        public UserStoreInt(BaseIUOW uow)
             : base(uow)
         {
         }
@@ -35,7 +35,7 @@ namespace Identity
         IRoleRepository, IUserClaimRepository, IUserLoginRepository, IUserRepository, IUserRoleRepository>,
         IUserStore<User>
     {
-        public UserStore(IUOW uow)
+        public UserStore(BaseIUOW uow)
             : base(uow)
         {
         }
@@ -75,10 +75,10 @@ namespace Identity
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly string _instanceId = Guid.NewGuid().ToString();
 
-        private readonly IUOW _uow;
+        private readonly BaseIUOW _uow;
         private bool _disposed;
 
-        public UserStore(IUOW uow)
+        public UserStore(BaseIUOW uow)
         {
             _logger.Debug("InstanceId: " + _instanceId);
             _uow = uow;

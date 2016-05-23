@@ -4,9 +4,10 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using DAL.Interfaces;
 using DAL.Repositories;
 using Domain.Identity;
+using Interfaces.Repositories;
+using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
 
 namespace Identity
@@ -17,7 +18,7 @@ namespace Identity
     public class RoleStoreInt :
         RoleStore<int, RoleInt, UserInt, UserClaimInt, UserLoginInt, UserRoleInt, IRoleIntRepository>
     {
-        public RoleStoreInt(IUOW uow, NLog.Logger logger)
+        public RoleStoreInt(BaseIUOW uow, NLog.Logger logger)
             : base(uow, logger)
         {
         }
@@ -29,7 +30,7 @@ namespace Identity
     public class RoleStore : RoleStore<string, Role, User, UserClaim, UserLogin, UserRole, IRoleRepository>,
         IRoleStore<Role>
     {
-        public RoleStore(IUOW uow, NLog.Logger logger)
+        public RoleStore(BaseIUOW uow, NLog.Logger logger)
             : base(uow, logger)
         {
         }
@@ -47,13 +48,13 @@ namespace Identity
         where TUserRole : UserRole<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole>
         where TRepo : class, IRoleRepository<TKey, TRole>
     {
-        private readonly IUOW _uow;
+        private readonly BaseIUOW _uow;
         private readonly NLog.Logger _logger;
 
         private bool _disposed;
         private readonly string _instanceId = Guid.NewGuid().ToString();
 
-        public RoleStore(IUOW uow, NLog.Logger logger)
+        public RoleStore(BaseIUOW uow, NLog.Logger logger)
         {
             _logger = logger;
             _logger.Debug("InstanceId: " + _instanceId);

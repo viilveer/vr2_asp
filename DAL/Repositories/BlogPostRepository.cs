@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using DAL.Interfaces;
 using Domain;
+using Interfaces.Repositories;
 
 namespace DAL.Repositories
 {
