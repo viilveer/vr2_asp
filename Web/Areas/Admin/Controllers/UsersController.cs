@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Web.Mvc;
-using DAL.Interfaces;
 using Domain.Identity;
+using Interfaces.UOW;
 using Web.Controllers;
 
 namespace Web.Areas.Admin.Controllers
@@ -14,9 +14,9 @@ namespace Web.Areas.Admin.Controllers
         private readonly string _instanceId = Guid.NewGuid().ToString();
 
         //private WebAppEFContext db = new WebAppEFContext();
-        private readonly IUOW _uow;
+        private readonly BaseIUOW _uow;
 
-        public UsersController(IUOW uow)
+        public UsersController(BaseIUOW uow)
         {
             _logger.Debug("InstanceId: " + _instanceId);
             _uow = uow;

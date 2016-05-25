@@ -6,9 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using DAL;
-using DAL.Interfaces;
 using Domain;
+using Interfaces.UOW;
 using NLog;
 using Web.Areas.Admin.ViewModels;
 using Web.Controllers;
@@ -20,9 +19,9 @@ namespace Web.Areas.Admin.Controllers
     {
         private readonly NLog.ILogger _logger;
         private readonly string _instanceId = Guid.NewGuid().ToString();
-        private readonly IUOW _uow;
+        private readonly BaseIUOW _uow;
 
-        public TranslationsController(ILogger logger, IUOW uow)
+        public TranslationsController(ILogger logger, BaseIUOW uow)
         {
             _logger = logger;
             _logger.Debug("InstanceId: " + _instanceId);

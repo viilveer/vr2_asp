@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using DAL.Interfaces;
 using Domain;
 using Interfaces.Repositories;
 using Interfaces.UOW;
@@ -10,9 +9,7 @@ using Microsoft.AspNet.Identity;
 using PagedList;
 using Santhos.Web.Mvc.BootstrapFlashMessages;
 using Web.Areas.MemberArea.ViewModels.Blog;
-using Web.Areas.MemberArea.ViewModels.BlogPost;
 using Web.Controllers;
-using DetailsModel = Web.Areas.MemberArea.ViewModels.Blog.DetailsModel;
 
 namespace Web.Areas.MemberArea.Controllers
 {
@@ -51,7 +48,7 @@ namespace Web.Areas.MemberArea.Controllers
         }
 
         // GET: MemberArea/Blogs/Details/5
-        public ActionResult Details(int? id, DetailsModel detailsModel)
+        public ActionResult Details(int? id, ViewModels.Blog.DetailsModel detailsModel)
         {
             if (id == null)
             {

@@ -38,4 +38,33 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+        function showError(jqXHR) {
+            $("#result").html(jqXHR.status + ': ' + jqXHR.statusText);
+        }
+
+        $("#apiRegister").submit(function (event) {
+            $("#result").html("Register...");
+
+            var registerData = {
+                Email: $("#registerEmail").val(),
+                Password: $("#registerPassword").val(),
+                ConfirmPassword: $("#registerPassword2").val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/Account/Register',
+                contentType: 'application/json; charset=utf-8',
+                processData: false,
+                data: JSON.stringify(registerData)
+            }).done(function (data) {
+                $("#result").html("Register done!");
+            }).fail(showError);
+
+            event.preventDefault();
+        });
+
+    </script>
 }

@@ -1,8 +1,6 @@
 using System;
 using System.Web;
-using DAL;
-using DAL.Helpers;
-using DAL.Interfaces;
+using API_DAL;
 using Domain.Identity;
 using Identity;
 using Interfaces;
@@ -70,11 +68,8 @@ namespace Web
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<IDbContext>().To<DataBaseContext>().InRequestScope();
             //kernel.Bind<IDbContextFactory>().To<DbContextFactory>().InRequestScope();
 
-            kernel.Bind<EFRepositoryFactories>().To<EFRepositoryFactories>().InSingletonScope();
-            kernel.Bind<IEFRepositoryProvider>().To<EFRepositoryProvider>().InRequestScope();
             kernel.Bind<BaseIUOW>().To<UOW>().InRequestScope();
 
             kernel.Bind<IUserStore<User>>().To<UserStore>().InRequestScope();
@@ -91,7 +86,6 @@ namespace Web
             // http://stackoverflow.com/questions/5646820/logger-wrapper-best-practice
             kernel.Bind<NLog.ILogger>().ToMethod(a => NLog.LogManager.GetCurrentClassLogger());
 
-            kernel.Bind<IUserNameResolver>().ToMethod(a => new UserNameResolver(UserNameFactory.GetCurrentUserNameFactory())).InRequestScope();
         }
     }
 }

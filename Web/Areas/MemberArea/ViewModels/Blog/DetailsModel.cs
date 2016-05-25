@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using PagedList;
-using Web.Areas.MemberArea.ViewModels.BlogPost;
 
 namespace Web.Areas.MemberArea.ViewModels.Blog
 {

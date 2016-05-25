@@ -4,14 +4,15 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Interfaces.Repositories;
 using Domain.Identity;
+using Interfaces.Repositories;
 using Microsoft.Owin.Security;
+using NLog;
 
 namespace API_DAL.Repositories
 {
     public class RoleIntRepository : RoleRepository<int, RoleInt, UserInt, UserClaimInt, UserLoginInt, UserRoleInt>,
-        IRoleIntRepository
+    IRoleIntRepository
     {
         public RoleIntRepository(HttpClient httpClient, string endPoint, IAuthenticationManager authenticationManager) : base(httpClient, endPoint, authenticationManager)
         {
@@ -34,42 +35,34 @@ namespace API_DAL.Repositories
         where TUserLogin : UserLogin<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole>
         where TUserRole : UserRole<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole>
     {
+        private readonly ILogger _logger = NLog.LogManager.GetCurrentClassLogger();
+
         public RoleRepository(HttpClient httpClient, string endPoint, IAuthenticationManager authenticationManager) : base(httpClient, endPoint, authenticationManager)
         {
         }
 
-        //public TRole GetByRoleName(string roleName)
-        //{
-        //    return DbSet.FirstOrDefault(a => a.Name.ToUpper() == roleName.ToUpper());
-        //}
-
-        //public List<TRole> GetRolesForUser(TKey userId)
-        //{
-        //    //var query = from userRole in _userRoles
-        //    //            where userRole.UserId.Equals(userId)
-        //    //            join role in _roleStore.DbEntitySet on userRole.RoleId equals role.Id
-        //    //            select role.Name;
-
-
-        //    //foreach (var role in ctx.Roles)
-        //    //{
-        //    //    foreach (var user in role.Users.Where(a => a.Id == id))
-        //    //    {
-        //    //        Console.WriteLine(role.Name);
-        //    //    }
-        //    //}
-        //    //return (DbSet.SelectMany(role => role.Users.Where(a => a.UserId == userId), (role, user) => role)).ToList();
-        //    //return DbSet.All(a => a.Users.Where(b => b.UserId.Equals(userId))).ToList();
-        ////    //return (from role in DbSet from user in role.Users.Where(a => a.UserId.Equals(userId)) select role).ToList();
-        //}
         public TRole GetByRoleName(string roleName)
         {
+            //return DbSet.FirstOrDefault(a => a.Name.ToUpper() == roleName.ToUpper());
             throw new NotImplementedException();
         }
 
         public List<TRole> GetRolesForUser(TKey userId)
         {
-            throw new NotImplementedException();
+            // return (from role in DbSet from user in role.Users.Where(a => a.UserId.Equals(userId)) select role).ToList();
+
+            var response = HttpClient.GetAsync(EndPoint + nameof(GetRolesForUser) + "/" + userId).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var res = response.Content.ReadAsAsync<List<TRole>>().Result;
+                return res;
+            }
+            _logger.Debug("Web API statuscode: " + response.StatusCode.ToString() + " Uri:" + response.RequestMessage.RequestUri);
+            return new List<TRole>();
         }
+
     }
+
+
+
 }

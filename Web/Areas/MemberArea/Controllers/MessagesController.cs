@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using DAL.Interfaces;
+using Web.Areas.MemberArea.ViewModels.Message;
 using Domain;
 using Domain.Identity;
 using Interfaces.Repositories;
 using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
 using PagedList;
-using Web.Areas.MemberArea.ViewModels.Message;
 using Web.Areas.MemberArea.ViewModels.MessageThread;
 using Web.Controllers;
 using Web.Helpers.Factories;
 using CreateModel = Web.Areas.MemberArea.ViewModels.Message.CreateModel;
+using DetailsModel = Web.Areas.MemberArea.ViewModels.MessageThread.DetailsModel;
 
 namespace Web.Areas.MemberArea.Controllers
 {
@@ -69,7 +69,7 @@ namespace Web.Areas.MemberArea.Controllers
             }
 
 
-            ViewModels.MessageThread.DetailsModel detailsModel = new ViewModels.MessageThread.DetailsModel()
+            DetailsModel detailsModel = new DetailsModel()
             {
                 Author = messageThread.Author.Email, // TODO :: fix
                 Title = messageThread.Title,
@@ -86,7 +86,7 @@ namespace Web.Areas.MemberArea.Controllers
         // TODO :: finish
         // GET: MemberArea/Messages/Details/5
         [HttpPost]
-        public ActionResult Details(int? id, ViewModels.MessageThread.DetailsModel detailsModel)
+        public ActionResult Details(int? id, DetailsModel detailsModel)
         {
             int activeUserId = Convert.ToInt32(User.Identity.GetUserId());
             if (id == null)
@@ -131,7 +131,7 @@ namespace Web.Areas.MemberArea.Controllers
                 return HttpNotFound();
             }
 
-            ViewModels.MessageThread.CreateModel createModel = new ViewModels.MessageThread.CreateModel();
+            Web.Areas.MemberArea.ViewModels.MessageThread.CreateModel createModel = new Web.Areas.MemberArea.ViewModels.MessageThread.CreateModel();
             return View(createModel);
         }
 
@@ -140,7 +140,7 @@ namespace Web.Areas.MemberArea.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Title,Text")] ViewModels.MessageThread.CreateModel createModel, int? receiverId)
+        public ActionResult Create([Bind(Include = "Title,Text")] Web.Areas.MemberArea.ViewModels.MessageThread.CreateModel createModel, int? receiverId)
         {
             UserInt user = _uow.GetRepository<IUserIntRepository>().GetById(receiverId);
             if (user == null)

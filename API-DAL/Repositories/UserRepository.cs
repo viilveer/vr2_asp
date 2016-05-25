@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Interfaces.Repositories;
 using Domain.Identity;
 using Microsoft.Owin.Security;
+using NLog;
 
 namespace API_DAL.Repositories
 {
@@ -33,37 +34,36 @@ namespace API_DAL.Repositories
         where TUserLogin : UserLogin<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole>
         where TUserRole : UserRole<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole>
     {
+        private readonly ILogger _logger = NLog.LogManager.GetCurrentClassLogger();
+
         public UserRepository(HttpClient httpClient, string endPoint, IAuthenticationManager authenticationManager) : base(httpClient, endPoint, authenticationManager)
         {
         }
 
-        //public TUser GetUserByUserName(string userName)
-        //{
-        //    //return DbSet.FirstOrDefault(a => a.UserName.ToUpper() == userName.ToUpper());
-        //}
-
-        //public TUser GetUserByEmail(string email)
-        //{
-        //    //return DbSet.FirstOrDefault(a => a.Email.ToUpper() == email.ToUpper());
-        //}
-
-        //public bool IsInRole(TKey userId, string roleName)
-        //{
-        //    //return DbSet.Find(userId).Roles.Any(a => a.Role.Name == roleName);
-        //}
-
-        //public void AddUserToRole(TKey userId, string roleName)
-        //{
-        //}
-
         public TUser GetUserByUserName(string userName)
         {
-            throw new NotImplementedException();
+            //return DbSet.FirstOrDefault(a => a.UserName.ToUpper() == userName.ToUpper());
+
+            var response = HttpClient.GetAsync(EndPoint + nameof(GetUserByUserName) + "/" + userName + "/").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var res = response.Content.ReadAsAsync<TUser>().Result;
+                return res;
+            }
+            _logger.Debug("Web API statuscode: " + response.StatusCode.ToString() + " Uri:" + response.RequestMessage.RequestUri);
+            return null;
         }
 
         public TUser GetUserByEmail(string email)
         {
-            throw new NotImplementedException();
+            var response = HttpClient.GetAsync(EndPoint + nameof(GetUserByEmail) + "/" + email + "/").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var res = response.Content.ReadAsAsync<TUser>().Result;
+                return res;
+            }
+            _logger.Debug("Web API statuscode: " + response.StatusCode.ToString() + " Uri:" + response.RequestMessage.RequestUri);
+            return null;
         }
 
         public bool IsInRole(TKey userId, string roleName)

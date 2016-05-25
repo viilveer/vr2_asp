@@ -1,135 +1,154 @@
-﻿//using System;
-//using System.Linq;
-//using System.Net;
-//using System.Web.Mvc;
-//using DAL.Interfaces;
-//using Domain;
-//using Microsoft.AspNet.Identity;
-//using PagedList;
-//using Santhos.Web.Mvc.BootstrapFlashMessages;
-//using WebAPI.ViewModels.Blog;
-//using WebAPI.ViewModels.BlogPost;
-//using Web.Controllers;
-//using DetailsModel = WebAPI.ViewModels.Blog.DetailsModel;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.UI.WebControls;
+using DAL.Interfaces;
+using Domain;
+using Interfaces.Repositories;
+using Microsoft.AspNet.Identity;
+using PagedList;
 
-//namespace WebAPI.Controllers
-//{
-//    [Authorize(Roles = "User")]
-//    public class BlogsController : BaseController
-//    {
-//        private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
-//        private readonly string _instanceId = Guid.NewGuid().ToString();
+namespace WebAPI.Controllers
+{
+    [System.Web.Mvc.Authorize(Roles = "User")]
+    [RoutePrefix("api/Blogs")]
+    public class BlogsController : ApiController
+    {
+        private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+        private readonly string _instanceId = Guid.NewGuid().ToString();
 
-//        private readonly IUOW _uow;
+        private readonly IUOW _uow;
+        
+        public BlogsController(IUOW uow)
+        {
+            _logger.Debug("InstanceId: " + _instanceId);
+            _uow = uow;
+        }
 
-//        public BlogsController(IUOW uow)
-//        {
-//            _logger.Debug("InstanceId: " + _instanceId);
-//            _uow = uow;
-//        }
+        [HttpGet]
+        public HttpResponseMessage Index(string blogName, string sortProperty, int pageNumber, int pageSize)
+        {
+            int totalCount;
+            string realSortProperty;
+           
+            IEnumerable<Blog> blogs = _uow.GetRepository<IBlogRepository>().GetList(blogName, sortProperty, pageNumber, pageSize, out totalCount, out realSortProperty);
+            var response = Request.CreateResponse(HttpStatusCode.OK, blogs);
 
-//        // GET: MemberArea/Blogs
-//        public ActionResult Index(IndexModel vm)
-//        {
-//            int totalVehicleCount;
-//            string realSortProperty;
+            // Set headers for paging
+            response.Headers.Add("X-Paging-PageNo", pageNumber.ToString());
+            response.Headers.Add("X-Paging-PageSize", pageSize.ToString());
+            response.Headers.Add("X-RealSortProperty", realSortProperty);
+            response.Headers.Add("X-Paging-TotalRecordCount", totalCount.ToString());
 
-//            // if not set, set base values
-//            vm.PageNumber = vm.PageNumber ?? 1;
-//            vm.PageSize = vm.PageSize ?? 25;
+            return response;
+        }
 
-//            var res = _uow.GetRepository<IBlogRepository>().GetList(Request.Params["blogName"], vm.SortProperty, vm.PageNumber.Value - 1, vm.PageSize.Value, out totalVehicleCount, out realSortProperty);
+        //// GET: MemberArea/Blogs
+        //public ActionResult Index(IndexModel vm)
+        //{
+        //    int totalVehicleCount;
+        //    string realSortProperty;
 
-//            vm.SortProperty = realSortProperty;
+        //    // if not set, set base values
+        //    vm.PageNumber = vm.PageNumber ?? 1;
+        //    vm.PageSize = vm.PageSize ?? 25;
 
-//            // https://github.com/kpi-ua/X.PagedList
-//            vm.Blogs = new StaticPagedList<Blog>(res, vm.PageNumber.Value, vm.PageSize.Value, totalVehicleCount);
+        //    var res = _uow.GetRepository<IBlogRepository>().GetList(Request.Params["blogName"], vm.SortProperty, vm.PageNumber.Value - 1, vm.PageSize.Value, out totalVehicleCount, out realSortProperty);
 
-//            return View(vm);
-//        }
+        //    vm.SortProperty = realSortProperty;
 
-//        // GET: MemberArea/Blogs/Details/5
-//        public ActionResult Details(int? id, DetailsModel detailsModel)
-//        {
-//            if (id == null)
-//            {
-//                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-//            }
-//            Blog blog = _uow.GetRepository<IBlogRepository>().GetById(id);
-//            if (blog == null)
-//            {
-//                return HttpNotFound();
-//            }
+        //    // https://github.com/kpi-ua/X.PagedList
+        //    vm.Blogs = new StaticPagedList<Blog>(res, vm.PageNumber.Value, vm.PageSize.Value, totalVehicleCount);
 
-//            int totalItemCount;
-//            string realSortProperty;
+        //    return View(vm);
+        //}
 
-//            // if not set, set base values
-//            detailsModel.PageNumber = detailsModel.PageNumber ?? 1;
-//            detailsModel.PageSize = detailsModel.PageSize ?? 25;
-//            detailsModel.HeadLine = blog.HeadLine;
-//            detailsModel.BlogId = blog.BlogId;
-//            detailsModel.Name = blog.Name;
+        //// GET: MemberArea/Blogs/Details/5
+        //public ActionResult Details(int? id, DetailsModel detailsModel)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Blog blog = _uow.GetRepository<IBlogRepository>().GetById(id);
+        //    if (blog == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
 
-//            var res = _uow.GetRepository<IBlogPostRepository>().GetAllByBlogId(id.Value, detailsModel.SortProperty, detailsModel.PageNumber.Value - 1, detailsModel.PageSize.Value, out totalItemCount, out realSortProperty);
+        //    int totalItemCount;
+        //    string realSortProperty;
 
-//            detailsModel.SortProperty = realSortProperty;
+        //    // if not set, set base values
+        //    detailsModel.PageNumber = detailsModel.PageNumber ?? 1;
+        //    detailsModel.PageSize = detailsModel.PageSize ?? 25;
+        //    detailsModel.HeadLine = blog.HeadLine;
+        //    detailsModel.BlogId = blog.BlogId;
+        //    detailsModel.Name = blog.Name;
 
-//            // https://github.com/kpi-ua/X.PagedList
-//            detailsModel.BlogPosts = new StaticPagedList<BlogPost>(res, detailsModel.PageNumber.Value, detailsModel.PageSize.Value, totalItemCount);
+        //    var res = _uow.GetRepository<IBlogPostRepository>().GetAllByBlogId(id.Value, detailsModel.SortProperty, detailsModel.PageNumber.Value - 1, detailsModel.PageSize.Value, out totalItemCount, out realSortProperty);
 
-//            return View(detailsModel);
-//        }
+        //    detailsModel.SortProperty = realSortProperty;
 
+        //    // https://github.com/kpi-ua/X.PagedList
+        //    detailsModel.BlogPosts = new StaticPagedList<BlogPost>(res, detailsModel.PageNumber.Value, detailsModel.PageSize.Value, totalItemCount);
 
-
-//        // GET: MemberArea/Blog/ConnectTo/5
-//        public ActionResult ConnectTo(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-//            }
-//            int blogId = id.Value;
-//            int userId = Convert.ToInt32(User.Identity.GetUserId());
-            
-//            UserBlogConnection userBlogConnection =
-//                _uow.GetRepository<IUserBlogConnectionRepository>()
-//                    .GetUserAndBlogConnection(userId, blogId);
-
-//            if (userBlogConnection == null) // TODO:: handle count > 1?
-//            {
-//                UserBlogConnection connection = new UserBlogConnection()
-//                {
-//                    UserId = userId,
-//                    BlogId = blogId,
-//                };
-//                _uow.GetRepository<IUserBlogConnectionRepository>().Add(connection);
-//                _uow.Commit();
-//                this.FlashSuccess("You successfully favorited a blog-");
-//            }
-
-//            return RedirectToAction("Details", "Blogs", new { area = "MemberArea", id = id });
-//        }
-
-//        // GET: MemberArea/Blog/ConnectTo/5
-//        public ActionResult DisconnectFrom(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-//            }
-//            int blogId = id.Value;
-//            int userId = User.Identity.GetUserId<int>();
-
-            
-//            _uow.GetRepository<IUserBlogConnectionRepository>().DeleteByUserIdAndBlogId(userId, blogId);
-//            this.FlashSuccess("You successfully removed a blog from favorites-");
-//            _uow.Commit();
-
-//            return RedirectToAction("Details", "Blogs", new { area = "MemberArea", id = id });
-//        }
+        //    return View(detailsModel);
+        //}
 
 
-//    }
-//}
+
+        //// GET: MemberArea/Blog/ConnectTo/5
+        //public ActionResult ConnectTo(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    int blogId = id.Value;
+        //    int userId = Convert.ToInt32(User.Identity.GetUserId());
+
+        //    UserBlogConnection userBlogConnection =
+        //        _uow.GetRepository<IUserBlogConnectionRepository>()
+        //            .GetUserAndBlogConnection(userId, blogId);
+
+        //    if (userBlogConnection == null) // TODO:: handle count > 1?
+        //    {
+        //        UserBlogConnection connection = new UserBlogConnection()
+        //        {
+        //            UserId = userId,
+        //            BlogId = blogId,
+        //        };
+        //        _uow.GetRepository<IUserBlogConnectionRepository>().Add(connection);
+        //        _uow.Commit();
+        //        this.FlashSuccess("You successfully favorited a blog-");
+        //    }
+
+        //    return RedirectToAction("Details", "Blogs", new { area = "MemberArea", id = id });
+        //}
+
+        //// GET: MemberArea/Blog/ConnectTo/5
+        //public ActionResult DisconnectFrom(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    int blogId = id.Value;
+        //    int userId = User.Identity.GetUserId<int>();
+
+
+        //    _uow.GetRepository<IUserBlogConnectionRepository>().DeleteByUserIdAndBlogId(userId, blogId);
+        //    this.FlashSuccess("You successfully removed a blog from favorites-");
+        //    _uow.Commit();
+
+        //    return RedirectToAction("Details", "Blogs", new { area = "MemberArea", id = id });
+        //}
+
+
+    }
+}

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -19,6 +20,7 @@ namespace WebAPI
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
+            //GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.Re‌​ferenceLoopHandling = ReferenceLoopHandling.Ignore;
             var formatters = config.Formatters;
             var jsonFormatter = formatters.JsonFormatter;
 
@@ -26,7 +28,7 @@ namespace WebAPI
             formatters.Remove(formatters.XmlFormatter);
 
             // json referenceloop
-            jsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
+            jsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             // json referenceloop objects
             jsonFormatter.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
 
@@ -49,6 +51,8 @@ namespace WebAPI
             jsonFormatter.SerializerSettings.Culture = new CultureInfo("et-EE");
 
 
+            var cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(cors);
 
 
             // Web API routes
@@ -56,7 +60,7 @@ namespace WebAPI
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "{controller}/{id}",
+                routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
         }

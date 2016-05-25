@@ -56,5 +56,17 @@
 @Scripts.Render("~/bundles/bootstrap")
 @Scripts.Render("~/Scripts/tinymce/tinymce.min.js")
 @RenderSection("scripts", required: false)
+@section scripts
+{
+        <script type="text/javascript">
+        $("#apiLogout").click(function (event) {
+            $("#user").val("");
+            $("#result").html("Logout!");
+
+            sessionStorage.removeItem('accessToken');
+            event.preventDefault();
+        });
+        </script>
+}
 </body>
 </html>

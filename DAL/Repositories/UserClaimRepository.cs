@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DAL.Interfaces;
-using Interfaces.Repositories;
 using Domain.Identity;
+using Interfaces.Repositories;
 
 namespace DAL.Repositories
 {
@@ -24,9 +24,10 @@ namespace DAL.Repositories
         public UserClaimRepository(IDbContext dbContext) : base(dbContext)
         {
         }
+
     }
 
-    public class UserClaimRepository<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole> : EFRepository<TUserClaim>
+    public class UserClaimRepository<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole> : EFRepository<TUserClaim>, IUserClaimRepository<TKey, TUserClaim>
         where TKey : IEquatable<TKey>
         where TRole : Role<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole>
         where TUser : User<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole>
@@ -42,5 +43,10 @@ namespace DAL.Repositories
         {
             return DbSet.Include(a => a.User).ToList();
         }
+        public List<TUserClaim> AllForUserId(TKey userId)
+        {
+            return DbSet.Where(c => c.UserId.Equals(userId)).ToList();
+        }
+
     }
 }

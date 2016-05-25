@@ -6,10 +6,13 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using DAL.Interfaces;
+using DAL.Repositories;
 using Domain.Identity;
 using Interfaces.Repositories;
 using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
+using NLog;
 
 namespace Identity
 {
@@ -21,9 +24,11 @@ namespace Identity
         IRoleIntRepository, IUserClaimIntRepository, IUserLoginIntRepository, IUserIntRepository, IUserRoleIntRepository
         >
     {
-        public UserStoreInt(BaseIUOW uow)
-            : base(uow)
+        private readonly NLog.ILogger _logger;
+        public UserStoreInt(BaseIUOW uow, ILogger logger)
+            : base(uow, logger)
         {
+            _logger = logger;
         }
     }
 
@@ -35,9 +40,11 @@ namespace Identity
         IRoleRepository, IUserClaimRepository, IUserLoginRepository, IUserRepository, IUserRoleRepository>,
         IUserStore<User>
     {
-        public UserStore(BaseIUOW uow)
-            : base(uow)
+        private readonly NLog.ILogger _logger;
+        public UserStore(BaseIUOW uow, ILogger logger)
+            : base(uow, logger)
         {
+            _logger = logger;
         }
     }
 
@@ -66,22 +73,24 @@ namespace Identity
         where TUserLogin : UserLogin<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole>, new()
         where TUserRole : UserRole<TKey, TRole, TUser, TUserClaim, TUserLogin, TUserRole>, new()
         where TRoleRepository : class, IRoleRepository<TKey, TRole>
-        where TUserClaimRepository : class, IUserClaimRepository<TUserClaim>
+        where TUserClaimRepository : class, IUserClaimRepository<TKey, TUserClaim>
         where TUserLoginRepository : class, IUserLoginRepository<TUserLogin>
         where TUserRepository : class, IUserRepository<TKey, TUser>
         where TUserRoleRepository : class, IUserRoleRepository<TKey, TUserRole>
 
     {
-        private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+        private readonly NLog.ILogger _logger;
         private readonly string _instanceId = Guid.NewGuid().ToString();
 
         private readonly BaseIUOW _uow;
         private bool _disposed;
 
-        public UserStore(BaseIUOW uow)
+        public UserStore(BaseIUOW uow, ILogger logger)
         {
-            _logger.Debug("InstanceId: " + _instanceId);
             _uow = uow;
+            _logger = logger;
+
+            _logger.Debug("InstanceId: " + _instanceId);
         }
 
         #region dispose
@@ -289,7 +298,7 @@ namespace Identity
             {
                 throw new ArgumentNullException("user");
             }
-            user.LockoutEndDateUtc = lockoutEnd == DateTimeOffset.MinValue ? (DateTime?) null : lockoutEnd.UtcDateTime;
+            user.LockoutEndDateUtc = lockoutEnd == DateTimeOffset.MinValue ? (DateTime?)null : lockoutEnd.UtcDateTime;
             return Task.FromResult(0);
         }
 
@@ -553,7 +562,7 @@ namespace Identity
                 throw new InvalidOperationException(roleName);
             }
 
-            _uow.GetRepository<TUserRoleRepository>().Add(new TUserRole() {UserId = user.Id, RoleId = role.Id});
+            _uow.GetRepository<TUserRoleRepository>().Add(new TUserRole() { UserId = user.Id, RoleId = role.Id });
             _uow.Commit();
 
             return Task.FromResult(0);
@@ -632,11 +641,16 @@ namespace Identity
             ThrowIfDisposed();
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                throw new ArgumentNullException(nameof(user));
             }
-            return
-                Task.FromResult<IList<System.Security.Claims.Claim>>(
-                    user.Claims.Select(c => new System.Security.Claims.Claim(c.ClaimType, c.ClaimValue)).ToList());
+            //return
+            //    Task.FromResult<IList<System.Security.Claims.Claim>>(
+            //        user.Claims.Select(c => new System.Security.Claims.Claim(c.ClaimType, c.ClaimValue)).ToList());
+            var res =
+                _uow.GetRepository<TUserClaimRepository>().AllForUserId(user.Id)
+                    .Select(c => new System.Security.Claims.Claim(c.ClaimType, c.ClaimValue))
+                    .ToList();
+            return Task.FromResult<IList<System.Security.Claims.Claim>>(res);
         }
 
         public Task AddClaimAsync(TUser user, System.Security.Claims.Claim claim)
@@ -656,7 +670,7 @@ namespace Identity
             _logger.Info("claim.value: " + claim.Value + " claim.type: " + claim.Type);
 
             _uow.GetRepository<TUserClaimRepository>()
-                .Add(new TUserClaim() {ClaimValue = claim.Value, ClaimType = claim.Type, UserId = user.Id});
+                .Add(new TUserClaim() { ClaimValue = claim.Value, ClaimType = claim.Type, UserId = user.Id });
             _uow.Commit();
             return Task.FromResult<object>(null);
         }

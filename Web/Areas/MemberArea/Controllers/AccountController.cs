@@ -2,15 +2,17 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
-using DAL;
+using API_DAL;
 using Domain.Identity;
+using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using NLog;
 using Web.Controllers;
 using Web.ViewModels;
 
@@ -19,21 +21,24 @@ namespace Web.Areas.MemberArea.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
-        private readonly DataBaseContext _db = new DataBaseContext();
-        private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+        private readonly NLog.ILogger _logger;
         private readonly string _instanceId = Guid.NewGuid().ToString();
         private readonly ApplicationSignInManager _signInManager;
         private readonly ApplicationUserManager _userManager;
         private readonly IAuthenticationManager _authenticationManager;
-
+        private readonly BaseIUOW _uow;
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager,
-            IAuthenticationManager authenticationManager)
+            IAuthenticationManager authenticationManager, ILogger logger, BaseIUOW uow)
         {
-            _logger.Debug("InstanceId: " + _instanceId);
+            _logger = logger;
+
             _userManager = userManager;
             _signInManager = signInManager;
             _authenticationManager = authenticationManager;
+            _uow = uow;
+
+            _logger.Debug("InstanceId: " + _instanceId);
         }
 
         //
@@ -41,10 +46,6 @@ namespace Web.Areas.MemberArea.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToLocal(returnUrl);
-            }
             ViewBag.ReturnUrl = returnUrl;
             return View("Login", "_Empty");
         }
@@ -67,6 +68,27 @@ namespace Web.Areas.MemberArea.Controllers
                 await
                     _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe,
                         shouldLockout: false);
+            // check for UOW type, if webapi - get token and store it as claim
+            var webApiUOW = _uow as UOW;
+            if (webApiUOW != null)
+            {
+                var token = webApiUOW.GetWebApiToken(model.Email, model.Password);
+                var user = _userManager.Find(model.Email, model.Password);
+                if (user != null)
+                {
+                    //remove any previous auth claims
+                    var claims = _userManager.GetClaims(user.Id).Where(c => c.Type == ClaimTypes.Authentication).ToList();
+                    _logger.Debug($"Claimcount: {claims.Count}");
+                    foreach (var claim in claims)
+                    {
+                        _userManager.RemoveClaim(user.Id, claim);
+                    }
+                    _userManager.AddClaim(user.Id, new Claim(ClaimTypes.Authentication, token));
+                    _signInManager.SignIn(user, true, true);
+                }
+                
+            }
+
             switch (result)
             {
                 case SignInStatus.Success:
@@ -74,7 +96,7 @@ namespace Web.Areas.MemberArea.Controllers
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, RememberMe = model.RememberMe});
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("summary", "Invalid login attempt.");
@@ -92,7 +114,7 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return View("Error");
             }
-            return View(new VerifyCodeViewModel {Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe});
+            return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
         //
@@ -143,25 +165,17 @@ namespace Web.Areas.MemberArea.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            using (TransactionScope transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            if (ModelState.IsValid)
             {
-                try
+                var user = new UserInt { UserName = model.Email, Email = model.Email, LastName = model.LastName, FirstName = model.FirstName };
+                var userSave = await _userManager.CreateAsync(user, model.Password);
+                var roleSave = await _userManager.AddToRoleAsync(user.Id, "User"); // TODO :: fetch role and then add if exists
+                if (userSave.Succeeded == false || roleSave.Succeeded == false)
                 {
-                    if (ModelState.IsValid == false)
-                    {
-                        throw new InvalidDataException("Model state not valid");
-                    }
-                
-               
-                    var user = new UserInt { UserName = model.Email, Email = model.Email, LastName = model.LastName, FirstName = model.FirstName};
-                    var userSave = await _userManager.CreateAsync(user, model.Password);
-                    var roleSave = await _userManager.AddToRoleAsync(user.Id, "User"); // TODO :: fetch role and then add if exists
-                    if (userSave.Succeeded == false || roleSave.Succeeded == false)
-                    {
-                        AddErrors(userSave);
-                        throw new InvalidDataException("Save failed");
-                    }
-                    
+                    AddErrors(userSave);
+                }
+                else
+                {
                     await _signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
@@ -169,20 +183,13 @@ namespace Web.Areas.MemberArea.Controllers
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                    transaction.Complete();
-                  
 
-                }
-                catch (Exception ex)
-                {
-                    transaction.Dispose();
-                    Console.WriteLine(ex.InnerException);
-                    return View("Register", "_Empty");
+                    return RedirectToAction("Index", "Dashboard");
                 }
             }
-            return RedirectToAction("Index", "Dashboard", new {area = "MemberArea"});
 
-            
+            // If we got this far, something failed, redisplay form
+            return View("Register", "_Empty");
         }
 
         //
@@ -293,7 +300,7 @@ namespace Web.Areas.MemberArea.Controllers
         {
             // Request a redirect to the external login provider
             return new ChallengeResult(provider,
-                Url.Action("ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl}));
+                Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
         //
@@ -308,9 +315,9 @@ namespace Web.Areas.MemberArea.Controllers
             }
             var userFactors = await _userManager.GetValidTwoFactorProvidersAsync(userId);
             var factorOptions =
-                userFactors.Select(purpose => new SelectListItem {Text = purpose, Value = purpose}).ToList();
+                userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
             return
-                View(new SendCodeViewModel {Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe});
+                View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
         //
@@ -331,7 +338,7 @@ namespace Web.Areas.MemberArea.Controllers
                 return View("Error");
             }
             return RedirectToAction("VerifyCode",
-                new {Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe});
+                new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
         }
 
         //
@@ -354,14 +361,14 @@ namespace Web.Areas.MemberArea.Controllers
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, RememberMe = false});
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
                     return View("ExternalLoginConfirmation",
-                        new ExternalLoginConfirmationViewModel {Email = loginInfo.Email});
+                        new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
             }
         }
 
@@ -386,7 +393,7 @@ namespace Web.Areas.MemberArea.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new UserInt {UserName = model.Email, Email = model.Email};
+                var user = new UserInt { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -410,6 +417,7 @@ namespace Web.Areas.MemberArea.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
+            //_authenticationManager.SignOut();
             _authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }
@@ -437,7 +445,7 @@ namespace Web.Areas.MemberArea.Controllers
         {
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError("summary", error);
+                ModelState.AddModelError("", error);
             }
         }
 
@@ -447,7 +455,7 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Dashboard", new { area = "Memberarea"});
+            return RedirectToAction("Index", "Dashboard");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult
@@ -470,7 +478,7 @@ namespace Web.Areas.MemberArea.Controllers
 
             public override void ExecuteResult(ControllerContext context)
             {
-                var properties = new AuthenticationProperties {RedirectUri = RedirectUri};
+                var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
                 if (UserId != default(int))
                 {
                     properties.Dictionary[XsrfKey] = UserId.ToString(CultureInfo.InvariantCulture);

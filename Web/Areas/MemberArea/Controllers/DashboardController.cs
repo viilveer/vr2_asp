@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Web.Mvc;
-using DAL.Interfaces;
 using Interfaces.Repositories;
 using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
@@ -28,8 +27,8 @@ namespace Web.Areas.MemberArea.Controllers
         public ActionResult Index()
         {
             ViewModel vm = new ViewModel();
-            vm.NewBlogPostList =_uow.GetRepository<IBlogPostRepository>().GetDashBoardNewestBlogPosts(10);
-            vm.FavoriteBlogPostList =_uow.GetRepository<IBlogPostRepository>().GetDashBoardFavoriteBlogBlogPosts(User.Identity.GetUserId<int>(), 10);
+            vm.NewBlogPostList = _uow.GetRepository<IBlogPostRepository>().GetDashBoardNewestBlogPosts(10);
+            vm.FavoriteBlogPostList = _uow.GetRepository<IBlogPostRepository>().GetDashBoardFavoriteBlogBlogPosts(User.Identity.GetUserId<int>(), 10);
             return View(vm);
         }
     }

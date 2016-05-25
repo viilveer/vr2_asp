@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Interfaces.Repositories;
 using Interfaces.UOW;
+using System.Web;
 using Microsoft.Owin.Security;
 using NLog.Internal;
 using API_DAL.Repositories;
+using Newtonsoft.Json.Linq;
+using NLog;
 using ConfigurationManager = System.Configuration.ConfigurationManager;
 
 namespace API_DAL
@@ -24,16 +29,22 @@ namespace API_DAL
 
         private readonly HttpClient _httpClient = new HttpClient();
 
+        private readonly ILogger _logger = NLog.LogManager.GetCurrentClassLogger();
+
         public UOW(IAuthenticationManager authenticationManager)
         {
             _authenticationManager = authenticationManager;
+            // initialize list of repo factories
             _repositoryFactories = GetCustomFactories();
-            var baseAddr = ConfigurationManager.AppSettings["WebApi_BaseAddress"];
+
+            // set up httpclient
+            var baseAddr = ConfigurationManager.AppSettings["WebApi_BaseUri"];
             if (string.IsNullOrWhiteSpace(baseAddr))
             {
-                throw new KeyNotFoundException("WebApi_BaseAddress not defined in config!");
+                throw new KeyNotFoundException("WebApi_BaseUri not defined in config!");
             }
-
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _httpClient.BaseAddress = new Uri(baseAddr);
 
         }
@@ -42,44 +53,27 @@ namespace API_DAL
         {
             return new Dictionary<Type, Func<HttpClient, IAuthenticationManager, object>>
             {
-                {typeof (IUserIntRepository), (httpClient, authenticationManager) => new UserIntRepository(
-                    httpClient,
-                    ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
-                    authenticationManager)
-                },
-                {typeof (IUserRoleIntRepository), (httpClient, authenticationManager) => new UserRoleIntRepository(
-                    httpClient,
-                    ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
-                    authenticationManager)
-                },
-                {typeof (IUserClaimIntRepository), (httpClient, authenticationManager) => new UserClaimIntRepository(
-                    httpClient,
-                    ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
-                    authenticationManager)
-                },
-                {typeof (IUserLoginIntRepository), (httpClient, authenticationManager) => new UserLoginIntRepository(
-                    httpClient,
-                    ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
-                    authenticationManager)
-                },
-                {typeof (IRoleIntRepository), (httpClient, authenticationManager) => new RoleIntRepository(
-                    httpClient,
-                    ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
-                    authenticationManager)
-                },
+                {typeof(IUserIntRepository), (httpClient, authenticationManager) => new UserIntRepository(httpClient, ConfigurationManager.AppSettings["WebApi_EndPoint_UsersInt"], authenticationManager)},
+                    {typeof(IUserRoleIntRepository), (httpClient, authenticationManager) => new UserRoleIntRepository(httpClient, ConfigurationManager.AppSettings["WebApi_EndPoint_UserRolesInt"], authenticationManager)},
+                    {typeof(IRoleIntRepository), (httpClient, authenticationManager) => new RoleIntRepository(httpClient, ConfigurationManager.AppSettings["WebApi_EndPoint_RolesInt"], authenticationManager)},
+                    {typeof(IUserClaimIntRepository), (httpClient, authenticationManager) => new UserClaimIntRepository(httpClient, ConfigurationManager.AppSettings["WebApi_EndPoint_UserClaimsInt"], authenticationManager)},
+                    {typeof(IUserLoginIntRepository), (httpClient, authenticationManager) => new UserLoginIntRepository(httpClient, ConfigurationManager.AppSettings["WebApi_EndPoint_UserLoginsInt"], authenticationManager)},
+
+
+              
                 {typeof (IVehicleRepository), (httpClient, authenticationManager) => new VehicleRepository(
                     httpClient,
-                    ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
+                    ConfigurationManager.AppSettings["WebApi_EndPoint_Vehicles"],
                     authenticationManager)
                 },
                 {typeof (IBlogRepository), (httpClient, authenticationManager) => new BlogRepository(
                     httpClient,
-                    ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
+                    ConfigurationManager.AppSettings["WebApi_EndPoint_Blogs"],
                     authenticationManager)
                 },
                 {typeof (IBlogPostRepository), (httpClient, authenticationManager) => new BlogPostRepository(
                     httpClient,
-                    ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
+                    ConfigurationManager.AppSettings["WebApi_EndPoint_BlogPosts"],
                     authenticationManager)
                 },
                 {typeof (IMessageThreadRepository), (httpClient, authenticationManager) => new MessageThreadRepository(
@@ -107,59 +101,83 @@ namespace API_DAL
                     ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
                     authenticationManager)
                 },
-            };
+
+                    };
         }
 
-        public T GetRepository<T>() where T : class
+        /// <summary>
+        /// Returns repo instance by repo interface
+        /// Repo is first searched from cache, if not found then its created new and stored into cache
+        /// </summary>
+        /// <typeparam name="TRepo">Repo interface</typeparam>
+        /// <returns></returns>
+        public TRepo GetRepository<TRepo>() where TRepo : class
         {
-            var repo = GetWebApiRepository<T>();
+            var repo = GetWebApiRepo<TRepo>() as TRepo;
             if (repo == null)
             {
-                throw new NotImplementedException($"No repo for type: {typeof(T).FullName}");
+                throw new NotImplementedException("No repository for type, " + typeof(TRepo).FullName);
             }
             return repo;
         }
 
-        private TRepoType GetWebApiRepository<TRepoType>() where TRepoType : class
+        private TRepo GetWebApiRepo<TRepo>() where TRepo : class
         {
+
+            // Look for TRepo in dictionary cache under typeof(TRepo).
             object repo;
-            _repositories.TryGetValue(typeof(TRepoType), out repo);
+            _repositories.TryGetValue(typeof(TRepo), out repo);
             if (repo != null)
             {
-                return (TRepoType)repo;
+                return (TRepo)repo;
             }
 
-
-            return MakeRepository<TRepoType>();
+            return MakeRepository<TRepo>();
         }
 
-        private TRepoType MakeRepository<TRepoType>() where TRepoType : class
+        protected virtual TRepo MakeRepository<TRepo>() where TRepo : class
         {
-            Func<HttpClient, IAuthenticationManager, object> factory;
-            _repositoryFactories.TryGetValue(typeof(TRepoType), out factory);
-            if (factory == null)
+            // repo factory (delegate), not yet initialized
+            Func<HttpClient, IAuthenticationManager, object> repoFactory;
+
+            // try to get factroy for this repo type
+            _repositoryFactories.TryGetValue(typeof(TRepo), out repoFactory);
+            if (repoFactory == null)
             {
-                throw new NotImplementedException($"No factory for type: {typeof(TRepoType).FullName}");
+                throw new NotImplementedException("No factory for repository type: " + typeof(TRepo).FullName);
             }
 
-            // create repo 
-            var repo = (TRepoType)factory(_httpClient, _authenticationManager);
+            // there should be user identity built up already at this moment
+            if (HttpContext.Current?.Request.IsAuthenticated ?? false)
+            {
+                var identity = HttpContext.Current.User.Identity as ClaimsIdentity;
+                var token = identity?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Authentication)?.Value;
+                if (!string.IsNullOrWhiteSpace(token))
+                {
+                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+                _logger.Debug("Bearer token added to the httpclient header!");
+            }
 
-            //save to dictionary
-            _repositories[typeof(TRepoType)] = repo;
+            // make the repo
+            var repo = (TRepo)repoFactory(_httpClient, _authenticationManager);
 
+            // save it to dictionary
+            _repositories[typeof(TRepo)] = repo;
+
+            //return it
             return repo;
         }
 
 
-        public IMultiLangStringRepository MultiLangStrings => GetWebApiRepository<IMultiLangStringRepository>();
-        public ITranslationRepository Translations => GetWebApiRepository<ITranslationRepository>();
+        public IMultiLangStringRepository MultiLangStrings => GetWebApiRepo<IMultiLangStringRepository>();
+        public ITranslationRepository Translations => GetWebApiRepo<ITranslationRepository>();
 
-        public IUserIntRepository UsersInt => GetWebApiRepository<IUserIntRepository>();
-        public IUserRoleIntRepository UserRolesInt => GetWebApiRepository<IUserRoleIntRepository>();
-        public IRoleIntRepository RolesInt => GetWebApiRepository<IRoleIntRepository>();
-        public IUserClaimIntRepository UserClaimsInt => GetWebApiRepository<IUserClaimIntRepository>();
-        public IUserLoginIntRepository UserLoginsInt => GetWebApiRepository<IUserLoginIntRepository>();
+        public IUserIntRepository UsersInt => GetWebApiRepo<IUserIntRepository>();
+        public IUserRoleIntRepository UserRolesInt => GetWebApiRepo<IUserRoleIntRepository>();
+        public IRoleIntRepository RolesInt => GetWebApiRepo<IRoleIntRepository>();
+        public IUserClaimIntRepository UserClaimsInt => GetWebApiRepo<IUserClaimIntRepository>();
+        public IUserLoginIntRepository UserLoginsInt => GetWebApiRepo<IUserLoginIntRepository>();
 
         /// <summary>
         /// Not used in Web API
@@ -173,5 +191,41 @@ namespace API_DAL
         {
         }
 
+        public string GetWebApiToken(string userName, string password)
+        {
+            var bearerToken = "";
+            using (var tokenHttpClient = new HttpClient())
+            {
+                var tokenAddr = ConfigurationManager.AppSettings["WebApi_TokenUri"];
+                if (string.IsNullOrWhiteSpace(tokenAddr))
+                {
+                    throw new KeyNotFoundException("WebApi_TokenUri not defined in config!");
+                }
+                tokenHttpClient.BaseAddress = new Uri(tokenAddr);
+                tokenHttpClient.DefaultRequestHeaders.Accept.Clear();
+                tokenHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var tokenContent = new StringContent($"grant_type=password&username={userName}&password={password}");
+
+                tokenContent.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded")
+                {
+                    CharSet = "UTF-8"
+                };
+
+                var response = tokenHttpClient.PostAsync("", tokenContent).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var tokenResult = response.Content.ReadAsStringAsync().Result;
+                    bearerToken = JObject.Parse(tokenResult)["access_token"].ToString();
+                }
+                else
+                {
+                    _logger.Debug(response.RequestMessage.RequestUri + " - " + response.StatusCode + " - " + response.ReasonPhrase);
+                }
+
+            }
+            return bearerToken;
+        }
     }
 }

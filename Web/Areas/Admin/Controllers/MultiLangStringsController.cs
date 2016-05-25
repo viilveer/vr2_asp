@@ -6,9 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using DAL;
-using DAL.Interfaces;
 using Domain;
+using Interfaces.UOW;
 using NLog;
 using Web.Controllers;
 
@@ -18,11 +17,11 @@ namespace Web.Areas.Admin.Controllers
     public class MultiLangStringsController : BaseController
     {
         //private DataBaseContext db = new DataBaseContext();
-        private readonly IUOW _uow;
+        private readonly BaseIUOW _uow;
         private readonly NLog.ILogger _logger;
         private readonly string _instanceId = Guid.NewGuid().ToString();
 
-        public MultiLangStringsController(IUOW uow, ILogger logger)
+        public MultiLangStringsController(BaseIUOW uow, ILogger logger)
         {
             _logger = logger;
             _logger.Debug("InstanceId: " + _instanceId);

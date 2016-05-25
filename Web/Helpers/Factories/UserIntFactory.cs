@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Security.Principal;
-using DAL;
-using DAL.Interfaces;
 using Domain.Identity;
 using Interfaces.Repositories;
 using Interfaces.UOW;

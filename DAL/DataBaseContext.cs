@@ -36,7 +36,7 @@ namespace DAL
             //Database.SetInitializer(new DropCreateDatabaseIfModelChanges<DataBaseContext>());
             Database.SetInitializer(new DatabaseInitializer());
 
-
+            Configuration.LazyLoadingEnabled = false;
 #if DEBUG
             this.Database.Log = s => Trace.Write(s);
 #endif

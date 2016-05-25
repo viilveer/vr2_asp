@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Web.Mvc;
-using DAL.Interfaces;
 using Domain;
 using Interfaces.Repositories;
 using Interfaces.UOW;

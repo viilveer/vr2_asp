@@ -1,4 +1,5 @@
-﻿@using Web.ViewModels
+﻿@using System.Configuration
+@using Web.ViewModels
 @model Web.ViewModels.LoginViewModel
 @{
     ViewBag.Title = Resources.Account.Login_Title;
@@ -27,7 +28,7 @@
                                         @Html.LabelFor(m => m.RememberMe)
                                     </div>
                                 </div>
-
+                            <div id="result"></div>
                             <div class="action">
                                 <input type="submit" value="@Resources.Account.Login_ButtonLogin" class="btn btn-primary signup"/>
                             </div>
@@ -47,4 +48,36 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-}
+    <script type="text/javascript">
+
+        @*function showError(jqXHR) {
+            $("#result").html(jqXHR.status + ': ' + jqXHR.statusText);
+        }
+
+        $("form.form-horizontal").submit(function (event) {
+            $("#result").html("Login...");
+
+            var loginData = {
+                grant_type: 'password',
+                username: $("#Email").val(),
+                password: $("#Password").val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '@ConfigurationManager.AppSettings["WebApi_BaseAddress"]' + 'Token',
+                data: loginData
+            }).done(function (data) {
+                $("#user").val(data.userName);
+                $("#result").html("Login done!");
+
+                // Cache the access token in session storage.
+                sessionStorage.setItem('accessToken', data.access_token);
+            }).fail(showError);
+
+            event.preventDefault();
+        });*@
+
+    
+    </script>
+} 

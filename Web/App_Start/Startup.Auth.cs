@@ -49,7 +49,7 @@ namespace Web
                     // This is a security feature which is used when you change a password or add an external login to your account.  
                     OnValidateIdentity =
                         SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, UserInt, int>(
-                            validateInterval: TimeSpan.FromMinutes(1),
+                            validateInterval: TimeSpan.FromMinutes(5),
                             regenerateIdentityCallback: (manager, user) =>
                                 user.GenerateUserIdentityAsync(manager),
                             // delete old cookies from browser first, otherwise youll get string conversion error
@@ -57,6 +57,25 @@ namespace Web
                 }
             });
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
+
+
+
+
+            // Configure the application for OAuth based flow
+            PublicClientId = "self";
+            OAuthOptions = new OAuthAuthorizationServerOptions
+            {
+                TokenEndpointPath = new PathString("/Token"),
+                Provider = new ApplicationOAuthProvider(PublicClientId),
+                AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
+                // In production mode set AllowInsecureHttp = false
+                AllowInsecureHttp = false
+            };
+
+            // Enable the application to use bearer tokens to authenticate users
+            app.UseOAuthBearerTokens(OAuthOptions);
+
 
             // Enables the application to temporarily store user information when they are verifying the second factor in the two-factor authentication process.
             app.UseTwoFactorSignInCookie(DefaultAuthenticationTypes.TwoFactorCookie, TimeSpan.FromMinutes(5));

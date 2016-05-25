@@ -21,7 +21,7 @@ namespace DAL.Repositories
 
         public List<BlogPost> GetDashBoardNewestBlogPosts(int limit)
         {
-            return DbSet.OrderByDescending(u => u.CreatedAt).Include(u => u.Blog).Take(limit).ToList();
+            return DbSet.OrderByDescending(u => u.CreatedAt).Include(u => u.Blog).Include(u => u.Author).Take(limit).ToList();
         }
 
         public void DeleteByBlogId(int blogId)
@@ -35,6 +35,7 @@ namespace DAL.Repositories
                 .Where(u => u.Blog.UserBlogConnections.Any(x => x.UserId == userId))
                 .OrderByDescending(u => u.CreatedAt)
                 .Include("Blog")
+                .Include("Author")
                 .Include("Blog.UserBlogConnections")
                 .Take(limit)
                 .ToList();

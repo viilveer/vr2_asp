@@ -7,7 +7,6 @@ using WebAPI.ViewModels.Dashboard;
 
 namespace WebAPI.Controllers
 {
-    [Authorize(Roles = "User")]
     public class DashboardController : Controller
     {
 
@@ -25,10 +24,9 @@ namespace WebAPI.Controllers
         {
             return new ViewModel
             {
-                NewBlogPostList = _uow.GetRepository<IBlogPostRepository>().GetDashBoardNewestBlogPosts(10),
-                FavoriteBlogPostList =
-                    _uow.GetRepository<IBlogPostRepository>()
-                        .GetDashBoardFavoriteBlogBlogPosts(User.Identity.GetUserId<int>(), 10)
+                //NewBlogPostList = _uow.GetRepository<IBlogPostRepository>().GetDashBoardNewestBlogPosts(10),
+                //FavoriteBlogPostList =
+                //    _uow.GetRepository<IBlogPostRepository>().GetDashBoardFavoriteBlogBlogPosts(User.Identity.GetUserId<int>(), 10)
             };
         }
     }

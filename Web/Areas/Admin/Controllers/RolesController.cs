@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using DAL.Interfaces;
 using Domain.Identity;
+using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Web.Controllers;
@@ -16,13 +16,13 @@ namespace Web.Areas.Admin.Controllers
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly string _instanceId = Guid.NewGuid().ToString();
 
-        private readonly IUOW _uow;
+        private readonly BaseIUOW _uow;
         private readonly ApplicationRoleManager _roleManager;
         private readonly ApplicationSignInManager _signInManager;
         private readonly ApplicationUserManager _userManager;
         private readonly IAuthenticationManager _authenticationManager;
 
-        public RolesController(IUOW uow, ApplicationRoleManager roleManager, ApplicationUserManager userManager,
+        public RolesController(BaseIUOW uow, ApplicationRoleManager roleManager, ApplicationUserManager userManager,
             ApplicationSignInManager signInManager, IAuthenticationManager authenticationManager)
         {
             _logger.Debug("InstanceId: " + _instanceId);
