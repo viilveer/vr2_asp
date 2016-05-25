@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Web.Mvc;
+using BLL.Helpers.Factories;
+using BLL.ViewModels.Vehicle;
 using Domain;
 using Domain.Identity;
 using Interfaces.Repositories;
@@ -8,9 +10,7 @@ using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
 using PagedList;
 using Santhos.Web.Mvc.BootstrapFlashMessages;
-using Web.Areas.MemberArea.ViewModels.Vehicle;
 using Web.Controllers;
-using Web.Helpers.Factories;
 
 namespace Web.Areas.MemberArea.Controllers
 {
@@ -57,7 +57,8 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Vehicle vehicle = _uow.GetRepository<IVehicleRepository>().GetById(id);
+            Vehicle vehicle = _uow.GetRepository<IVehicleRepository>()
+               .GetByIdAndUserId(id.Value, User.Identity.GetUserId<int>());
             if (vehicle == null)
             {
                 return HttpNotFound();
@@ -101,7 +102,7 @@ namespace Web.Areas.MemberArea.Controllers
                     _uow.GetRepository<IBlogRepository>().Add(blog);
                     _uow.Commit();
 
-                    if (_userManager.IsInRole(user.Id, "CarOwner") == false)
+                    if (_userManager.GetRoles(user.Id).Contains("CarOwner"))
                     {
                         _userManager.AddToRole(user.Id, "CarOwner");
                     }
@@ -129,7 +130,8 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Vehicle vehicle = _uow.GetRepository<IVehicleRepository>().GetById(id);
+            Vehicle vehicle = _uow.GetRepository<IVehicleRepository>()
+                .GetByIdAndUserId(id.Value, User.Identity.GetUserId<int>());
             if (vehicle == null)
             {
                 return HttpNotFound();
@@ -149,7 +151,8 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Vehicle vehicle = _uow.GetRepository<IVehicleRepository>().GetById(id);
+            Vehicle vehicle = _uow.GetRepository<IVehicleRepository>()
+               .GetByIdAndUserId(id.Value, User.Identity.GetUserId<int>());
             if (vehicle == null)
             {
                 return HttpNotFound();
@@ -173,7 +176,8 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Vehicle vehicle = _uow.GetRepository<IVehicleRepository>().GetById(id);
+              Vehicle vehicle = _uow.GetRepository<IVehicleRepository>()
+               .GetByIdAndUserId(id.Value, User.Identity.GetUserId<int>());
 
             if (vehicle == null)
             {
@@ -195,9 +199,8 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return HttpNotFound();
             }
-            _uow.GetRepository<IBlogPostRepository>().DeleteByBlogId(vehicle.Blog.BlogId);
-            _uow.GetRepository<IUserBlogConnectionRepository>().DeleteByBlogId(vehicle.Blog.BlogId);
-            _uow.GetRepository<IBlogRepository>().Delete(vehicle.Blog.BlogId);
+            
+            
             _uow.GetRepository<IVehicleRepository>().Delete(vehicle.VehicleId);
             _uow.Commit();
             

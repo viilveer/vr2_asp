@@ -7,10 +7,10 @@ using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
 using PagedList;
 using Santhos.Web.Mvc.BootstrapFlashMessages;
-using Web.Areas.MemberArea.ViewModels.Blog;
+using BLL.ViewModels.Blog;
 using Web.Controllers;
-using DetailsModel = Web.Areas.MemberArea.ViewModels.Blog.DetailsModel;
-using UpdateModel = Web.Areas.MemberArea.ViewModels.Blog.UpdateModel;
+using DetailsModel = BLL.ViewModels.Blog.DetailsModel;
+using UpdateModel = BLL.ViewModels.Blog.UpdateModel;
 
 namespace Web.Areas.MemberArea.Controllers
 {

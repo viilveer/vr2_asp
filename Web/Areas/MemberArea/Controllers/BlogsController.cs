@@ -8,7 +8,7 @@ using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
 using PagedList;
 using Santhos.Web.Mvc.BootstrapFlashMessages;
-using Web.Areas.MemberArea.ViewModels.Blog;
+using BLL.ViewModels.Blog;
 using Web.Controllers;
 
 namespace Web.Areas.MemberArea.Controllers
@@ -48,7 +48,7 @@ namespace Web.Areas.MemberArea.Controllers
         }
 
         // GET: MemberArea/Blogs/Details/5
-        public ActionResult Details(int? id, ViewModels.Blog.DetailsModel detailsModel)
+        public ActionResult Details(int? id, DetailsModel detailsModel)
         {
             if (id == null)
             {

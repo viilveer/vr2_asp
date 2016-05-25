@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
 using System.Linq;
 using System.Net.Http;
 using Interfaces.Repositories;
@@ -18,13 +19,37 @@ namespace API_DAL.Repositories
         }
         public Blog GetOneByUserAndId(int id, int userId)
         {
-            throw new NotImplementedException();
+            var response = HttpClient.GetAsync(EndPoint + "/User/Me/" + id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var res = response.Content.ReadAsAsync<Blog>().Result;
+                return res;
+            }
+
+            _logger.Debug(response.RequestMessage.RequestUri + " - " + response.StatusCode + " - " + response.ReasonPhrase);
+            throw new ObjectNotFoundException("Not found");
         }
 
         public IEnumerable<Blog> GetListByUserId(int userId, string sortProperty, int pageNumber, int pageSize, out int totalItemCount,
             out string realSortProperty)
         {
-            throw new NotImplementedException();
+            // 
+            string requestParams =
+                $"sortProperty={sortProperty}&pageNumber={pageNumber}&pageSize={pageSize}";
+
+            var response = HttpClient.GetAsync(EndPoint + $"User/{userId}/Blogs?" + requestParams).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var res = response.Content.ReadAsAsync<IEnumerable<Blog>>().Result;
+                realSortProperty = response.Headers.GetValues("X-RealSortProperty").ToString();
+                totalItemCount = Convert.ToInt32(response.Headers.GetValues("X-Paging-TotalRecordCount").FirstOrDefault());
+                return res;
+            }
+            realSortProperty = "";
+            totalItemCount = 0;
+
+            _logger.Debug(response.RequestMessage.RequestUri + " - " + response.StatusCode + " - " + response.ReasonPhrase);
+            return new List<Blog>();
         }
 
         public IEnumerable<Blog> GetList(string filter, string sortProperty, int pageNumber, int pageSize, out int totalItemCount,
@@ -37,13 +62,12 @@ namespace API_DAL.Repositories
             if (response.IsSuccessStatusCode)
             {
                 var res = response.Content.ReadAsAsync<IEnumerable<Blog>>().Result;
-                _logger.Debug(response.Headers.ToString);
                 realSortProperty = response.Headers.GetValues("X-RealSortProperty").ToString();
-                totalItemCount = Convert.ToInt32(response.Headers.GetValues("X-Paging-TotalRecordCount"));
+                totalItemCount = Convert.ToInt32(response.Headers.GetValues("X-Paging-TotalRecordCount").FirstOrDefault());
                 return res;
             }
-            realSortProperty = "test";
-            totalItemCount = 2;
+            realSortProperty = "";
+            totalItemCount = 0;
 
             _logger.Debug(response.RequestMessage.RequestUri + " - " + response.StatusCode + " - " + response.ReasonPhrase);
             return new List<Blog>();

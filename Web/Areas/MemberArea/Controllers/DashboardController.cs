@@ -3,7 +3,7 @@ using System.Web.Mvc;
 using Interfaces.Repositories;
 using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
-using Web.Areas.MemberArea.ViewModels.Dashboard;
+using BLL.ViewModels.Dashboard;
 using Web.Controllers;
 
 namespace Web.Areas.MemberArea.Controllers

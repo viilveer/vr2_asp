@@ -7,6 +7,7 @@ namespace Domain
 {
     public class Vehicle : BaseEntity
     {
+        [Key]
         public int VehicleId { get; set; }
 
         [Required]

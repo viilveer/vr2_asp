@@ -14,11 +14,10 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using WebAPI;
 using WebAPI.Models;
+using WebAPI;
 using WebAPI.Providers;
 using WebAPI.Results;
-using WebAPI.ViewModels;
 
 namespace WebAPI.Controllers
 {

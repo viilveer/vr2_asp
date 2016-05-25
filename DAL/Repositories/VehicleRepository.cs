@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using DAL.Interfaces;
 using Interfaces.Repositories;
@@ -55,7 +56,7 @@ namespace DAL.Repositories
 
         public Vehicle GetByIdAndUserId(int id, int userId)
         {
-            return DbSet.FirstOrDefault(x => x.UserId == userId && x.VehicleId == id);
+            return DbSet.Where(x => x.UserId == userId && x.VehicleId == id).Include(x => x.User).Include(x => x.Blog).Single();
         }
     }
 }

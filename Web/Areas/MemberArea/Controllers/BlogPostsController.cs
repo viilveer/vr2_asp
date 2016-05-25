@@ -6,7 +6,7 @@ using Interfaces.Repositories;
 using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
 using Santhos.Web.Mvc.BootstrapFlashMessages;
-using Web.Areas.MemberArea.ViewModels.BlogPost;
+using BLL.ViewModels.BlogPost;
 
 namespace Web.Areas.MemberArea.Controllers
 {

@@ -6,6 +6,7 @@ namespace Domain
 {
     public class UserBlogConnection : BaseEntity
     {
+        [Key]
         public int UserBlogConnectionId { get; set; }
 
         [Required]

@@ -8,6 +8,7 @@ namespace Domain
 {
     public class BlogPost : BaseEntity
     {
+        [Key]
         public int BlogPostId { get; set; }
 
         [Required]

@@ -24,7 +24,9 @@ namespace DAL.Repositories
 
             var res =
                 DbSet.Where(m => m.MessageThreadReceivers.Any(x => x.UserId == userId))
-                    .Include(u => u.MessageThreadReceivers);
+                    .Include(u => u.MessageThreadReceivers)
+                    .Include(u => u.Author)
+                    ;
 
 
             // set up sorting
@@ -49,7 +51,10 @@ namespace DAL.Repositories
 
         public MessageThread GetUserThread(int threadId, int userId)
         {
-            return DbSet.Where(u => u.MessageThreadId == threadId && u.MessageThreadReceivers.Any(x => x.UserId == userId)).Include(u => u.MessageThreadReceivers).Single();
+            return DbSet.Where(u => u.MessageThreadId == threadId && u.MessageThreadReceivers.Any(x => x.UserId == userId))
+                .Include(u => u.Author)
+                .Include(u => u.MessageThreadReceivers)
+                .Single();
         }
 
     }

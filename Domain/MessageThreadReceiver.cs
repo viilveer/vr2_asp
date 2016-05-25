@@ -10,6 +10,7 @@ namespace Domain
 {
     public class MessageThreadReceiver : BaseEntity
     {
+        [Key]
         public int MessageThreadReceiverId { get; set; }
 
         [Required]

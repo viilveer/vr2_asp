@@ -1,16 +1,17 @@
 ﻿@using PagedList.Mvc
 @using Web.Helpers
-@model Web.Areas.MemberArea.ViewModels.Blog.DetailsModel
+@model BLL.ViewModels.Blog.DetailsModel
 
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.BlogId }) |
+    @Html.ActionLink("Create post", "Create", "BlogPosts", new { id = Model.BlogId }, null) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
 <div class="content-box-large">
     <div class="panel-heading">
-        <div class="panel-title">@Resources.Messages.MyMessages</div>
+        <div class="panel-title">@Model.Name - @Model.HeadLine</div>
 
-        <p>
-            @Html.ActionLink("Edit", "Edit", new { id = Model.BlogId }) |
-            @Html.ActionLink("Create post", "Create", "BlogPosts", new { id = Model.BlogId }, null) |
-            @Html.ActionLink("Back to List", "Index")
-        </p>
+        
     </div>
     <div class="panel-body">
         <div class="table-responsive">

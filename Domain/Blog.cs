@@ -9,6 +9,7 @@ namespace Domain
 {
     public class Blog : BaseEntity
     {
+        [Key]
         public int BlogId { get; set; }
 
         [Display(Name = "Vehicle", ResourceType = typeof(Resources.Domain))]

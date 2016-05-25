@@ -5,7 +5,7 @@ namespace Domain
 {
     public class PostTag : BaseEntity
     {
-
+        [Key]
         public int PostTagId { get; set; }
 
         [Required]

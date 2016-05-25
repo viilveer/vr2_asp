@@ -5,6 +5,7 @@ namespace Domain
 {
     public class MessageReceiver : BaseEntity
     {
+        [Key]
         public int MessageReceiverId { get; set; }
 
         [Required]

@@ -78,27 +78,27 @@ namespace API_DAL
                 },
                 {typeof (IMessageThreadRepository), (httpClient, authenticationManager) => new MessageThreadRepository(
                     httpClient,
-                    ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
+                    ConfigurationManager.AppSettings["WebApi_EndPoint_Messages"],
                     authenticationManager)
                 },
                 {typeof (IMessageRepository), (httpClient, authenticationManager) => new MessageRepository(
                     httpClient,
-                    ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
+                    ConfigurationManager.AppSettings["WebApi_EndPoint_Messages"],
                     authenticationManager)
                 },
-                {typeof (IMessageReceiverRepository), (httpClient, authenticationManager) => new MessageReceiverRepository(
-                    httpClient,
-                    ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
-                    authenticationManager)
-                },
-                {typeof (IMessageThreadReceiverRepository), (httpClient, authenticationManager) => new MessageThreadReceiverRepository(
-                    httpClient,
-                    ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
-                    authenticationManager)
-                },
+                //{typeof (IMessageReceiverRepository), (httpClient, authenticationManager) => new MessageReceiverRepository(
+                //    httpClient,
+                //    ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
+                //    authenticationManager)
+                //},
+                //{typeof (IMessageThreadReceiverRepository), (httpClient, authenticationManager) => new MessageThreadReceiverRepository(
+                //    httpClient,
+                //    ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
+                //    authenticationManager)
+                //},
                 {typeof (IUserBlogConnectionRepository), (httpClient, authenticationManager) => new UserBlogConnectionRepository(
                     httpClient,
-                    ConfigurationManager.AppSettings["WebApi_EndPoint_Articles"],
+                    ConfigurationManager.AppSettings["WebApi_EndPoint_BlogConnections"],
                     authenticationManager)
                 },
 

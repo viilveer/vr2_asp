@@ -5,6 +5,7 @@ namespace Domain
 {
     public class PostComment : BaseEntity
     {
+        [Key]
         public int PostCommentId { get; set; }
 
         [Required]

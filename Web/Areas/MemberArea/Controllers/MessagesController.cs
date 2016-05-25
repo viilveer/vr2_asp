@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using Web.Areas.MemberArea.ViewModels.Message;
+using BLL.Helpers.Factories;
+using BLL.ViewModels.Message;
 using Domain;
 using Domain.Identity;
 using Interfaces.Repositories;
 using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
 using PagedList;
-using Web.Areas.MemberArea.ViewModels.MessageThread;
+using BLL.ViewModels.MessageThread;
 using Web.Controllers;
-using Web.Helpers.Factories;
-using CreateModel = Web.Areas.MemberArea.ViewModels.Message.CreateModel;
-using DetailsModel = Web.Areas.MemberArea.ViewModels.MessageThread.DetailsModel;
+using CreateModel = BLL.ViewModels.Message.CreateModel;
+using DetailsModel = BLL.ViewModels.MessageThread.DetailsModel;
 
 namespace Web.Areas.MemberArea.Controllers
 {
@@ -131,7 +131,7 @@ namespace Web.Areas.MemberArea.Controllers
                 return HttpNotFound();
             }
 
-            Web.Areas.MemberArea.ViewModels.MessageThread.CreateModel createModel = new Web.Areas.MemberArea.ViewModels.MessageThread.CreateModel();
+            BLL.ViewModels.MessageThread.CreateModel createModel = new BLL.ViewModels.MessageThread.CreateModel();
             return View(createModel);
         }
 
@@ -140,7 +140,7 @@ namespace Web.Areas.MemberArea.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Title,Text")] Web.Areas.MemberArea.ViewModels.MessageThread.CreateModel createModel, int? receiverId)
+        public ActionResult Create([Bind(Include = "Title,Text")] BLL.ViewModels.MessageThread.CreateModel createModel, int? receiverId)
         {
             UserInt user = _uow.GetRepository<IUserIntRepository>().GetById(receiverId);
             if (user == null)

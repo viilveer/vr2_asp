@@ -7,7 +7,6 @@ using DAL.Interfaces;
 using Domain;
 using Interfaces.Repositories;
 using Microsoft.AspNet.Identity;
-using WebAPI.ViewModels.BlogPost;
 
 namespace WebAPI.Controllers
 {

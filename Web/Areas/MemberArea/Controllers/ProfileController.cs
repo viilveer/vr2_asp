@@ -8,7 +8,7 @@ using Domain;
 using Domain.Identity;
 using Interfaces.Repositories;
 using Interfaces.UOW;
-using Web.Areas.MemberArea.ViewModels.Profile;
+using BLL.ViewModels.Profile;
 
 namespace Web.Areas.MemberArea.Controllers
 {

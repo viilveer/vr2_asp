@@ -7,7 +7,7 @@ namespace Domain
 {
     public class Message : BaseEntity
     {
-
+        [Key]
         public int MessageId { get; set; }
 
         [Required]

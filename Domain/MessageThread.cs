@@ -11,7 +11,7 @@ namespace Domain
 {
     public class MessageThread : BaseEntity
     {
-
+        [Key]
         public int MessageThreadId { get; set; }
 
         [Required]

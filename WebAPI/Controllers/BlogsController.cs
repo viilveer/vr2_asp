@@ -1,24 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.UI.WebControls;
 using DAL.Interfaces;
 using Domain;
 using Interfaces.Repositories;
 using Microsoft.AspNet.Identity;
-using PagedList;
+using NLog;
 
 namespace WebAPI.Controllers
 {
-    [System.Web.Mvc.Authorize(Roles = "User")]
-    [RoutePrefix("api/Blogs")]
+    [System.Web.Mvc.Authorize(Roles = "User"), RoutePrefix("api/Blogs")]
     public class BlogsController : ApiController
     {
-        private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly string _instanceId = Guid.NewGuid().ToString();
 
         private readonly IUOW _uow;
@@ -30,6 +26,8 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
+        [Route("")]
         public HttpResponseMessage Index(string blogName, string sortProperty, int pageNumber, int pageSize)
         {
             int totalCount;
@@ -47,108 +45,99 @@ namespace WebAPI.Controllers
             return response;
         }
 
-        //// GET: MemberArea/Blogs
-        //public ActionResult Index(IndexModel vm)
-        //{
-        //    int totalVehicleCount;
-        //    string realSortProperty;
+        [HttpGet]
+        [Route("User/{userId}/Blogs")]
+        public HttpResponseMessage MyBlogs(int userId, string sortProperty, int pageNumber, int pageSize)
+        {
+            int totalCount;
+            string realSortProperty;
 
-        //    // if not set, set base values
-        //    vm.PageNumber = vm.PageNumber ?? 1;
-        //    vm.PageSize = vm.PageSize ?? 25;
+            IEnumerable<Blog> blogs = _uow.GetRepository<IBlogRepository>().GetListByUserId(userId, sortProperty, pageNumber, pageSize, out totalCount, out realSortProperty);
+            var response = Request.CreateResponse(HttpStatusCode.OK, blogs);
 
-        //    var res = _uow.GetRepository<IBlogRepository>().GetList(Request.Params["blogName"], vm.SortProperty, vm.PageNumber.Value - 1, vm.PageSize.Value, out totalVehicleCount, out realSortProperty);
+            // Set headers for paging
+            response.Headers.Add("X-Paging-PageNo", pageNumber.ToString());
+            response.Headers.Add("X-Paging-PageSize", pageSize.ToString());
+            response.Headers.Add("X-RealSortProperty", realSortProperty);
+            response.Headers.Add("X-Paging-TotalRecordCount", totalCount.ToString());
 
-        //    vm.SortProperty = realSortProperty;
+            return response;
+        }
 
-        //    // https://github.com/kpi-ua/X.PagedList
-        //    vm.Blogs = new StaticPagedList<Blog>(res, vm.PageNumber.Value, vm.PageSize.Value, totalVehicleCount);
-
-        //    return View(vm);
-        //}
-
-        //// GET: MemberArea/Blogs/Details/5
-        //public ActionResult Details(int? id, DetailsModel detailsModel)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Blog blog = _uow.GetRepository<IBlogRepository>().GetById(id);
-        //    if (blog == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-
-        //    int totalItemCount;
-        //    string realSortProperty;
-
-        //    // if not set, set base values
-        //    detailsModel.PageNumber = detailsModel.PageNumber ?? 1;
-        //    detailsModel.PageSize = detailsModel.PageSize ?? 25;
-        //    detailsModel.HeadLine = blog.HeadLine;
-        //    detailsModel.BlogId = blog.BlogId;
-        //    detailsModel.Name = blog.Name;
-
-        //    var res = _uow.GetRepository<IBlogPostRepository>().GetAllByBlogId(id.Value, detailsModel.SortProperty, detailsModel.PageNumber.Value - 1, detailsModel.PageSize.Value, out totalItemCount, out realSortProperty);
-
-        //    detailsModel.SortProperty = realSortProperty;
-
-        //    // https://github.com/kpi-ua/X.PagedList
-        //    detailsModel.BlogPosts = new StaticPagedList<BlogPost>(res, detailsModel.PageNumber.Value, detailsModel.PageSize.Value, totalItemCount);
-
-        //    return View(detailsModel);
-        //}
+        [HttpGet]
+        [Route("User/Me/{blogId}")]
+        public Blog UserBlog(int blogId)
+        {
+            return _uow.GetRepository<IBlogRepository>().GetOneByUserAndId(blogId, User.Identity.GetUserId<int>());
+        }
 
 
 
-        //// GET: MemberArea/Blog/ConnectTo/5
-        //public ActionResult ConnectTo(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    int blogId = id.Value;
-        //    int userId = Convert.ToInt32(User.Identity.GetUserId());
+        [HttpPost]
+        [Route("")]
+        public IHttpActionResult Index(Blog blog)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    UserBlogConnection userBlogConnection =
-        //        _uow.GetRepository<IUserBlogConnectionRepository>()
-        //            .GetUserAndBlogConnection(userId, blogId);
+            _uow.GetRepository<IBlogRepository>().Add(blog);
+            _uow.Commit();
+            return Ok();
+        }
 
-        //    if (userBlogConnection == null) // TODO:: handle count > 1?
-        //    {
-        //        UserBlogConnection connection = new UserBlogConnection()
-        //        {
-        //            UserId = userId,
-        //            BlogId = blogId,
-        //        };
-        //        _uow.GetRepository<IUserBlogConnectionRepository>().Add(connection);
-        //        _uow.Commit();
-        //        this.FlashSuccess("You successfully favorited a blog-");
-        //    }
+        [HttpPut]
+        [Route("{id}")]
+        public IHttpActionResult Update(int id, Blog blog)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    return RedirectToAction("Details", "Blogs", new { area = "MemberArea", id = id });
-        //}
-
-        //// GET: MemberArea/Blog/ConnectTo/5
-        //public ActionResult DisconnectFrom(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    int blogId = id.Value;
-        //    int userId = User.Identity.GetUserId<int>();
+            _uow.GetRepository<IBlogRepository>().Update(blog);
+            _uow.Commit();
 
 
-        //    _uow.GetRepository<IUserBlogConnectionRepository>().DeleteByUserIdAndBlogId(userId, blogId);
-        //    this.FlashSuccess("You successfully removed a blog from favorites-");
-        //    _uow.Commit();
-
-        //    return RedirectToAction("Details", "Blogs", new { area = "MemberArea", id = id });
-        //}
+            return Ok();
+        }
 
 
+        [HttpGet]
+        [Route("Connect/{blogId}")]
+        // GET: MemberArea/Blog/ConnectTo/5
+        public IHttpActionResult ConnectTo(int blogId)
+        {
+            int userId = Convert.ToInt32(User.Identity.GetUserId());
+
+            UserBlogConnection userBlogConnection =
+                _uow.GetRepository<IUserBlogConnectionRepository>()
+                    .GetUserAndBlogConnection(userId, blogId);
+
+            if (userBlogConnection == null) 
+            {
+                UserBlogConnection connection = new UserBlogConnection
+                {
+                    UserId = userId,
+                    BlogId = blogId
+                };
+                _uow.GetRepository<IUserBlogConnectionRepository>().Add(connection);
+                _uow.Commit();
+                return Ok();
+            }
+            return NotFound();
+        }
+
+        [HttpGet]
+        [Route("Disconnect/{blogId}")]
+        // GET: MemberArea/Blog/ConnectTo/5
+        public IHttpActionResult DisconnectFrom(int blogId)
+        {
+            int userId = User.Identity.GetUserId<int>();
+            _uow.GetRepository<IUserBlogConnectionRepository>().DeleteByUserIdAndBlogId(userId, blogId);
+            _uow.Commit();
+            return Ok();
+        }
     }
 }
