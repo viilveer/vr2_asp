@@ -14,42 +14,64 @@ using PagedList;
 namespace WebAPI.Controllers
 {
     [System.Web.Mvc.Authorize(Roles = "User")]
-    [RoutePrefix("api/Messages")]
-    public class MessagesController : ApiController
+    [RoutePrefix("api/MessageThreads")]
+    public class MessageThreadsController : ApiController
     {
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly string _instanceId = Guid.NewGuid().ToString();
 
         private readonly IUOW _uow;
 
-        public MessagesController(IUOW uow)
+        public MessageThreadsController(IUOW uow)
         {
             _logger.Debug("InstanceId: " + _instanceId);
             _uow = uow;
         }
 
         [HttpGet]
-        [Route("{threadId}/User/Me")]
-        public List<Message> UserThreadMessages(int threadId)
+        [AllowAnonymous]
+        [Route("Mine")]
+        public HttpResponseMessage Index(string sortProperty, int pageNumber, int pageSize)
         {
-            return _uow.GetRepository<IMessageRepository>()
-                .GetAllByThreadIdAndUserId(threadId, Convert.ToInt32(User.Identity.GetUserId()));
+            int totalCount;
+            string realSortProperty;
+
+            var messages = _uow.GetRepository<IMessageThreadRepository>().GetUserThreads(User.Identity.GetUserId<int>(), sortProperty, pageNumber, pageSize, out totalCount, out realSortProperty);
+            var response = Request.CreateResponse(HttpStatusCode.OK, messages);
+
+            // Set headers for paging
+            response.Headers.Add("X-Paging-PageNo", pageNumber.ToString());
+            response.Headers.Add("X-Paging-PageSize", pageSize.ToString());
+            response.Headers.Add("X-RealSortProperty", realSortProperty);
+            response.Headers.Add("X-Paging-TotalRecordCount", totalCount.ToString());
+
+            return response;
         }
 
+        [HttpGet]
+        [Route("Mine/{threadId}")]
+        public MessageThread UserThread(int threadId)
+        {
+            return _uow.GetRepository<IMessageThreadRepository>()
+                .GetUserThread(threadId, Convert.ToInt32(User.Identity.GetUserId()));
+        }
+
+
         [HttpPost]
-        public IHttpActionResult Create(Message message)
+        [Route("")]
+        public IHttpActionResult Index(MessageThread messageThread)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            message.AuthorId = User.Identity.GetUserId<int>();
-            _uow.GetRepository<IMessageRepository>().Add(message);
+            messageThread.AuthorId = User.Identity.GetUserId<int>();
+            _uow.GetRepository<IMessageThreadRepository>().Add(messageThread);
+
             _uow.Commit();
 
-            return Ok(message);
+            return Ok(messageThread);
         }
-
 
         //// GET: MemberArea/Messages
         //public ActionResult Index(IndexModel vm)

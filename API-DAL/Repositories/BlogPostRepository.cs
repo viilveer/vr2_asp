@@ -21,7 +21,7 @@ namespace API_DAL.Repositories
 
         public BlogPost GetOneByUserAndId(int id, int userId)
         {
-            var response = HttpClient.GetAsync(EndPoint + "/" + id).Result;
+            var response = HttpClient.GetAsync(EndPoint + $"User/Me/{id}").Result;
             if (response.IsSuccessStatusCode)
             {
                 var res = response.Content.ReadAsAsync<BlogPost>().Result;

@@ -80,7 +80,7 @@ namespace DAL.Repositories
             return DbSet.Find(id);
         }
 
-        public void Add(T entity)
+        public int Add(T entity)
         {
             DbEntityEntry dbEntityEntry = DbContext.Entry(entity);
             if (dbEntityEntry.State != EntityState.Detached)
@@ -91,6 +91,8 @@ namespace DAL.Repositories
             {
                 DbSet.Add(entity);
             }
+            
+            return 1;
         }
 
         public void Update(T entity)

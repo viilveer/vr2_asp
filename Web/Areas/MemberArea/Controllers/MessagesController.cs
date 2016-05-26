@@ -61,7 +61,7 @@ namespace Web.Areas.MemberArea.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             MessageThread messageThread = _uow.GetRepository<IMessageThreadRepository>()
-                .GetUserThread((int)id, Convert.ToInt32(User.Identity.GetUserId()));
+                .GetUserThread((int)id, User.Identity.GetUserId<int>());
 
             if (messageThread == null)
             {
@@ -75,7 +75,7 @@ namespace Web.Areas.MemberArea.Controllers
                 Title = messageThread.Title,
                 NewMessageModel = new CreateModel(),
                 DetailsModels = _uow.GetRepository<IMessageRepository>()
-                    .GetAllByThreadId(messageThread.MessageThreadId)
+                    .GetAllByThreadIdAndUserId(messageThread.MessageThreadId, User.Identity.GetUserId<int>())
                     .Select(DetailsModelFactory.CreateFromMessage)
                     .ToList(),
             };
@@ -115,7 +115,7 @@ namespace Web.Areas.MemberArea.Controllers
             detailsModel.Author = messageThread.Author.Email; // TODO :: fix
             detailsModel.Title = messageThread.Title;
             detailsModel.DetailsModels = _uow.GetRepository<IMessageRepository>()
-                .GetAllByThreadId(messageThread.MessageThreadId)
+                .GetAllByThreadIdAndUserId(messageThread.MessageThreadId, User.Identity.GetUserId<int>())
                 .Select(DetailsModelFactory.CreateFromMessage)
                 .ToList();
 
@@ -143,7 +143,7 @@ namespace Web.Areas.MemberArea.Controllers
         public ActionResult Create([Bind(Include = "Title,Text")] BLL.ViewModels.MessageThread.CreateModel createModel, int? receiverId)
         {
             UserInt user = _uow.GetRepository<IUserIntRepository>().GetById(receiverId);
-            if (user == null)
+            if (user == null && User.Identity.GetUserId<int>() != receiverId)
             {
                 return HttpNotFound();
             }
@@ -156,20 +156,25 @@ namespace Web.Areas.MemberArea.Controllers
                 NewThreadModel newThreadModel = new NewThreadModel(sender, user);
                 newThreadModel.Prepare(createModel.Title, createModel.Text);
 
-                _uow.GetRepository<IMessageThreadRepository>().Add(newThreadModel.MessageThread);
+                int id = _uow.GetRepository<IMessageThreadRepository>().Add(newThreadModel.MessageThread);
+                _uow.Commit();
 
-                newThreadModel.Message.MessageThreadId = newThreadModel.MessageThread.MessageThreadId;
-                _uow.GetRepository<IMessageRepository>().Add(newThreadModel.Message);
+                Message message = newThreadModel.Message;
+                message.MessageThreadId = id;
+                message.AuthorId = newThreadModel.MessageThread.AuthorId;
+                message.Status = MessageStatus.New;
+
+                int messageId = _uow.GetRepository<IMessageRepository>().Add(message);
 
                 foreach (var messageReceiver in newThreadModel.MessageReceivers)
                 {
-                    messageReceiver.MessageId = newThreadModel.Message.MessageId;
+                    messageReceiver.MessageId = messageId;
                     _uow.GetRepository<IMessageReceiverRepository>().Add(messageReceiver);
                 }
 
                 foreach (var messageThreadReceiver in newThreadModel.MessageThreadReceivers)
                 {
-                    messageThreadReceiver.MessageThreadId = newThreadModel.Message.MessageId;
+                    messageThreadReceiver.MessageThreadId = id;
                     _uow.GetRepository<IMessageThreadReceiverRepository>().Add(messageThreadReceiver);
                 }
 

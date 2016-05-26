@@ -4,11 +4,14 @@ using System.Net.Http;
 using Interfaces.Repositories;
 using Domain;
 using Microsoft.Owin.Security;
+using NLog;
 
 namespace API_DAL.Repositories
 {
     public class MessageRepository : ApiRepository<Message>, IMessageRepository
     {
+        private readonly ILogger _logger = NLog.LogManager.GetCurrentClassLogger();
+
         public MessageRepository(HttpClient httpClient, string endPoint, IAuthenticationManager authenticationManager) : base(httpClient, endPoint, authenticationManager)
         {
         }
@@ -19,7 +22,16 @@ namespace API_DAL.Repositories
 
         public List<Message> GetAllByThreadIdAndUserId(int threadId, int userId)
         {
-            throw new System.NotImplementedException();
+
+            var response = HttpClient.GetAsync(EndPoint + $"{threadId}/User/Me/").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var res = response.Content.ReadAsAsync<List<Message>>().Result;
+                return res;
+            }
+
+            _logger.Debug(response.RequestMessage.RequestUri + " - " + response.StatusCode + " - " + response.ReasonPhrase);
+            return new List<Message>();
         }
     }
 }

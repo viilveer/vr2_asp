@@ -49,7 +49,7 @@ namespace DAL.Repositories
 
 
             //start building up the query
-            var res = DbSet.Where(u => u.BlogId == blogId);
+            var res = DbSet.Where(u => u.BlogId == blogId).Include(u => u.Author).Include(u => u.Blog.UserBlogConnections);
 
 
             // set up sorting

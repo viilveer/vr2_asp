@@ -42,8 +42,6 @@ namespace API_DAL.Repositories
 
         public TUser GetUserByUserName(string userName)
         {
-            //return DbSet.FirstOrDefault(a => a.UserName.ToUpper() == userName.ToUpper());
-
             var response = HttpClient.GetAsync(EndPoint + nameof(GetUserByUserName) + "/" + userName + "/").Result;
             if (response.IsSuccessStatusCode)
             {

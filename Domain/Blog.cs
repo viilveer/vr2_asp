@@ -14,6 +14,7 @@ namespace Domain
 
         [Display(Name = "Vehicle", ResourceType = typeof(Resources.Domain))]
         [Required]
+       
         public int VehicleId { get; set; }
         [Required]
         public Vehicle Vehicle { get; set; }

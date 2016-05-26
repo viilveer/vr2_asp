@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -13,6 +14,7 @@ using API_DAL.Helpers;
 using Interfaces.Repositories;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using Newtonsoft.Json;
 using NLog;
 
 namespace API_DAL.Repositories
@@ -88,15 +90,23 @@ namespace API_DAL.Repositories
 
         }
 
-        public void Add(T entity)
+        public int Add(T entity)
         {
             var response = HttpClient.PostAsJsonAsync(EndPoint, entity).Result;
             if (!response.IsSuccessStatusCode)
             {
+                
                 _logger.Error(response.RequestMessage.RequestUri + " - " + response.StatusCode + " - " + response.ReasonPhrase);
                 throw new Exception(response.RequestMessage.RequestUri + " - " + response.StatusCode + " - " + response.ReasonPhrase);
             }
-            // TODO: update entity key?
+            var res = response.Content.ReadAsAsync<T>().Result;
+            var keys = GetEntityKeys(res).OrderBy(k => k.Order).ToArray();
+            if (keys == null || keys.Length == 0)
+            {
+                throw new KeyNotFoundException("Primary key(s) not detected in entity type: " + typeof(T).FullName);
+            }
+            return Convert.ToInt32(keys[0].Value);
+           
         }
 
         public void Update(T entity)
@@ -114,7 +124,17 @@ namespace API_DAL.Repositories
             }
 
             uri = EndPoint + uri;
-            var response = HttpClient.PutAsJsonAsync(uri, entity).Result;
+
+            JsonMediaTypeFormatter jsonFormat = new JsonMediaTypeFormatter
+            {
+                SerializerSettings =
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                }
+            };
+
+            var response = HttpClient.PutAsync(uri, entity, jsonFormat).Result;
             if (!response.IsSuccessStatusCode)
             {
                 _logger.Error(response.RequestMessage.RequestUri + " - " + response.StatusCode + " - " + response.ReasonPhrase);

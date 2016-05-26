@@ -37,7 +37,7 @@ namespace API_DAL.Repositories
             string requestParams =
                 $"sortProperty={sortProperty}&pageNumber={pageNumber}&pageSize={pageSize}";
 
-            var response = HttpClient.GetAsync(EndPoint + $"User/{userId}/Blogs?" + requestParams).Result;
+            var response = HttpClient.GetAsync(EndPoint + $"User/Me/All?" + requestParams).Result;
             if (response.IsSuccessStatusCode)
             {
                 var res = response.Content.ReadAsAsync<IEnumerable<Blog>>().Result;

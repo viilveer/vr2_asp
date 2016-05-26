@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Author.
+        /// </summary>
+        public static string Author {
+            get {
+                return ResourceManager.GetString("Author", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Blog.
         /// </summary>
         public static string BlogNoun {
@@ -93,6 +102,15 @@ namespace Resources {
         public static string DisconnectFrom {
             get {
                 return ResourceManager.GetString("DisconnectFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go to blog.
+        /// </summary>
+        public static string GoToBlog {
+            get {
+                return ResourceManager.GetString("GoToBlog", resourceCulture);
             }
         }
     }

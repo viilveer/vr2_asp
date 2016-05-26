@@ -159,4 +159,10 @@
   <data name="Dashboard" xml:space="preserve">
     <value>Avaleht</value>
   </data>
+  <data name="Back" xml:space="preserve">
+    <value>Tagasi</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Detailvaade</value>
+  </data>
 </root>

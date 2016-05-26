@@ -9,18 +9,18 @@
             <div class="pull-right">
                 @if (item.Blog.UserBlogConnections?.Count > 0)
                 {
-                    @Html.ActionLink("Unfavorite", "DisconnectFrom", "Blogs", new {id = item.BlogId}, null)
+                    @Html.ActionLink(Resources.Blog.DisconnectFrom, "DisconnectFrom", "Blogs", new {id = item.BlogId}, null)
                 }
                 else
                 {
-                    @Html.ActionLink("Favorite", "ConnectTo", "Blogs", new {id = item.BlogId}, null)
+                    @Html.ActionLink(Resources.Blog.ConnectTo, "ConnectTo", "Blogs", new {id = item.BlogId}, null)
                 }
                 |
-                @Html.ActionLink("Go To Blog", "Details", "Blogs", new {id = item.BlogId}, null)
+                @Html.ActionLink(Resources.Blog.GoToBlog, "Details", "Blogs", new {id = item.BlogId}, null)
             </div>
         </div>
         <div class="content-box-large box-with-header">
-            <p><strong>Author-: @item.Author.FirstLastName</strong></p>
+            <p><strong>@Resources.Blog.Author: @Html.ActionLink(item.Author.FirstLastName, "Details", "Profile", new { id = item.AuthorId }, null) </strong></p>
             @Html.Raw(item.Message)
             <br><br>
         </div>

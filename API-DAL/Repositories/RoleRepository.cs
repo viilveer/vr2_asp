@@ -43,8 +43,14 @@ namespace API_DAL.Repositories
 
         public TRole GetByRoleName(string roleName)
         {
-            //return DbSet.FirstOrDefault(a => a.Name.ToUpper() == roleName.ToUpper());
-            throw new NotImplementedException();
+            var response = HttpClient.GetAsync(EndPoint + nameof(GetByRoleName) + "/" + roleName).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var res = response.Content.ReadAsAsync<TRole>().Result;
+                return res;
+            }
+            _logger.Debug("Web API statuscode: " + response.StatusCode.ToString() + " Uri:" + response.RequestMessage.RequestUri);
+            throw new Exception("Role not found");
         }
 
         public List<TRole> GetRolesForUser(TKey userId)

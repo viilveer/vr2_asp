@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using DAL.Interfaces;
 using Interfaces.Repositories;
@@ -19,7 +20,7 @@ namespace DAL.Repositories
 
         public List<Message> GetAllByThreadIdAndUserId(int threadId, int userId)
         {
-            return DbSet.Where(u => u.MessageThreadId == threadId).ToList();
+            return DbSet.Where(u => u.MessageThreadId == threadId).Include(u => u.Author).ToList();
         }
     }
 }

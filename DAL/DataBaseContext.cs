@@ -141,7 +141,7 @@ namespace DAL
                 ((IBaseEntity)entity.Entity).UpdatedAt = DateTime.Now;
                 ((IBaseEntity)entity.Entity).UpdatedBy = _userNameResolver.CurrentUserName;
             }
-
+            
             try
             {
                 return base.SaveChanges();

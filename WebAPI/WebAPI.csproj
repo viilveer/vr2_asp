@@ -265,11 +265,13 @@
     <Compile Include="Controllers\BlogPostsController.cs" />
     <Compile Include="Controllers\BlogsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MessageThreadReceiversController.cs" />
+    <Compile Include="Controllers\MessageReceiversController.cs" />
+    <Compile Include="Controllers\MessageThreadsController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
-    <Compile Include="Controllers\MyBlogsController.cs" />
-    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RolesIntController.cs" />
     <Compile Include="Controllers\UserClaimsIntController.cs" />
+    <Compile Include="Controllers\UserRolesIntController.cs" />
     <Compile Include="Controllers\UsersIntController.cs" />
     <Compile Include="Controllers\VehiclesController.cs" />
     <Compile Include="Global.asax.cs">

@@ -86,15 +86,12 @@ namespace Web.Areas.MemberArea.Controllers
                 {
                     UserInt user = UserIntFactory.CreateFromIdentity(_uow, User);
                     Vehicle vehicle = vehicleCreateModel.GetVehicle(user);
-                    _uow.GetRepository<IVehicleRepository>().Add(vehicle);
-
+                    int vehicleId = _uow.GetRepository<IVehicleRepository>().Add(vehicle);
                     _uow.Commit();
-                    //_uow.RefreshAllEntities();
-                    _logger.Debug(vehicle.VehicleId.ToString);
                     Blog blog = new Blog
                     {
                         Vehicle = vehicle,
-                        VehicleId = vehicle.VehicleId,
+                        VehicleId = vehicleId,
                         AuthorId = user.Id,
                         Name = vehicle.Make + " " + vehicle.Model // TODO :: ugly
                     };
@@ -102,13 +99,7 @@ namespace Web.Areas.MemberArea.Controllers
                     _uow.GetRepository<IBlogRepository>().Add(blog);
                     _uow.Commit();
 
-                    if (_userManager.GetRoles(user.Id).Contains("CarOwner"))
-                    {
-                        _userManager.AddToRole(user.Id, "CarOwner");
-                    }
                     //_uow.CommitTransaction();
-
-                   
                 }
                 catch (Exception ex)
                 {

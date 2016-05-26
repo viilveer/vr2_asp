@@ -17,7 +17,7 @@ namespace Interfaces.Repositories
         List<T> AllIncluding(params Expression<Func<T, object>>[] includeProperties);
 
         T GetById(params object[] id);
-        void Add(T entity);
+        int Add(T entity);
         void Update(T entity);
         //void UpdateOrInsert(T entity);
         void Delete(T entity);

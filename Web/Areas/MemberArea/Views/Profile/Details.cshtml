@@ -1,13 +1,13 @@
 ﻿@model BLL.ViewModels.Profile.DetailsModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = @Resources.Common.Details;
 }
 
-<h2>Details</h2>
+<h2>@Resources.Common.Details</h2>
 
 <div>
-    <h4>UserInt</h4>
+    <h4>@Model.UserName</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -44,11 +44,5 @@
 
         <dt>
         </dt>
-
-        <dd>
-
-            @Html.ActionLink(@Resources.Account.AddAsConnection, "Create", "Messages", new { receiverId = Model.id }, null)
-        </dd>
-
     </dl>
 </div>

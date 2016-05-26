@@ -55,6 +55,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [Route("")]
         public IHttpActionResult Create(Vehicle vehicle)
         {
             if (!ModelState.IsValid)
@@ -65,8 +66,13 @@ namespace WebAPI.Controllers
             _uow.GetRepository<IVehicleRepository>().Add(vehicle);
             _uow.Commit();
 
+            if (_userManager.GetRoles(User.Identity.GetUserId<int>()).Contains("CarOwner"))
+            {
+                _userManager.AddToRole(User.Identity.GetUserId<int>(), "CarOwner");
+            }
 
-            return Ok();
+            //ActionContext.Response.Headers.Add("X-CreatedEntityId", vehicle.VehicleId.ToString());
+            return Ok(vehicle);
         }
 
         [HttpPut]

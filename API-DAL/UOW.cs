@@ -78,13 +78,23 @@ namespace API_DAL
                 },
                 {typeof (IMessageThreadRepository), (httpClient, authenticationManager) => new MessageThreadRepository(
                     httpClient,
-                    ConfigurationManager.AppSettings["WebApi_EndPoint_Messages"],
+                    ConfigurationManager.AppSettings["WebApi_EndPoint_MessageThreads"],
                     authenticationManager)
                 },
                 {typeof (IMessageRepository), (httpClient, authenticationManager) => new MessageRepository(
                     httpClient,
                     ConfigurationManager.AppSettings["WebApi_EndPoint_Messages"],
                     authenticationManager)
+                },
+                {typeof (IMessageReceiverRepository), (httpClient, authenticationManager) => new MessageReceiverRepository(
+                    httpClient,
+                    ConfigurationManager.AppSettings["WebApi_EndPoint_MessageReceivers"],
+                    authenticationManager)
+                },
+                {typeof (IMessageThreadReceiverRepository), (httpClient, authenticationManager) => new MessageThreadReceiverRepository(
+                    httpClient,
+                    ConfigurationManager.AppSettings["WebApi_EndPoint_MessageThreadReceivers"],
+                    authenticationManager) 
                 },
                 //{typeof (IMessageReceiverRepository), (httpClient, authenticationManager) => new MessageReceiverRepository(
                 //    httpClient,

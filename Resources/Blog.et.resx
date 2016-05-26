@@ -120,6 +120,9 @@
   <data name="AllMyBlogs" xml:space="preserve">
     <value>Minu blogid</value>
   </data>
+  <data name="Author" xml:space="preserve">
+    <value>Autor</value>
+  </data>
   <data name="BlogNoun" xml:space="preserve">
     <value>Blogi</value>
   </data>
@@ -128,5 +131,8 @@
   </data>
   <data name="DisconnectFrom" xml:space="preserve">
     <value>Eemalda blogi lemmikutest</value>
+  </data>
+  <data name="GoToBlog" xml:space="preserve">
+    <value>Vaata blogi</value>
   </data>
 </root>

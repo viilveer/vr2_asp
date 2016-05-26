@@ -14,42 +14,36 @@ using PagedList;
 namespace WebAPI.Controllers
 {
     [System.Web.Mvc.Authorize(Roles = "User")]
-    [RoutePrefix("api/Messages")]
-    public class MessagesController : ApiController
+    [RoutePrefix("api/MessageReceivers")]
+    public class MessageReceiversController : ApiController
     {
         private readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly string _instanceId = Guid.NewGuid().ToString();
 
         private readonly IUOW _uow;
 
-        public MessagesController(IUOW uow)
+        public MessageReceiversController(IUOW uow)
         {
             _logger.Debug("InstanceId: " + _instanceId);
             _uow = uow;
         }
 
-        [HttpGet]
-        [Route("{threadId}/User/Me")]
-        public List<Message> UserThreadMessages(int threadId)
-        {
-            return _uow.GetRepository<IMessageRepository>()
-                .GetAllByThreadIdAndUserId(threadId, Convert.ToInt32(User.Identity.GetUserId()));
-        }
+     
 
         [HttpPost]
-        public IHttpActionResult Create(Message message)
+        [Route("")]
+        public IHttpActionResult Index(MessageReceiver messageReceiver)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            message.AuthorId = User.Identity.GetUserId<int>();
-            _uow.GetRepository<IMessageRepository>().Add(message);
+            _uow.GetRepository<IMessageReceiverRepository>().Add(messageReceiver);
+
             _uow.Commit();
 
-            return Ok(message);
+            return Ok(messageReceiver);
         }
-
 
         //// GET: MemberArea/Messages
         //public ActionResult Index(IndexModel vm)

@@ -169,14 +169,36 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 var user = new UserInt { UserName = model.Email, Email = model.Email, LastName = model.LastName, FirstName = model.FirstName };
                 var userSave = await _userManager.CreateAsync(user, model.Password);
-                var roleSave = await _userManager.AddToRoleAsync(user.Id, "User"); // TODO :: fetch role and then add if exists
-                if (userSave.Succeeded == false || roleSave.Succeeded == false)
+                
+                
+                if (userSave.Succeeded == false)
                 {
                     AddErrors(userSave);
                 }
                 else
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    var webApiUOW = _uow as UOW;
+                    if (webApiUOW != null)
+                    {
+                        var token = webApiUOW.GetWebApiToken(model.Email, model.Password);
+                        var newUser = _userManager.FindByEmail(model.Email);
+                        if (newUser != null)
+                        {
+                            //remove any previous auth claims
+                            var claims = _userManager.GetClaims(newUser.Id).Where(c => c.Type == ClaimTypes.Authentication).ToList();
+                            _logger.Debug($"Claimcount: {claims.Count}");
+                            await _userManager.AddToRoleAsync(newUser.Id, "User"); // TODO :: fetch role and then add if exists
+                            foreach (var claim in claims)
+                            {
+                                _userManager.RemoveClaim(newUser.Id, claim);
+                            }
+                            _userManager.AddClaim(newUser.Id, new Claim(ClaimTypes.Authentication, token));
+                            _signInManager.SignIn(newUser, true, true);
+                            
+                        }
+
+
+                    }
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link

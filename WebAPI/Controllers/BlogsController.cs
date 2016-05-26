@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using DAL;
 using DAL.Interfaces;
 using Domain;
 using Interfaces.Repositories;
@@ -46,13 +48,13 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("User/{userId}/Blogs")]
-        public HttpResponseMessage MyBlogs(int userId, string sortProperty, int pageNumber, int pageSize)
+        [Route("User/Me/All")]
+        public HttpResponseMessage MyBlogs(string sortProperty, int pageNumber, int pageSize)
         {
             int totalCount;
             string realSortProperty;
 
-            IEnumerable<Blog> blogs = _uow.GetRepository<IBlogRepository>().GetListByUserId(userId, sortProperty, pageNumber, pageSize, out totalCount, out realSortProperty);
+            IEnumerable<Blog> blogs = _uow.GetRepository<IBlogRepository>().GetListByUserId(User.Identity.GetUserId<int>(), sortProperty, pageNumber, pageSize, out totalCount, out realSortProperty);
             var response = Request.CreateResponse(HttpStatusCode.OK, blogs);
 
             // Set headers for paging
@@ -71,12 +73,20 @@ namespace WebAPI.Controllers
             return _uow.GetRepository<IBlogRepository>().GetOneByUserAndId(blogId, User.Identity.GetUserId<int>());
         }
 
+        [HttpGet]
+        [Route("{id}")]
+        public Blog Index(int id)
+        {
+            return _uow.GetRepository<IBlogRepository>().GetById(id);
+        }
 
 
         [HttpPost]
         [Route("")]
         public IHttpActionResult Index(Blog blog)
         {
+            blog.Vehicle = _uow.GetRepository<IVehicleRepository>()
+                .GetByIdAndUserId(blog.VehicleId, User.Identity.GetUserId<int>());
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -84,7 +94,7 @@ namespace WebAPI.Controllers
 
             _uow.GetRepository<IBlogRepository>().Add(blog);
             _uow.Commit();
-            return Ok();
+            return Ok(blog);
         }
 
         [HttpPut]

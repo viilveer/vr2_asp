@@ -3,9 +3,9 @@
 @model BLL.ViewModels.Blog.DetailsModel
 
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.BlogId }) |
-    @Html.ActionLink("Create post", "Create", "BlogPosts", new { id = Model.BlogId }, null) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink(Resources.Common.Edit, "Edit", new { id = Model.BlogId }) |
+    @Html.ActionLink(Resources.Common.Create, "Create", "BlogPosts", new { id = Model.BlogId }, null) |
+    @Html.ActionLink(Resources.Common.Back, "Index")
 </p>
 <div class="content-box-large">
     <div class="panel-heading">

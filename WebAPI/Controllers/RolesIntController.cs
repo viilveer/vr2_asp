@@ -35,6 +35,14 @@ namespace WebAPI.Controllers
             return _uow.RolesInt.GetRolesForUser(userId);
         }
 
+        [AllowAnonymous]
+        [Route("GetByRoleName/{rolename}")]
+        [HttpGet]
+        public RoleInt GetRolesForUser(string rolename)
+        {
+            return _uow.RolesInt.GetByRoleName(rolename);
+        }
+
 
         public IQueryable<RoleInt> GetRolesInt()
         {

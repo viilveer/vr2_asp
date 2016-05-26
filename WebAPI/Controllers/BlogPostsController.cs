@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using System.Web.UI.WebControls;
 using DAL.Interfaces;
@@ -37,6 +38,64 @@ namespace WebAPI.Controllers
         public List<BlogPost> GetNewBlogPosts(int limit = 10)
         {
             return _uow.GetRepository<IBlogPostRepository>().GetDashBoardNewestBlogPosts(limit);
+        }
+
+        [HttpPost]
+        public IHttpActionResult Create(BlogPost blogPost)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _uow.GetRepository<IBlogPostRepository>().Add(blogPost);
+            _uow.Commit();
+
+
+            return Ok(blogPost);
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public IHttpActionResult Update(int id, BlogPost blogPost)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _uow.GetRepository<IBlogPostRepository>().Update(blogPost);
+            _uow.Commit();
+
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("Blog/{id}/All")]
+        public HttpResponseMessage Index(int id, string sortProperty, int pageNumber, int pageSize)
+        {
+            int totalCount;
+            string realSortProperty;
+
+            IEnumerable<BlogPost> blogs = _uow.GetRepository<IBlogPostRepository>().GetAllByBlogId(id, sortProperty, pageNumber, pageSize, out totalCount, out realSortProperty);
+            var response = Request.CreateResponse(HttpStatusCode.OK, blogs);
+
+            // Set headers for paging
+            response.Headers.Add("X-Paging-PageNo", pageNumber.ToString());
+            response.Headers.Add("X-Paging-PageSize", pageSize.ToString());
+            response.Headers.Add("X-RealSortProperty", realSortProperty);
+            response.Headers.Add("X-Paging-TotalRecordCount", totalCount.ToString());
+
+            return response;
+        }
+
+
+        [HttpGet]
+        [Route("User/Me/{blogPostId}")]
+        public BlogPost UserBlog(int blogPostId)
+        {
+            return _uow.GetRepository<IBlogPostRepository>().GetOneByUserAndId(blogPostId, User.Identity.GetUserId<int>());
         }
 
         //// GET: MemberArea/BlogPosts/Edit/5
