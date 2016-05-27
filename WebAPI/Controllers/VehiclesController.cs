@@ -66,7 +66,7 @@ namespace WebAPI.Controllers
             _uow.GetRepository<IVehicleRepository>().Add(vehicle);
             _uow.Commit();
 
-            if (_userManager.GetRoles(User.Identity.GetUserId<int>()).Contains("CarOwner"))
+            if (_userManager.IsInRole(User.Identity.GetUserId<int>(), "CarOwner") == false)
             {
                 _userManager.AddToRole(User.Identity.GetUserId<int>(), "CarOwner");
             }

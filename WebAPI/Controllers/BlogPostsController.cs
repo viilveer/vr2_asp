@@ -98,6 +98,22 @@ namespace WebAPI.Controllers
             return _uow.GetRepository<IBlogPostRepository>().GetOneByUserAndId(blogPostId, User.Identity.GetUserId<int>());
         }
 
+        [HttpDelete]
+        [Route("{id}")]
+        public IHttpActionResult Delete(int id)
+        {
+            BlogPost blogPost = _uow.GetRepository<IBlogPostRepository>().GetOneByUserAndId(id, User.Identity.GetUserId<int>());
+            if (blogPost != null)
+            {
+                _uow.GetRepository<IBlogPostRepository>().Delete(blogPost.BlogPostId);
+
+                _uow.Commit();
+                return Ok();
+            }
+            return BadRequest();
+
+        }
+
         //// GET: MemberArea/BlogPosts/Edit/5
         //public ActionResult Create(int? id)
         //{

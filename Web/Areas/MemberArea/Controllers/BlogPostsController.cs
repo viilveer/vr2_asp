@@ -59,10 +59,10 @@ namespace Web.Areas.MemberArea.Controllers
 
             if (ModelState.IsValid)
             {
-                _uow.GetRepository<IBlogPostRepository>().Add(model.GetBlogPost(blog, User.Identity.GetUserId<int>()));
+                int blogPostId = _uow.GetRepository<IBlogPostRepository>().Add(model.GetBlogPost(blog, User.Identity.GetUserId<int>()));
                 _uow.Commit();
                 this.FlashSuccess("You created new blog post-");
-                return RedirectToAction("Edit", "BlogPosts", new { area = "MemberArea", id = id.Value });
+                return RedirectToAction("Edit", "BlogPosts", new { area = "MemberArea", id = blogPostId });
             }
             this.FlashDanger("There were errors on form-");
             return View(model);
@@ -122,7 +122,7 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BlogPost blogPost = _uow.GetRepository<IBlogPostRepository>().GetById(id);
+            BlogPost blogPost = _uow.GetRepository<IBlogPostRepository>().GetOneByUserAndId(id.Value, User.Identity.GetUserId<int>());
             if (blogPost == null)
             {
                 return HttpNotFound();

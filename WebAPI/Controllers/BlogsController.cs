@@ -115,7 +115,7 @@ namespace WebAPI.Controllers
 
 
         [HttpGet]
-        [Route("Connect/{blogId}")]
+        [Route("{blogId}/Connect")]
         // GET: MemberArea/Blog/ConnectTo/5
         public IHttpActionResult ConnectTo(int blogId)
         {
@@ -134,13 +134,13 @@ namespace WebAPI.Controllers
                 };
                 _uow.GetRepository<IUserBlogConnectionRepository>().Add(connection);
                 _uow.Commit();
-                return Ok();
+                return Ok(connection);
             }
             return NotFound();
         }
 
         [HttpGet]
-        [Route("Disconnect/{blogId}")]
+        [Route("{blogId}/Disconnect")]
         // GET: MemberArea/Blog/ConnectTo/5
         public IHttpActionResult DisconnectFrom(int blogId)
         {

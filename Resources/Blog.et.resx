@@ -132,7 +132,13 @@
   <data name="DisconnectFrom" xml:space="preserve">
     <value>Eemalda blogi lemmikutest</value>
   </data>
+  <data name="FavoritedBlogs" xml:space="preserve">
+    <value>Lemmikud</value>
+  </data>
   <data name="GoToBlog" xml:space="preserve">
     <value>Vaata blogi</value>
+  </data>
+  <data name="NewBlogs" xml:space="preserve">
+    <value>Uued</value>
   </data>
 </root>

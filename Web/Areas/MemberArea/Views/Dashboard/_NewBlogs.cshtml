@@ -1,6 +1,6 @@
 ﻿@model BLL.ViewModels.Dashboard.ViewModel
 
-<h4>New Blogs-</h4>     
+<h4>@Resources.Blog.NewBlogs</h4>     
 @foreach (var item in Model.NewBlogPostList)
 {
     @Html.Partial("~/Areas/MemberArea/Views/BlogPosts/_BlogEntity.cshtml", new ViewDataDictionary { { "item", item } });

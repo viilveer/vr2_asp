@@ -103,7 +103,7 @@ namespace API_DAL.Repositories
             var keys = GetEntityKeys(res).OrderBy(k => k.Order).ToArray();
             if (keys == null || keys.Length == 0)
             {
-                throw new KeyNotFoundException("Primary key(s) not detected in entity type: " + typeof(T).FullName);
+                return 0; // TODO :: THIS IS HASCK AND SHOULD BE REMOVED, IN PANIC DEMO SOON!!!
             }
             return Convert.ToInt32(keys[0].Value);
            

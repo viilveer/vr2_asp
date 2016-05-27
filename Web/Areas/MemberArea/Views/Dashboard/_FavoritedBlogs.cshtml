@@ -1,6 +1,6 @@
 ﻿@model BLL.ViewModels.Dashboard.ViewModel
 
-<h4>Favorited Blogs-</h4> 
+<h4>@Resources.Blog.FavoritedBlogs</h4> 
 @foreach (var item in Model.FavoriteBlogPostList)
 {
     @Html.Partial("~/Areas/MemberArea/Views/BlogPosts/_BlogEntity.cshtml", new ViewDataDictionary { { "item", item } });

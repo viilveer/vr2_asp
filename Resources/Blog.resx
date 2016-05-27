@@ -132,7 +132,13 @@
   <data name="DisconnectFrom" xml:space="preserve">
     <value>Remove blog from favorites</value>
   </data>
+  <data name="FavoritedBlogs" xml:space="preserve">
+    <value>Favorited Blogs</value>
+  </data>
   <data name="GoToBlog" xml:space="preserve">
     <value>Go to blog</value>
+  </data>
+  <data name="NewBlogs" xml:space="preserve">
+    <value>New Blogs</value>
   </data>
 </root>

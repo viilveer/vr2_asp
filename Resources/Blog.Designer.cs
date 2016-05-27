@@ -106,11 +106,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Favorited Blogs.
+        /// </summary>
+        public static string FavoritedBlogs {
+            get {
+                return ResourceManager.GetString("FavoritedBlogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Go to blog.
         /// </summary>
         public static string GoToBlog {
             get {
                 return ResourceManager.GetString("GoToBlog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Blogs.
+        /// </summary>
+        public static string NewBlogs {
+            get {
+                return ResourceManager.GetString("NewBlogs", resourceCulture);
             }
         }
     }
