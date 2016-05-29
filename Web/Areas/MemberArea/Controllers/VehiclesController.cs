@@ -1,11 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Web.Mvc;
+using API_DAL.Interfaces;
 using BLL.Helpers.Factories;
 using BLL.ViewModels.Vehicle;
 using Domain;
 using Domain.Identity;
-using Interfaces.Repositories;
 using Interfaces.UOW;
 using Microsoft.AspNet.Identity;
 using PagedList;
@@ -40,25 +41,24 @@ namespace Web.Areas.MemberArea.Controllers
             vm.PageNumber = vm.PageNumber ?? 1;
             vm.PageSize = vm.PageSize ?? 25;
 
-            var res = _uow.GetRepository<IVehicleRepository>().GetListByUserId(User.Identity.GetUserId<int>(), vm.SortProperty, vm.PageNumber.Value - 1, vm.PageSize.Value, out totalVehicleCount, out realSortProperty);
+            var res = _uow.GetRepository<IVehicleRepository>().GetUserVehicleList(vm.SortProperty, vm.PageNumber.Value - 1, vm.PageSize.Value, out totalVehicleCount, out realSortProperty);
 
             vm.SortProperty = realSortProperty;
 
             // https://github.com/kpi-ua/X.PagedList
-            vm.Vehicles = new StaticPagedList<Vehicle>(res, vm.PageNumber.Value, vm.PageSize.Value, totalVehicleCount);
+            vm.Vehicles = new StaticPagedList<IndexVehicleModel>(res, vm.PageNumber.Value, vm.PageSize.Value, totalVehicleCount);
 
             return View(vm);
         }
 
-        // GET: Vehicles/Details/5
+        // GET:Vehicles/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Vehicle vehicle = _uow.GetRepository<IVehicleRepository>()
-               .GetByIdAndUserId(id.Value, User.Identity.GetUserId<int>());
+            DetailsModel vehicle = _uow.GetRepository<IVehicleRepository>().GetUserVehicle(id.Value);
             if (vehicle == null)
             {
                 return HttpNotFound();
@@ -79,39 +79,22 @@ namespace Web.Areas.MemberArea.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Make,Model,Year,Kw,Engine")] CreateModel vehicleCreateModel)
         {
-            if (ModelState.IsValid)
+            try
             {
-               //_uow.BeginTransaction();
-                try
-                {
-                    UserInt user = UserIntFactory.CreateFromIdentity(_uow, User);
-                    Vehicle vehicle = vehicleCreateModel.GetVehicle(user);
-                    int vehicleId = _uow.GetRepository<IVehicleRepository>().Add(vehicle);
-                    _uow.Commit();
-                    Blog blog = new Blog
-                    {
-                        Vehicle = vehicle,
-                        VehicleId = vehicleId,
-                        AuthorId = user.Id,
-                        Name = vehicle.Make + " " + vehicle.Model // TODO :: ugly
-                    };
 
-                    _uow.GetRepository<IBlogRepository>().Add(blog);
-                    _uow.Commit();
-
-                    //_uow.CommitTransaction();
-                }
-                catch (Exception ex)
+                if (ModelState.IsValid == false)
                 {
-                    //_uow.RollbackTransaction();
-                    throw ex;
+                    throw new ValidationException("Invalid model state");
                 }
+                _uow.GetRepository<IVehicleRepository>().AddVehicle(vehicleCreateModel);
                 this.FlashSuccess("Vehicle created");
-
                 return RedirectToAction("Index");
             }
-            this.FlashDanger("There were errors on form");
-            return View(vehicleCreateModel);
+            catch (Exception)
+            {
+                this.FlashDanger("There were errors on form");
+                return View(vehicleCreateModel);
+            }
         }
 
         // GET: Vehicles/Edit/5
@@ -121,14 +104,13 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Vehicle vehicle = _uow.GetRepository<IVehicleRepository>()
-                .GetByIdAndUserId(id.Value, User.Identity.GetUserId<int>());
+            DetailsModel vehicle = _uow.GetRepository<IVehicleRepository>().GetUserVehicle(id.Value);
             if (vehicle == null)
             {
                 return HttpNotFound();
             }
 
-            return View(UpdateModelFactory.CreateFromVehicle(vehicle));
+            return View(UpdateModelFactory.CreateFromDetailsModel(vehicle));
         }
 
         // POST: Vehicles/Edit/5
@@ -142,8 +124,7 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Vehicle vehicle = _uow.GetRepository<IVehicleRepository>()
-               .GetByIdAndUserId(id.Value, User.Identity.GetUserId<int>());
+            DetailsModel vehicle = _uow.GetRepository<IVehicleRepository>().GetUserVehicle(id.Value);
             if (vehicle == null)
             {
                 return HttpNotFound();
@@ -151,8 +132,7 @@ namespace Web.Areas.MemberArea.Controllers
 
             if (ModelState.IsValid)
             {
-                _uow.GetRepository<IVehicleRepository>().Update(vehicleUpdateModel.UpdateVehicle(vehicle));
-                _uow.Commit();
+                _uow.GetRepository<IVehicleRepository>().UpdateVehicle(vehicle.Id, vehicleUpdateModel);
                 this.FlashSuccess("Vehicle edited");
                 return RedirectToAction("Index");
             }
@@ -167,8 +147,7 @@ namespace Web.Areas.MemberArea.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-              Vehicle vehicle = _uow.GetRepository<IVehicleRepository>()
-               .GetByIdAndUserId(id.Value, User.Identity.GetUserId<int>());
+            DetailsModel vehicle = _uow.GetRepository<IVehicleRepository>().GetUserVehicle(id.Value);
 
             if (vehicle == null)
             {
@@ -183,17 +162,14 @@ namespace Web.Areas.MemberArea.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             // vehicle grants access to all sub objects
-            Vehicle vehicle = _uow.GetRepository<IVehicleRepository>()
-                .GetByIdAndUserId(id, User.Identity.GetUserId<int>());
+            DetailsModel vehicle = _uow.GetRepository<IVehicleRepository>().GetUserVehicle(id);
 
             if (vehicle == null)
             {
                 return HttpNotFound();
             }
             
-            
-            _uow.GetRepository<IVehicleRepository>().Delete(vehicle.VehicleId);
-            _uow.Commit();
+            _uow.GetRepository<IVehicleRepository>().Delete(vehicle.Id);
             
             this.FlashSuccess("Vehicle deleted");
             return RedirectToAction("Index");

@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using BLL.Helpers.Factories;
+using BLL.ViewModels.Vehicle;
 using DAL.Interfaces;
 using Domain;
+using Domain.Identity;
 using Interfaces.Repositories;
 using Microsoft.AspNet.Identity;
 using NLog;
+using WebAPI.Services;
 
 namespace WebAPI.Controllers
 {
-    [RoutePrefix("api/Vehicles")]
+    [RoutePrefix("api/UserVehicles")]
     public class VehiclesController : ApiController
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
@@ -26,7 +30,9 @@ namespace WebAPI.Controllers
             _uow = uow;
             _userManager = userManager;
         }
-
+        /// <summary>
+        /// Retrieves user vehicle list, supports paginating
+        /// </summary>
         [HttpGet]
         [Route("")]
         public HttpResponseMessage Index(string sortProperty, int pageNumber, int pageSize)
@@ -34,7 +40,9 @@ namespace WebAPI.Controllers
             int totalCount;
             string realSortProperty;
 
-            IEnumerable<Vehicle> vehicles = _uow.GetRepository<IVehicleRepository>().GetListByUserId(User.Identity.GetUserId<int>(), sortProperty, pageNumber, pageSize, out totalCount, out realSortProperty);
+            VehicleService service = new VehicleService(_uow.GetRepository<IVehicleRepository>());
+            List<IndexVehicleModel> vehicles = service.GetUserVehiclesList(User.Identity.GetUserId<int>(), sortProperty,
+                pageNumber, pageSize, out totalCount, out realSortProperty);
 
             var response = Request.CreateResponse(HttpStatusCode.OK, vehicles);
 
@@ -47,23 +55,44 @@ namespace WebAPI.Controllers
             return response;
         }
 
+        /// <summary>
+        /// Retrieves user single vehicle
+        /// </summary>
         [HttpGet]
-        [Route("User/Me/Vehicle/{vehicleId}")]
-        public Vehicle UserVehicle(int vehicleId)
+        [Route("{vehicleId}")]
+        public DetailsModel UserVehicle(int vehicleId)
         {
-            return _uow.GetRepository<IVehicleRepository>().GetByIdAndUserId(vehicleId, User.Identity.GetUserId<int>());
+            VehicleService service = new VehicleService(_uow.GetRepository<IVehicleRepository>());
+            return service.GetUserVehicle(User.Identity.GetUserId<int>(), vehicleId);
         }
-
+        /// <summary>
+        /// Creates new user vehicle
+        /// </summary>
         [HttpPost]
         [Route("")]
-        public IHttpActionResult Create(Vehicle vehicle)
+        public IHttpActionResult Create(CreateModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+          
+            UserInt user = UserIntFactory.CreateFromIdentity(_uow, User);
+            Vehicle vehicle = model.GetVehicle(user);
             _uow.GetRepository<IVehicleRepository>().Add(vehicle);
+            _uow.Commit();
+            _uow.RefreshAllEntities();
+
+            Blog blog = new Blog
+            {
+                Vehicle = vehicle,
+                VehicleId = vehicle.VehicleId,
+                AuthorId = user.Id,
+                Name = vehicle.Make + " " + vehicle.Model // TODO :: ugly
+            };
+
+            _uow.GetRepository<IBlogRepository>().Add(blog);
             _uow.Commit();
 
             if (_userManager.IsInRole(User.Identity.GetUserId<int>(), "CarOwner") == false)
@@ -71,26 +100,35 @@ namespace WebAPI.Controllers
                 _userManager.AddToRole(User.Identity.GetUserId<int>(), "CarOwner");
             }
 
-            //ActionContext.Response.Headers.Add("X-CreatedEntityId", vehicle.VehicleId.ToString());
-            return Ok(vehicle);
+            return Ok(model);
         }
-
+        /// <summary>
+        /// Updates user vehicle
+        /// </summary>
         [HttpPut]
         [Route("{id}")]
-        public IHttpActionResult Update(int id, Vehicle vehicle)
+        public IHttpActionResult Update(int id, UpdateModel updateModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _uow.GetRepository<IVehicleRepository>().Update(vehicle);
+            Vehicle vehicle = _uow.GetRepository<IVehicleRepository>().GetByIdAndUserId(id, User.Identity.GetUserId<int>());
+            if (vehicle == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _uow.GetRepository<IVehicleRepository>().Update(updateModel.UpdateVehicle(vehicle));
             _uow.Commit();
 
 
-            return Ok();
+            return Ok(updateModel);
         }
-
+        /// <summary>
+        /// Deletes user vehicle
+        /// </summary>
         [HttpDelete]
         [Route("{id}")]
         public IHttpActionResult Delete(int id)
@@ -128,23 +166,7 @@ namespace WebAPI.Controllers
         //        _uow.BeginTransaction();
         //        try
         //        {
-        //            UserInt user = UserIntFactory.CreateFromIdentity(_uow, User);
-        //            Vehicle vehicle = vehicleCreateModel.GetVehicle(user);
-        //            _uow.GetRepository<IVehicleRepository>().Add(vehicle);
 
-        //            _uow.Commit();
-        //            _uow.RefreshAllEntities();
-        //            _logger.Debug(vehicle.VehicleId.ToString);
-        //            Blog blog = new Blog
-        //            {
-        //                Vehicle = vehicle,
-        //                VehicleId = vehicle.VehicleId,
-        //                AuthorId = user.Id,
-        //                Name = vehicle.Make + " " + vehicle.Model // TODO :: ugly
-        //            };
-
-        //            _uow.GetRepository<IBlogRepository>().Add(blog);
-        //            _uow.Commit();
 
         //            if (_userManager.IsInRole(user.Id, "CarOwner") == false)
         //            {

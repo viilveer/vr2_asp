@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\EntityKeyInfo.cs" />
+    <Compile Include="Interfaces\IVehicleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BlogPostRepository.cs" />
     <Compile Include="Repositories\BlogRepository.cs" />

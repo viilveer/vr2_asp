@@ -16,6 +16,7 @@ using API_DAL.Repositories;
 using Newtonsoft.Json.Linq;
 using NLog;
 using ConfigurationManager = System.Configuration.ConfigurationManager;
+using IVehicleRepository = API_DAL.Interfaces.IVehicleRepository;
 
 namespace API_DAL
 {

@@ -27,7 +27,9 @@ namespace WebAPI.Controllers
             _logger.Debug("InstanceId: " + _instanceId);
             _uow = uow;
         }
-
+        /// <summary>
+        /// Lists all user message threads, paginated
+        /// </summary>
         [HttpGet]
         [AllowAnonymous]
         [Route("Mine")]
@@ -47,7 +49,9 @@ namespace WebAPI.Controllers
 
             return response;
         }
-
+        /// <summary>
+        /// Retrieves single user thread
+        /// </summary>
         [HttpGet]
         [Route("Mine/{threadId}")]
         public MessageThread UserThread(int threadId)
@@ -56,7 +60,9 @@ namespace WebAPI.Controllers
                 .GetUserThread(threadId, Convert.ToInt32(User.Identity.GetUserId()));
         }
 
-
+        /// <summary>
+        /// Creates new message thread to user
+        /// </summary>
         [HttpPost]
         [Route("")]
         public IHttpActionResult Index(MessageThread messageThread)

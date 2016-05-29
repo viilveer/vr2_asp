@@ -37,7 +37,7 @@ namespace BLL.ViewModels.Vehicle
 
     public static class UpdateModelFactory
     {
-        public static UpdateModel CreateFromVehicle(Domain.Vehicle vehicle)
+        public static UpdateModel CreateFromDetailsModel(DetailsModel vehicle)
         {
             return new UpdateModel() {Kw = vehicle.Kw, Engine = vehicle.Engine, Year = vehicle.Year, Model = vehicle.Model, Make = vehicle.Make.ToLower().Replace(" ", "-") };
         } 

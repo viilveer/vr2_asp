@@ -37,7 +37,7 @@
                         @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().Engine)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().CreatedAt)
+                        @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().CreateDateTime)
                     </th>
                     <th></th>
                 </tr>
@@ -61,12 +61,12 @@
                             @Html.DisplayFor(modelItem => item.Engine)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.CreatedAt)
+                            @Html.DisplayFor(modelItem => item.CreateDateTime)
                         </td>
                         <td>
-                            @Html.ActionLink("Edit", "Edit", new {id = item.VehicleId}) |
-                            @Html.ActionLink("Details", "Details", new {id = item.VehicleId}) |
-                            @Html.ActionLink("Delete", "Delete", new {id = item.VehicleId})
+                            @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
+                            @Html.ActionLink("Details", "Details", new {id = item.Id}) |
+                            @Html.ActionLink("Delete", "Delete", new {id = item.Id})
                         </td>
                     </tr>
                 }

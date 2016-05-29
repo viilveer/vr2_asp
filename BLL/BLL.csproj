@@ -108,6 +108,8 @@
     <Compile Include="ViewModels\Profile\DetailsModel.cs" />
     <Compile Include="ViewModels\Vehicle\CreateModel.cs" />
     <Compile Include="ViewModels\Vehicle\IndexModel.cs" />
+    <Compile Include="ViewModels\Vehicle\DetailsModel.cs" />
+    <Compile Include="ViewModels\Vehicle\IndexVehicleModel.cs" />
     <Compile Include="ViewModels\Vehicle\UpdateModel.cs" />
   </ItemGroup>
   <ItemGroup>

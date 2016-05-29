@@ -25,6 +25,9 @@ namespace WebAPI.Controllers
             _logger.Debug("InstanceId: " + _instanceId);
             _uow = uow;
         }
+        /// <summary>
+        /// Retrieves user favorited blog posts
+        /// </summary>
         [HttpGet]
         [Route("GetUserBlogPosts/{limit}")]
         public List<BlogPost> GetUserBlogPosts(int limit = 10)
@@ -33,6 +36,9 @@ namespace WebAPI.Controllers
                 _uow.GetRepository<IBlogPostRepository>()
                     .GetDashBoardFavoriteBlogBlogPosts(User.Identity.GetUserId<int>(), limit);
         }
+        /// <summary>
+        /// Retrieves new blog posts
+        /// </summary>
         [HttpGet]
         [Route("GetNewBlogPosts/{limit}")]
         public List<BlogPost> GetNewBlogPosts(int limit = 10)
@@ -40,6 +46,9 @@ namespace WebAPI.Controllers
             return _uow.GetRepository<IBlogPostRepository>().GetDashBoardNewestBlogPosts(limit);
         }
 
+        /// <summary>
+        /// Creates new blog post
+        /// </summary>
         [HttpPost]
         public IHttpActionResult Create(BlogPost blogPost)
         {
@@ -54,7 +63,9 @@ namespace WebAPI.Controllers
 
             return Ok(blogPost);
         }
-
+        /// <summary>
+        /// Updates a blog post
+        /// </summary>
         [HttpPut]
         [Route("{id}")]
         public IHttpActionResult Update(int id, BlogPost blogPost)
@@ -71,8 +82,12 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Lists all blog posts from certain blog (paginated). Can be accessed as guest
+        /// </summary>
         [HttpGet]
         [Route("Blog/{id}/All")]
+        [AllowAnonymous]
         public HttpResponseMessage Index(int id, string sortProperty, int pageNumber, int pageSize)
         {
             int totalCount;
@@ -90,14 +105,18 @@ namespace WebAPI.Controllers
             return response;
         }
 
-
+        /// <summary>
+        /// Fetches single blog post
+        /// </summary>
         [HttpGet]
         [Route("User/Me/{blogPostId}")]
         public BlogPost UserBlog(int blogPostId)
         {
             return _uow.GetRepository<IBlogPostRepository>().GetOneByUserAndId(blogPostId, User.Identity.GetUserId<int>());
         }
-
+        /// <summary>
+        /// Deletes blog post
+        /// </summary>
         [HttpDelete]
         [Route("{id}")]
         public IHttpActionResult Delete(int id)

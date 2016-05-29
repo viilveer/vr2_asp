@@ -26,7 +26,9 @@ namespace WebAPI.Controllers
             _logger.Debug("InstanceId: " + _instanceId);
             _uow = uow;
         }
-
+        /// <summary>
+        /// Searches blog post. Can be accessed also as guest member
+        /// </summary>
         [HttpGet]
         [AllowAnonymous]
         [Route("")]
@@ -46,7 +48,9 @@ namespace WebAPI.Controllers
 
             return response;
         }
-
+        /// <summary>
+        /// Paginated user blogs
+        /// </summary>
         [HttpGet]
         [Route("User/Me/All")]
         public HttpResponseMessage MyBlogs(string sortProperty, int pageNumber, int pageSize)
@@ -65,22 +69,29 @@ namespace WebAPI.Controllers
 
             return response;
         }
-
+        /// <summary>
+        /// Single user blog post
+        /// </summary>
         [HttpGet]
         [Route("User/Me/{blogId}")]
         public Blog UserBlog(int blogId)
         {
             return _uow.GetRepository<IBlogRepository>().GetOneByUserAndId(blogId, User.Identity.GetUserId<int>());
         }
-
+        /// <summary>
+        /// Single blog post
+        /// </summary>
         [HttpGet]
+        [AllowAnonymous]
         [Route("{id}")]
         public Blog Index(int id)
         {
             return _uow.GetRepository<IBlogRepository>().GetById(id);
         }
 
-
+        /// <summary>
+        /// Creates new blog. 
+        /// </summary>
         [HttpPost]
         [Route("")]
         public IHttpActionResult Index(Blog blog)
@@ -96,7 +107,9 @@ namespace WebAPI.Controllers
             _uow.Commit();
             return Ok(blog);
         }
-
+        /// <summary>
+        /// Updates blog post
+        /// </summary>
         [HttpPut]
         [Route("{id}")]
         public IHttpActionResult Update(int id, Blog blog)
@@ -113,7 +126,9 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-
+        /// <summary>
+        /// Marks blog as a user favorite
+        /// </summary>
         [HttpGet]
         [Route("{blogId}/Connect")]
         // GET: MemberArea/Blog/ConnectTo/5
@@ -138,7 +153,9 @@ namespace WebAPI.Controllers
             }
             return NotFound();
         }
-
+        /// <summary>
+        /// Removes blog from user favorite blogs
+        /// </summary>
         [HttpGet]
         [Route("{blogId}/Disconnect")]
         // GET: MemberArea/Blog/ConnectTo/5

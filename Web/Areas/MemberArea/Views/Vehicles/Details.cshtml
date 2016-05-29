@@ -1,7 +1,7 @@
-﻿@model Domain.Vehicle
+﻿@model BLL.ViewModels.Vehicle.DetailsModel
 
 @{
-    ViewBag.Title = @Resources.Common;
+    ViewBag.Title = @Resources.Common.Details;
 }
 
 <h2>Details</h2>
@@ -10,11 +10,11 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.User.Email)
+            @Html.DisplayNameFor(model => model.Author)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.User.Email)
+            @Html.DisplayFor(model => model.Author)
         </dd>
 
         <dt>
@@ -60,6 +60,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.VehicleId }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

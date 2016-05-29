@@ -28,8 +28,10 @@ namespace WebAPI.Controllers
             _uow = uow;
         }
 
-     
 
+        /// <summary>
+        /// Adds new message receiver
+        /// </summary>
         [HttpPost]
         [Route("")]
         public IHttpActionResult Index(MessageReceiver messageReceiver)

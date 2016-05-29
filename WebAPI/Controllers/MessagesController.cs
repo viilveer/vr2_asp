@@ -27,7 +27,9 @@ namespace WebAPI.Controllers
             _logger.Debug("InstanceId: " + _instanceId);
             _uow = uow;
         }
-
+        /// <summary>
+        /// Fetches all user messages using thread id
+        /// </summary>
         [HttpGet]
         [Route("{threadId}/User/Me")]
         public List<Message> UserThreadMessages(int threadId)
@@ -35,7 +37,9 @@ namespace WebAPI.Controllers
             return _uow.GetRepository<IMessageRepository>()
                 .GetAllByThreadIdAndUserId(threadId, Convert.ToInt32(User.Identity.GetUserId()));
         }
-
+        /// <summary>
+        /// Creates a new thread
+        /// </summary>
         [HttpPost]
         public IHttpActionResult Create(Message message)
         {

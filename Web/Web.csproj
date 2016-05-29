@@ -1745,7 +1745,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
-    <Folder Include="Areas\MemberArea\Components\" />
     <Folder Include="Areas\MemberArea\Models\" />
     <Folder Include="logs\" />
   </ItemGroup>
